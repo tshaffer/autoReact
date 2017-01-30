@@ -1,0 +1,292 @@
+{
+	"version": 6,
+	"BrightAuthorVersion": "5.0.0.0",
+	"type": "publish",
+	"meta": {
+		"id": "5dbc5f4b-cbf9-43a1-83f5-b8ba8d8bf234",
+		"version": "0.1.1",
+		"name": "NT-0",
+		"videoMode": "1920x1080x60p",
+		"model": "XT1143",
+		"monitorOrientation": "Landscape",
+		"videoConnector": "HDMI",
+		"deviceWebPageDisplay": "Standard",
+		"backgroundScreenColor": {
+			"a": 255,
+			"r": 0,
+			"g": 0,
+			"b": 0
+		},
+		"forceResolution": false,
+		"tenBitColorEnabled": false,
+		"htmlEnableJavascriptConsole": true,
+		"alphabetizeVariableNames": true,
+		"delayScheduleChangeUntilMediaEndEvent": false,
+		"language": "English",
+		"languageKey": "eng",
+		"monitorOverscan": "noOverscan",
+		"gpio": [
+			"input",
+			"input",
+			"input",
+			"input",
+			"input",
+			"input",
+			"input",
+			"input"
+		],
+		"BP900AConfigureAutomatically": true,
+		"BP900BConfigureAutomatically": true,
+		"BP900CConfigureAutomatically": true,
+		"BP200AConfigureAutomatically": true,
+		"BP200BConfigureAutomatically": true,
+		"BP200CConfigureAutomatically": true,
+		"BP900AConfiguration": 0,
+		"BP900BConfiguration": 0,
+		"BP900CConfiguration": 0,
+		"BP200AConfiguration": 0,
+		"BP200BConfiguration": 0,
+		"BP200CConfiguration": 0,
+		"serialPortConfigurations": [
+			{
+				"port": 0,
+				"baudRate": 115200,
+				"dataBits": "8",
+				"parity": "N",
+				"stopBits": "1",
+				"protocol": "ASCII",
+				"sendEol": "CR",
+				"receiveEol": "CR",
+				"invertSignals": false,
+				"connectedDevice": "None"
+			},
+			{
+				"port": 1,
+				"baudRate": 115200,
+				"dataBits": "8",
+				"parity": "N",
+				"stopBits": "1",
+				"protocol": "ASCII",
+				"sendEol": "CR",
+				"receiveEol": "CR",
+				"invertSignals": false,
+				"connectedDevice": "None"
+			},
+			{
+				"port": 2,
+				"baudRate": 115200,
+				"dataBits": "8",
+				"parity": "N",
+				"stopBits": "1",
+				"protocol": "ASCII",
+				"sendEol": "CR",
+				"receiveEol": "CR",
+				"invertSignals": false,
+				"connectedDevice": "None"
+			},
+			{
+				"port": 3,
+				"baudRate": 115200,
+				"dataBits": "8",
+				"parity": "N",
+				"stopBits": "1",
+				"protocol": "ASCII",
+				"sendEol": "CR",
+				"receiveEol": "CR",
+				"invertSignals": false,
+				"connectedDevice": "None"
+			},
+			{
+				"port": 4,
+				"baudRate": 115200,
+				"dataBits": "8",
+				"parity": "N",
+				"stopBits": "1",
+				"protocol": "ASCII",
+				"sendEol": "CR",
+				"receiveEol": "CR",
+				"invertSignals": false,
+				"connectedDevice": "None"
+			},
+			{
+				"port": 5,
+				"baudRate": 115200,
+				"dataBits": "8",
+				"parity": "N",
+				"stopBits": "1",
+				"protocol": "ASCII",
+				"sendEol": "CR",
+				"receiveEol": "CR",
+				"invertSignals": false,
+				"connectedDevice": "None"
+			},
+			{
+				"port": 6,
+				"baudRate": 115200,
+				"dataBits": "8",
+				"parity": "N",
+				"stopBits": "1",
+				"protocol": "ASCII",
+				"sendEol": "CR",
+				"receiveEol": "CR",
+				"invertSignals": false,
+				"connectedDevice": "None"
+			},
+			{
+				"port": 7,
+				"baudRate": 115200,
+				"dataBits": "8",
+				"parity": "N",
+				"stopBits": "1",
+				"protocol": "ASCII",
+				"sendEol": "CR",
+				"receiveEol": "CR",
+				"invertSignals": false,
+				"connectedDevice": "None"
+			}
+		],
+		"udpDestinationAddressType": "IPAddress",
+		"udpDestinationAddress": "255.255.255.255",
+		"udpDestinationPort": 5000,
+		"udpReceiverPort": 5000,
+		"flipCoordinates": false,
+		"touchCursorDisplayMode": "auto",
+		"audio1MinVolume": 0,
+		"audio1MaxVolume": 100,
+		"audio2MinVolume": 0,
+		"audio2MaxVolume": 100,
+		"audio3MinVolume": 0,
+		"audio3MaxVolume": 100,
+		"usbAMinVolume": 0,
+		"usbAMaxVolume": 100,
+		"usbBMinVolume": 0,
+		"usbBMaxVolume": 100,
+		"usbCMinVolume": 0,
+		"usbCMaxVolume": 100,
+		"usbDMinVolume": 0,
+		"usbDMaxVolume": 100,
+		"hdmiMinVolume": 0,
+		"hdmiMaxVolume": 100,
+		"spdifMinVolume": 0,
+		"spdifMaxVolume": 100,
+		"inactivityTimeout": false,
+		"inactivityTime": 30,
+		"autoCreateMediaCounterVariables": false,
+		"resetVariablesOnPresentationStart": false,
+		"networkedVariablesUpdateInterval": 300,
+		"graphicsZOrder": "Back",
+		"isMosaic": false,
+		"userDefinedEvents": [],
+		"userVariables": [],
+		"liveDataFeeds": [],
+		"scriptPlugins": [],
+		"parserPlugins": [],
+		"htmlSites": [],
+		"presentationIdentifiers": [],
+		"beacons": []
+	},
+	"zones": [
+		{
+			"id": 1,
+			"name": "Zone1",
+			"type": "VideoOrImages",
+			"nonInteractive": true,
+			"initialMediaStateId": "8ac91399-8cab-483e-b0e1-4c3ad50c3c19",
+			"x": 0,
+			"y": 0,
+			"width": 1920,
+			"height": 1080,
+			"zoneSpecificParameters": {
+				"viewMode": "Fill Screen and Centered",
+				"audioOutput": "Analog Audio",
+				"audioMode": "Multichannel Surround",
+				"audioMapping": "Audio-1",
+				"analogOutput": "None",
+				"analog2Output": "None",
+				"analog3Output": "None",
+				"hdmiOutput": "None",
+				"spdifOutput": "None",
+				"usbOutput": "None",
+				"usbOutputA": "None",
+				"usbOutputB": "None",
+				"usbOutputC": "None",
+				"usbOutputD": "None",
+				"audioMixMode": "Stereo",
+				"videoVolume": 100,
+				"audioVolume": 100,
+				"minimumVolume": 0,
+				"maximumVolume": 100,
+				"liveVideoInput": "S-Video",
+				"liveVideoStandard": "NTSC-M",
+				"brightness": 128,
+				"contrast": 64,
+				"saturation": 64,
+				"hue": 0,
+				"zOrderFront": true,
+				"mosaic": false,
+				"maxContentResolution": "_NotApplicable",
+				"imageMode": "Scale to Fit"
+			},
+			"playlist": {
+				"name": "Playlist 0",
+				"type": "non-interactive",
+				"initialMediaStateId": "8ac91399-8cab-483e-b0e1-4c3ad50c3c19",
+				"initialMediaStateName": "IMG_7094.JPG",
+				"states": [
+					{
+						"name": "IMG_7094.JPG",
+						"imageItem": {
+							"fileName": "IMG_7094.JPG",
+							"filePath": "/Users/tedshaffer/Pictures/SanMateoCoast2013/IMG_7094.JPG",
+							"slideDelayInterval": 5,
+							"slideTransition": "No effect",
+							"transitionDuration": 1000,
+							"videoPlayerRequired": false,
+							"useImageBuffer": false
+						}
+					},
+					{
+						"name": "Colorado.jpg",
+						"imageItem": {
+							"fileName": "Colorado.jpg",
+							"filePath": "/Users/tedshaffer/Pictures/BangPhotos/Colorado.jpg",
+							"slideDelayInterval": 5,
+							"slideTransition": "No effect",
+							"transitionDuration": 1000,
+							"videoPlayerRequired": false,
+							"useImageBuffer": false
+						}
+					}
+				],
+				"transitions": [
+					{
+						"sourceMediaState": "IMG_7094.JPG",
+						"userEvent": {
+							"parameters": [
+								5
+							],
+							"name": "timeout"
+						},
+						"targetMediaState": "Colorado.jpg",
+						"targetMediaStateIsPreviousState": false,
+						"assignInputToUserVariable": false,
+						"assignWildcardToUserVariable": false
+					},
+					{
+						"sourceMediaState": "Colorado.jpg",
+						"userEvent": {
+							"parameters": [
+								5
+							],
+							"name": "timeout"
+						},
+						"targetMediaState": "IMG_7094.JPG",
+						"targetMediaStateIsPreviousState": false,
+						"assignInputToUserVariable": false,
+						"assignWildcardToUserVariable": false
+					}
+				]
+			}
+		}
+	]
+}
