@@ -1,35 +1,54 @@
 // @flow
 
+import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
+
+import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
+
 import fs from 'fs';
 import path from 'path';
 
-import React, { Component } from 'react';
-import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
+import { openPresentationFile } from '../store/presentations';
 
-export default class App extends Component {
+class App extends Component {
 
   componentDidMount() {
+
+    let self = this;
+    ''
     console.log("app.js::componentDidMount invoked");
 
     console.log(__dirname);
 
+    // TODO wrong - this is a published file that has been turned rightside up; I just want to use a bpf file; the blob as returned from bsdm.
     const dataPath = "/Users/tedshaffer/Documents/Projects/autoReact/data/";
     const autoplayPath = path.join(dataPath, "autoplay.json");
-    const localSyncPath = path.join(dataPath, "local-sync.json");
 
-    fs.readFile(autoplayPath, { encoding: 'utf8' }, (err, data) => {
-      const autoplay = JSON.parse(data);
+    this.props.openPresentationFile(autoplayPath);
 
-      fs.readFile(localSyncPath,  { encoding: 'utf8' }, (err, data) => {
-        const localSync = JSON.parse(data);
-      })
-    });
+
+    // const localSyncPath = path.join(dataPath, "local-sync.json");
+    //
+    // fs.readFile(autoplayPath, { encoding: 'utf8' }, (err, data) => {
+    //   const autoplay = JSON.parse(data);
+    //
+    //   fs.readFile(localSyncPath,  { encoding: 'utf8' }, (err, data) => {
+    //     const localSync = JSON.parse(data)
+    //
+    //     self.props.openPresentationFile(autoplayPath);
+    //   })
+    // });
 
   }
 
   render() {
 
     console.log("app.js::render invoked");
+
+    if (this.props.bsdm) {
+      debugger;
+    }
 
     return (
       <MuiThemeProvider>
@@ -42,3 +61,16 @@ export default class App extends Component {
     );
   }
 }
+
+const mapStateToProps = (state) => ({
+  bsdm: state.bsdm,
+});
+
+
+const mapDispatchToProps = (dispatch) => {
+  return bindActionCreators({
+    openPresentationFile,
+  }, dispatch);
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(App);
