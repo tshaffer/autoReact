@@ -57,8 +57,6 @@ export function openPresentationFile(filePath) {
       dispatch(setAutoplay(autoplay));
       state = getState();
 
-      debugger;
-
     }).catch( (err) => {
       console.log(err);
       debugger;

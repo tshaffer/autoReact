@@ -47,18 +47,27 @@ class App extends Component {
 
     if (this.props.presentations && this.props.presentations.autoplay.BrightAuthor) {
 
-      let divStyle = {
-        color: 'orange',
-        position: 'absolute'
+      const brightAuthor = this.props.presentations.autoplay.BrightAuthor;
+      const zone = brightAuthor.zones[0];
+
+      const zoneX = zone.x;
+      const zoneY = zone.y;
+      const zoneWidth = zone.width;
+      const zoneHeight = zone.height;
+
+      let zoneDivStyle = {
+        position: 'absolute',
+        left: zoneX,
+        top: zoneY,
+        width: zoneWidth,
+        height: zoneHeight,
+        background: 'pink'
       };
 
-      divStyle.left = 69;
-      divStyle.top = 333;
-      divStyle.width = 200;
-      divStyle.height = 400;
+      console.log('render bs screen (again?)');
 
       return (
-        <div style={divStyle}>
+        <div id="zoneDiv" style={zoneDivStyle}>
           salami
         </div>
       );
