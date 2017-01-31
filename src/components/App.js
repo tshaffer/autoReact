@@ -21,9 +21,8 @@ class App extends Component {
 
     console.log(__dirname);
 
-    // TODO wrong - this is a published file that has been turned rightside up; I just want to use a bpf file; the blob as returned from bsdm.
     const dataPath = "/Users/tedshaffer/Documents/Projects/autoReact/data/";
-    const autoplayPath = path.join(dataPath, "autoplay.json");
+    const autoplayPath = path.join(dataPath, "NT-Two.json");
 
     this.props.openPresentationFile(autoplayPath);
 

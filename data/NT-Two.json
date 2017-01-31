@@ -1,0 +1,96 @@
+{
+	"sign": {
+		"id": "5dbc5f4b-cbf9-43a1-83f5-b8ba8d8bf234",
+		"version": "0.1.1",
+		"name": "NT-0",
+		"videoMode": 0
+	},
+	"zones": {
+		"zonesById": {
+			"6a48214f-6fbc-48bf-93e1-d9b68b6efd0b": {
+				"id": "6a48214f-6fbc-48bf-93e1-d9b68b6efd0b",
+				"name": "Zone1",
+				"type": 0,
+				"nonInteractive": true,
+				"initialMediaStateId": "8ac91399-8cab-483e-b0e1-4c3ad50c3c19"
+			}
+		},
+		"allZones": [
+			"6a48214f-6fbc-48bf-93e1-d9b68b6efd0b"
+		]
+	},
+	"mediaStates": {
+		"8ac91399-8cab-483e-b0e1-4c3ad50c3c19": {
+			"id": "8ac91399-8cab-483e-b0e1-4c3ad50c3c19",
+			"name": "IMG_7094.JPG",
+			"container": {
+				"id": "6a48214f-6fbc-48bf-93e1-d9b68b6efd0b",
+				"type": 0
+			},
+			"contentItemState": {
+				"id": "1e8c87aa-0903-a5f8-849d-1de50d839a5e",
+				"name": "IMG_7094.JPG",
+				"type": 0,
+				"media": {
+					"path": "/Users/tedshaffer/Pictures/SanMateoCoast2013/IMG_7094.JPG",
+					"mediaType": 1
+				}
+			},
+			"volume": 0
+		},
+		"99574fe1-666c-46cb-883e-92ff1dce9e44": {
+			"id": "99574fe1-666c-46cb-883e-92ff1dce9e44",
+			"name": "Colorado.jpg",
+			"container": {
+				"id": "6a48214f-6fbc-48bf-93e1-d9b68b6efd0b",
+				"type": 0
+			},
+			"contentItemState": {
+				"id": "67c22a74-117e-fb63-3a5f-57bd77fad3a7",
+				"name": "Colorado.jpg",
+				"type": 0,
+				"media": {
+					"path": "/Users/tedshaffer/Pictures/BangPhotos/Colorado.jpg",
+					"mediaType": 1
+				}
+			},
+			"volume": 0
+		}
+	},
+	"events": {
+		"f68ae3d6-9ca8-4f16-9f3a-24c2e2991f63": {
+			"id": "f68ae3d6-9ca8-4f16-9f3a-24c2e2991f63",
+			"name": "undefined_ev",
+			"type": 1,
+			"mediaStateId": "8ac91399-8cab-483e-b0e1-4c3ad50c3c19",
+			"data": {
+				"interval": 5
+			}
+		},
+		"beb8bc78-8869-4cf7-892c-697b40bddd03": {
+			"id": "beb8bc78-8869-4cf7-892c-697b40bddd03",
+			"name": "undefined_ev",
+			"type": 1,
+			"mediaStateId": "99574fe1-666c-46cb-883e-92ff1dce9e44",
+			"data": {
+				"interval": 5
+			}
+		}
+	},
+	"transitions": {
+		"8fed3721-2ba4-44f7-bd66-d91acce6e150": {
+			"id": "8fed3721-2ba4-44f7-bd66-d91acce6e150",
+			"name": "IMG_7094.JPG_tr",
+			"eventId": "f68ae3d6-9ca8-4f16-9f3a-24c2e2991f63",
+			"targetMediaStateId": "99574fe1-666c-46cb-883e-92ff1dce9e44",
+			"type": 0
+		},
+		"18d39ec7-e8da-4e9c-9f59-08dcf8141f19": {
+			"id": "18d39ec7-e8da-4e9c-9f59-08dcf8141f19",
+			"name": "Colorado.jpg_tr",
+			"eventId": "beb8bc78-8869-4cf7-892c-697b40bddd03",
+			"targetMediaStateId": "8ac91399-8cab-483e-b0e1-4c3ad50c3c19",
+			"type": 0
+		}
+	}
+}
