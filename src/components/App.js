@@ -35,6 +35,22 @@ class App extends Component {
     this.props.openPresentationFile(autoplayPath);
   }
 
+  nextAsset() {
+
+    const brightAuthor = this.props.presentations.autoplay.BrightAuthor;
+    const zone = brightAuthor.zones[0];
+    const playlist = zone.playlist;
+    let { states } = playlist;
+
+    let index = this.state.assetIndex;
+    index++;
+    if (index >= states.length) {
+      index = 0;
+    }
+    this.setState( { assetIndex: index });
+
+  }
+
   render() {
 
     console.log("app.js::render invoked");
@@ -66,6 +82,12 @@ class App extends Component {
       const imgSrc = "file://" + filePath;
 
       console.log('render bs screen (again?)');
+
+      setTimeout(
+        () => {
+          this.nextAsset();
+        },
+        3000);
 
       return (
         <div id="zoneDiv" style={zoneDivStyle}>
