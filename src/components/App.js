@@ -13,6 +13,14 @@ import { openPresentationFile } from '../store/presentations';
 
 class App extends Component {
 
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      assetIndex: 0
+    };
+  }
+
   componentDidMount() {
 
     let self = this;
@@ -25,20 +33,6 @@ class App extends Component {
     const autoplayPath = path.join(dataPath, "NT-Two.json");
 
     this.props.openPresentationFile(autoplayPath);
-
-
-    // const localSyncPath = path.join(dataPath, "local-sync.json");
-    //
-    // fs.readFile(autoplayPath, { encoding: 'utf8' }, (err, data) => {
-    //   const autoplay = JSON.parse(data);
-    //
-    //   fs.readFile(localSyncPath,  { encoding: 'utf8' }, (err, data) => {
-    //     const localSync = JSON.parse(data)
-    //
-    //     self.props.openPresentationFile(autoplayPath);
-    //   })
-    // });
-
   }
 
   render() {
@@ -64,11 +58,18 @@ class App extends Component {
         background: 'pink'
       };
 
+      const playlist = zone.playlist;
+      let { initialMediaStateId, initialMediaStateName, name, states, transitions } = playlist;
+
+      const currentState = states[this.state.assetIndex];
+      const filePath = currentState.imageItem.filePath;
+      const imgSrc = "file://" + filePath;
+
       console.log('render bs screen (again?)');
 
       return (
         <div id="zoneDiv" style={zoneDivStyle}>
-          salami
+          <img src={imgSrc} width={zoneWidth} height={zoneHeight} />
         </div>
       );
     }
