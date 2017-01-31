@@ -16,7 +16,7 @@ class App extends Component {
   componentDidMount() {
 
     let self = this;
-    ''
+
     console.log("app.js::componentDidMount invoked");
 
     console.log(__dirname);
@@ -46,18 +46,35 @@ class App extends Component {
     console.log("app.js::render invoked");
 
     if (this.props.bsdm) {
-      debugger;
+
+      let divStyle = {
+        color: 'orange',
+        position: 'absolute'
+      };
+
+      divStyle.left = 69;
+      divStyle.top = 333;
+      divStyle.width = 200;
+      divStyle.height = 400;
+
+      return (
+        <div style={divStyle}>
+          salami
+        </div>
+      );
     }
 
-    return (
-      <MuiThemeProvider>
-        <div>
-          <p className="autorunText">Pizza</p>
-          <p className="autorunText">Line 2</p>
-          <p className="autorunText">Line 3</p>
-        </div>
-      </MuiThemeProvider>
-    );
+    else {
+      return (
+        <MuiThemeProvider>
+          <div>
+            <p className="autorunText">Pizza</p>
+            <p className="autorunText">Line 2</p>
+            <p className="autorunText">Line 3</p>
+          </div>
+        </MuiThemeProvider>
+      );
+    }
   }
 }
 
