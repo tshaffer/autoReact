@@ -17,6 +17,7 @@ import { EventTypeName, VideoModeName, TransitionTypeName, MediaType } from '@br
 // ------------------------------------
 // Constants
 // ------------------------------------
+export const SET_AUTOPLAY = 'SET_AUTOPLAY';
 export const ADD_PRESENTATION = 'ADD_PRESENTATION';
 export const ADD_PRESENTATIONS = 'ADD_PRESENTATIONS';
 const UPDATE_PRESENTATION = 'ADD_PRESENTATION';
@@ -46,15 +47,17 @@ export function openPresentationFile(filePath) {
   return (dispatch, getState) => {
     getPresentationFile(filePath).then( (presentationData) => {
 
-      debugger;
-
       dispatch(dmOpenSign(presentationData));
 
       let state = getState();
-      // let bsdm = { state };
-      let bsdm = state.bsdm;
-      let autorunAutoplay = getAutorunAutoplay(bsdm);
-      console.log(autorunAutoplay);
+      let { bsdm } = state;
+      let autoplay = getAutorunAutoplay(bsdm);
+      console.log(autoplay);
+
+      dispatch(setAutoplay(autoplay));
+      state = getState();
+
+      debugger;
 
     }).catch( (err) => {
       console.log(err);
@@ -66,6 +69,14 @@ export function openPresentationFile(filePath) {
 // ------------------------------------
 // Actions
 // ------------------------------------
+export function setAutoplay(autoplay) {
+
+  return {
+    type: SET_AUTOPLAY,
+    payload: autoplay
+  };
+}
+
 export function addPresentation(presentation) {
 
   return {
@@ -104,7 +115,8 @@ export function setCurrentPresentation(presentation) {
 // ------------------------------------
 const initialState = {
   presentationsByPath: {},
-  currentPresentation: {}
+  currentPresentation: {},
+  autoplay: {}
 };
 
 export default function(state = initialState, action) {
@@ -118,7 +130,8 @@ export default function(state = initialState, action) {
 
       let newState = {
         presentationsByPath: newPresentationsByPath,
-        currentPresentation: state.currentPresentation
+        currentPresentation: state.currentPresentation,
+        autoplay: state.autoplay
       };
 
       return newState;
@@ -133,7 +146,8 @@ export default function(state = initialState, action) {
 
       let newState = {
         presentationsByPath: newPresentationsByPath,
-        currentPresentation: state.currentPresentation
+        currentPresentation: state.currentPresentation,
+        autoplay: state.autoplay
       };
 
       return newState;
@@ -143,7 +157,19 @@ export default function(state = initialState, action) {
 
       let newState = {
         presentationsByPath: state.presentationsByPath,
-        currentPresentation: action.payload
+        currentPresentation: action.payload,
+        autoplay: state.autoplay
+      };
+
+      return newState;
+    }
+
+    case SET_AUTOPLAY: {
+
+      let newState = {
+        presentationsByPath: state.presentationsByPath,
+        currentPresentation: state.currentPresentation,
+        autoplay: action.payload
       };
 
       return newState;

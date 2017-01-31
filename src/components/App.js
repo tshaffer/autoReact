@@ -45,7 +45,7 @@ class App extends Component {
 
     console.log("app.js::render invoked");
 
-    if (this.props.bsdm) {
+    if (this.props.presentations && this.props.presentations.autoplay.BrightAuthor) {
 
       let divStyle = {
         color: 'orange',
@@ -80,6 +80,7 @@ class App extends Component {
 
 const mapStateToProps = (state) => ({
   bsdm: state.bsdm,
+  presentations: state.presentations
 });
 
 
