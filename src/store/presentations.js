@@ -449,6 +449,7 @@ function getPlaylistStates(mediaStates, eventsById) {
       {
         autorunState.videoItem = {};
         autorunState.videoItem.fileName = mediaState.name;
+        autorunState.videoItem.filePath = mediaState.contentItem.media.path;
         autorunState.videoItem.videoDisplayMode = '2D';
         autorunState.videoItem.automaticallyLoop = true;
         break;

@@ -30,7 +30,8 @@ class App extends Component {
     console.log(__dirname);
 
     const dataPath = "/Users/tedshaffer/Documents/Projects/autoReact/data/";
-    const autoplayPath = path.join(dataPath, "NT-Two.json");
+    // const autoplayPath = path.join(dataPath, "NT-Two.json");
+    const autoplayPath = path.join(dataPath, "VideoPlusImage.bpf");
 
     this.props.openPresentationFile(autoplayPath);
   }
@@ -52,6 +53,8 @@ class App extends Component {
   }
 
   render() {
+
+    let self = this;
 
     console.log("app.js::render invoked");
 
@@ -78,22 +81,50 @@ class App extends Component {
       let { initialMediaStateId, initialMediaStateName, name, states, transitions } = playlist;
 
       const currentState = states[this.state.assetIndex];
-      const filePath = currentState.imageItem.filePath;
-      const imgSrc = "file://" + filePath;
 
       console.log('render bs screen (again?)');
 
-      setTimeout(
-        () => {
-          this.nextAsset();
-        },
-        3000);
+      if (currentState.imageItem) {
+        const filePath = currentState.imageItem.filePath;
+        const imgSrc = "file://" + filePath;
 
-      return (
-        <div id="zoneDiv" style={zoneDivStyle}>
-          <img src={imgSrc} width={zoneWidth} height={zoneHeight} />
-        </div>
-      );
+        setTimeout(
+          () => {
+            this.nextAsset();
+          },
+          3000);
+
+        return (
+          <div id="zoneDiv" style={zoneDivStyle}>
+            <img
+              src={imgSrc}
+              width={zoneWidth}
+              height={zoneHeight}
+            />
+          </div>
+        );
+      }
+      else if (currentState.videoItem) {
+        const filePath = currentState.videoItem.filePath;
+        const videoSrc = "file://" + filePath;
+
+        return (
+          <div id="zoneDiv" style={zoneDivStyle}>
+            <video
+              src={videoSrc}
+              autoPlay
+              width={zoneWidth}
+              height={zoneHeight}
+              type="video/mp4"
+              onEnded={ () =>
+                {
+                  self.nextAsset();
+                }
+              }
+            />
+          </div>
+        );
+      }
     }
 
     else {
