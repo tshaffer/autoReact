@@ -7,8 +7,7 @@ import Video from './video';
 
 export default class Zone extends Component {
 
-  state: Object;
-  
+
   constructor(props: Object) {
     super(props);
 
@@ -16,6 +15,8 @@ export default class Zone extends Component {
       assetIndex: 0
     };
   }
+
+  state: Object;
 
   nextAsset() {
 
