@@ -31,7 +31,9 @@ class App extends Component {
 
     const dataPath = "/Users/tedshaffer/Documents/Projects/autoReact/data/";
     // const autoplayPath = path.join(dataPath, "NT-Two.json");
-    const autoplayPath = path.join(dataPath, "VideoPlusImage.bpf");
+    // const dataPath = "";
+    // const autoplayPath = path.join(dataPath, "VideoPlusImage.bpf");
+    const autoplayPath = path.join(dataPath, "f0.bpf");
 
     this.props.openPresentationFile(autoplayPath);
   }
@@ -86,7 +88,13 @@ class App extends Component {
 
       if (currentState.imageItem) {
         const filePath = currentState.imageItem.filePath;
+        const fileName = path.basename(filePath);
+
+        // desktop version
         const imgSrc = "file://" + filePath;
+
+        // BrightSign device version
+        // const imgSrc = fileName;
 
         setTimeout(
           () => {
@@ -106,7 +114,9 @@ class App extends Component {
       }
       else if (currentState.videoItem) {
         const filePath = currentState.videoItem.filePath;
-        const videoSrc = "file://" + filePath;
+        const fileName = path.basename(filePath);
+        // const videoSrc = "file://" + filePath;
+        const videoSrc = fileName;
 
         return (
           <div id="zoneDiv" style={zoneDivStyle}>

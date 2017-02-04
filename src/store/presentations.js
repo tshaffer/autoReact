@@ -1,10 +1,7 @@
 import fs from 'fs';
 
 import {
-  dmNewSign,
   dmOpenSign,
-  dmAddZone,
-  dmGetZoneCount,
 } from '@brightsign/bsdatamodel';
 
 import { dmGetSignMetaData, dmGetZoneById, dmGetZoneSimplePlaylist, dmGetZonesForSign,
