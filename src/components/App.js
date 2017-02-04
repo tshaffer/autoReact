@@ -29,10 +29,12 @@ class App extends Component {
 
     console.log(__dirname);
 
-    const dataPath = "/Users/tedshaffer/Documents/Projects/autoReact/data/";
-    // const autoplayPath = path.join(dataPath, "NT-Two.json");
     // const dataPath = "";
+    const dataPath = "/storage/sd";
+    // const dataPath = "/Users/tedshaffer/Documents/Projects/autoReact/data/";
+    // const autoplayPath = path.join(dataPath, "NT-Two.json");
     // const autoplayPath = path.join(dataPath, "VideoPlusImage.bpf");
+
     const autoplayPath = path.join(dataPath, "f0.bpf");
 
     this.props.openPresentationFile(autoplayPath);
@@ -91,10 +93,10 @@ class App extends Component {
         const fileName = path.basename(filePath);
 
         // desktop version
-        const imgSrc = "file://" + filePath;
+        // const imgSrc = "file://" + filePath;
 
         // BrightSign device version
-        // const imgSrc = fileName;
+        const imgSrc = "pool/" + fileName;
 
         setTimeout(
           () => {
