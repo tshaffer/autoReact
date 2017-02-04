@@ -112,7 +112,7 @@
 			"type": 1,
 			"mediaStateId": "4235e8a6-8f53-4d75-a1c5-242f5da6b895",
 			"data": {
-				"interval": 5
+				"interval": 2
 			}
 		},
 		"49223e40-e761-4a09-9448-917d0664ddf2": {
@@ -121,7 +121,7 @@
 			"type": 1,
 			"mediaStateId": "2bd1be23-49d7-40d7-94e6-7c30c7d93a7c",
 			"data": {
-				"interval": 5
+				"interval": 4
 			}
 		},
 		"64b4f84f-ce3b-4cca-9a2d-d703c6cf8f5e": {
@@ -130,7 +130,7 @@
 			"type": 1,
 			"mediaStateId": "cb89ab44-980f-4852-9e64-53d9838d505a",
 			"data": {
-				"interval": 5
+				"interval": 6
 			}
 		}
 	},

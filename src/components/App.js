@@ -22,8 +22,8 @@ class App extends Component {
 
     // const autoplayPath = path.join(dataPath, "NT-Two.json");
     // const autoplayPath = path.join(dataPath, "VideoPlusImage.bpf");
-    // const autoplayPath = path.join(dataPath, "f0.bpf");
-    const autoplayPath = path.join(dataPath, "VideoPlusImage.bpf");
+    const autoplayPath = path.join(dataPath, "f0.bpf");
+    // const autoplayPath = path.join(dataPath, "VideoPlusImage.bpf");
 
     this.props.openPresentationFile(autoplayPath);
   }
