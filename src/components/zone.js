@@ -21,7 +21,7 @@ export default class Zone extends Component {
 
     let { states } = this.props.playlist;
 
-    let index = this.state.assetIndex;
+    let index: number = this.state.assetIndex;
     index++;
     if (index >= states.length) {
       index = 0;
@@ -33,7 +33,6 @@ export default class Zone extends Component {
 
     let self = this;
 
-    // let { initialMediaStateId, initialMediaStateName, name, states, transitions } = this.props.playlist;
     let { states } = this.props.playlist;
 
     const currentState = states[this.state.assetIndex];

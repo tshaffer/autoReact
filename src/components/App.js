@@ -15,10 +15,9 @@ class App extends Component {
   constructor(props: Object) {
     super(props);
 
-    // platform: 'desktop'
-
     this.state = {
-      platform: 'brightsign'
+      // platform: 'brightsign'
+      platform: 'desktop'
     };
   }
 
@@ -28,7 +27,7 @@ class App extends Component {
 
     console.log("app.js::componentDidMount invoked");
 
-    let dataPath = '';
+    let dataPath: string = '';
     if (this.state.platform === 'desktop') {
       dataPath = "/Users/tedshaffer/Documents/Projects/autoReact/data/";
     }
@@ -36,9 +35,9 @@ class App extends Component {
       dataPath = "/storage/sd";
     }
 
-    const presentationFile = "VideoPlusImage.bpf";
+    const presentationFile: string = "VideoPlusImage.bpf";
     // const presentationFile = "f0.bpf";
-    const autoplayPath = path.join(dataPath, presentationFile);
+    const autoplayPath: string = path.join(dataPath, presentationFile);
 
     this.props.openPresentationFile(autoplayPath);
   }
@@ -49,7 +48,7 @@ class App extends Component {
 
     if (this.props.presentations && this.props.presentations.autoplay.BrightAuthor) {
 
-      const brightAuthor = this.props.presentations.autoplay.BrightAuthor;
+      const brightAuthor: Object = this.props.presentations.autoplay.BrightAuthor;
 
       return (
         <Sign

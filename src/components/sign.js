@@ -8,7 +8,7 @@ export default class Sign extends Component {
 
   render () {
 
-    const zone = this.props.sign.zones[0];
+    const zone: Object = this.props.sign.zones[0];
 
     return (
       <div>
