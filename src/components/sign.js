@@ -8,13 +8,12 @@ export default class Sign extends Component {
 
   render () {
 
-    // TDOO - support multiple zones
-
     const zone = this.props.sign.zones[0];
 
     return (
       <div>
         <Zone
+          platform={this.props.platform}
           playlist={zone.playlist}
           x={Number(zone.x)}
           y={Number(zone.y)}
@@ -31,4 +30,5 @@ export default class Sign extends Component {
 
 Sign.propTypes = {
   sign: React.PropTypes.object.isRequired,
+  platform: React.PropTypes.string.isRequired
 };

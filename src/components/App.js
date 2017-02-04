@@ -12,23 +12,40 @@ import Sign from './sign';
 
 class App extends Component {
 
+  constructor(props: Object) {
+    super(props);
+
+    // platform: 'desktop'
+
+    this.state = {
+      platform: 'brightsign'
+    };
+  }
+
+  state: Object;
+
   componentDidMount() {
 
     console.log("app.js::componentDidMount invoked");
 
-    // const dataPath = "";
-    // const dataPath = "/storage/sd";
-    const dataPath = "/Users/tedshaffer/Documents/Projects/autoReact/data/";
+    let dataPath = '';
+    if (this.state.platform === 'desktop') {
+      dataPath = "/Users/tedshaffer/Documents/Projects/autoReact/data/";
+    }
+    else {
+      dataPath = "/storage/sd";
+    }
 
-    // const autoplayPath = path.join(dataPath, "NT-Two.json");
-    // const autoplayPath = path.join(dataPath, "VideoPlusImage.bpf");
-    const autoplayPath = path.join(dataPath, "f0.bpf");
-    // const autoplayPath = path.join(dataPath, "VideoPlusImage.bpf");
+    const presentationFile = "VideoPlusImage.bpf";
+    // const presentationFile = "f0.bpf";
+    const autoplayPath = path.join(dataPath, presentationFile);
 
     this.props.openPresentationFile(autoplayPath);
   }
 
   render() {
+
+    console.log("render invoked");
 
     if (this.props.presentations && this.props.presentations.autoplay.BrightAuthor) {
 
@@ -36,11 +53,13 @@ class App extends Component {
 
       return (
         <Sign
+          platform={this.state.platform}
           sign={brightAuthor}
         />
       );
     }
     else {
+
       return (
         <div>
           Sign Pizza

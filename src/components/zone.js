@@ -39,9 +39,18 @@ export default class Zone extends Component {
     const currentState = states[this.state.assetIndex];
 
     if (currentState.imageItem) {
+
+      let resourceIdentifier;
+      if (this.props.platform === 'desktop') {
+        resourceIdentifier = "file://" + currentState.imageItem.filePath;
+      }
+      else {
+        resourceIdentifier = "pool/" + currentState.imageItem.fileName;
+      }
+
       return (
         <Image
-          filePath={currentState.imageItem.filePath}
+          resourceIdentifier={resourceIdentifier}
           width={this.props.width}
           height={this.props.height}
           duration={currentState.imageItem.slideDelayInterval * 1000}
@@ -50,9 +59,18 @@ export default class Zone extends Component {
       );
     }
     else if (currentState.videoItem) {
+
+      let resourceIdentifier;
+      if (this.props.platform === 'desktop') {
+        resourceIdentifier = "file://" + currentState.videoItem.filePath;
+      }
+      else {
+        resourceIdentifier = "pool/" + currentState.videoItem.fileName;
+      }
+
       return (
         <Video
-          filePath={currentState.videoItem.filePath}
+          resourceIdentifier={resourceIdentifier}
           width={this.props.width}
           height={this.props.height}
           onVideoEnd={self.nextAsset.bind(this)}
@@ -66,4 +84,5 @@ Zone.propTypes = {
   playlist: React.PropTypes.object.isRequired,
   width: React.PropTypes.number.isRequired,
   height: React.PropTypes.number.isRequired,
+  platform: React.PropTypes.string.isRequired
 };

@@ -6,12 +6,6 @@ export default class Image extends Component {
 
   render () {
 
-    // desktop version
-    const imgSrc = "file://" + this.props.filePath;
-
-    // BrightSign device version
-    // const imgSrc = "pool/" + this.props.filePath;
-
     let self = this;
     setTimeout(
       () => {
@@ -21,7 +15,7 @@ export default class Image extends Component {
 
     return (
       <img
-        src={imgSrc}
+        src={this.props.resourceIdentifier}
         width={this.props.width.toString()}
         height={this.props.height.toString()}
       />
@@ -30,9 +24,9 @@ export default class Image extends Component {
 }
 
 Image.propTypes = {
-  filePath: React.PropTypes.string.isRequired,
   width: React.PropTypes.number.isRequired,
   height: React.PropTypes.number.isRequired,
   duration: React.PropTypes.number.isRequired,
-  onTimeout: React.PropTypes.func.isRequired
+  onTimeout: React.PropTypes.func.isRequired,
+  resourceIdentifier: React.PropTypes.string.isRequired,
 };
