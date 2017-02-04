@@ -88,14 +88,15 @@ export function addPresentations(presentations) {
   };
 }
 
-function updatePresentation(presentation) {
+// function updatePresentation(presentation) {
+//
+//   return {
+//     type: UPDATE_PRESENTATION,
+//     payload: presentation
+//   };
+//
+// }
 
-  return {
-    type: UPDATE_PRESENTATION,
-    payload: presentation
-  };
-
-}
 export function setCurrentPresentation(presentation) {
 
   return {
@@ -184,7 +185,7 @@ export function getAutorunAutoplay(bsdm): Object {
   autorunAutoplay.BrightAuthor = getBrightAuthorMetadata();
 
   let autorunSign = autorunAutoplay.BrightAuthor;
-  autorunSign.meta = getSignMetadata(bsdm);
+  autorunSign.meta = getSignMetadata(bsdm); // autorunSign.meta object is of type 'Sign'
   autorunSign.zones = [];
 
   const zoneIds = dmGetZonesForSign(bsdm);
@@ -427,30 +428,30 @@ function getPlaylistStates(mediaStates, eventsById) {
 
     switch (mediaType) {
       case MediaType.Image:
-      {
-        autorunState.imageItem = {};
-        autorunState.imageItem.fileName = mediaState.name;
-        autorunState.imageItem.filePath = mediaState.contentItem.media.path;
+        {
+          autorunState.imageItem = {};
+          autorunState.imageItem.fileName = mediaState.name;
+          autorunState.imageItem.filePath = mediaState.contentItem.media.path;
 
-        // TODO - fileIsLocal unused in current autorun - conceivable that it would be used?
-        // autorunState.imageItem.fileIsLocal = true;
+          // TODO - fileIsLocal unused in current autorun - conceivable that it would be used?
+          // autorunState.imageItem.fileIsLocal = true;
 
-        autorunState.imageItem.slideDelayInterval = mediaStateEvent.data.interval;
-        autorunState.imageItem.slideTransition = TransitionTypeName(mediaStateEvent.transitionList[0].type);
-        autorunState.imageItem.transitionDuration = 1000;   // TODO - bsdm
-        autorunState.imageItem.videoPlayerRequired = false; // TODO - bsdm
-        autorunState.imageItem.useImageBuffer = false; // TODO - bsdm
-        break;
-      }
+          autorunState.imageItem.slideDelayInterval = mediaStateEvent.data.interval;
+          autorunState.imageItem.slideTransition = TransitionTypeName(mediaStateEvent.transitionList[0].type);
+          autorunState.imageItem.transitionDuration = 1000;   // TODO - bsdm
+          autorunState.imageItem.videoPlayerRequired = false; // TODO - bsdm
+          autorunState.imageItem.useImageBuffer = false; // TODO - bsdm
+          break;
+        }
       case MediaType.Video:
-      {
-        autorunState.videoItem = {};
-        autorunState.videoItem.fileName = mediaState.name;
-        autorunState.videoItem.filePath = mediaState.contentItem.media.path;
-        autorunState.videoItem.videoDisplayMode = '2D';
-        autorunState.videoItem.automaticallyLoop = true;
-        break;
-      }
+        {
+          autorunState.videoItem = {};
+          autorunState.videoItem.fileName = mediaState.name;
+          autorunState.videoItem.filePath = mediaState.contentItem.media.path;
+          autorunState.videoItem.videoDisplayMode = '2D';
+          autorunState.videoItem.automaticallyLoop = true;
+          break;
+        }
       default:
         break;
     }
