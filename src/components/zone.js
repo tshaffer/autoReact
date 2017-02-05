@@ -37,7 +37,18 @@ export default class Zone extends Component {
 
     const currentState = states[this.state.assetIndex];
 
-    if (currentState.imageItem) {
+    // let htmlItem = {};
+
+    if (htmlItem) {
+      return (
+        <iframe
+          width={this.props.width}
+          height={this.props.height}
+          src={'file:///Users/tedshaffer/Documents/Projects/autoReact/data/test.html'}
+        />
+      );
+    }
+    else if (currentState.imageItem) {
 
       let resourceIdentifier;
       if (this.props.platform === 'desktop') {
