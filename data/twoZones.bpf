@@ -1,0 +1,270 @@
+{
+	"sign": {
+		"id": "df14f094-c14f-473e-be6a-f22ae5c56a46",
+		"version": "0.1.1",
+		"name": "f0",
+		"videoMode": 0,
+		"model": 6,
+		"monitorOrientation": 0,
+		"videoConnector": 0,
+		"deviceWebPageDisplay": 1,
+		"backgroundScreenColor": {
+			"a": 255,
+			"r": 0,
+			"g": 0,
+			"b": 0
+		},
+		"forceResolution": false,
+		"tenBitColorEnabled": false,
+		"htmlEnableJavascriptConsole": false,
+		"alphabetizeVariableNames": false,
+		"delayScheduleChangeUntilMediaEndEvent": false,
+		"language": "English",
+		"languageKey": "eng",
+		"autoCreateMediaCounterVariables": false,
+		"resetVariablesOnPresentationStart": false,
+		"networkedVariablesUpdateInterval": 300,
+		"flipCoordinates": false,
+		"isMosaic": false,
+		"inactivityTimeout": false,
+		"inactivityTime": 30,
+		"touchCursorDisplayMode": 1,
+		"graphicsZOrder": 0,
+		"udpDestinationAddressType": 0,
+		"udpDestinationAddress": "255.255.255.255",
+		"udpDestinationPort": 5000,
+		"udpReceiverPort": 5000
+	},
+	"zones": {
+		"zonesById": {
+			"d187fa92-1af7-4107-8093-01399fdc6d9b": {
+				"id": "d187fa92-1af7-4107-8093-01399fdc6d9b",
+				"name": "Zone1",
+				"type": 0,
+				"nonInteractive": true,
+				"initialMediaStateId": "4235e8a6-8f53-4d75-a1c5-242f5da6b895"
+			},
+            "c9237717-bf8f-47be-8c0b-06e577b3eb2e": {
+                "id": "c9237717-bf8f-47be-8c0b-06e577b3eb2e",
+                "name": "Zone2",
+                "type": 0,
+                "nonInteractive": true,
+                "initialMediaStateId": "ec258a65-c254-40a0-b854-a656db317230"
+            }
+		},
+		"allZones": [
+			"d187fa92-1af7-4107-8093-01399fdc6d9b",
+			"c9237717-bf8f-47be-8c0b-06e577b3eb2e"
+		]
+	},
+	"mediaStates": {
+		"4235e8a6-8f53-4d75-a1c5-242f5da6b895": {
+			"id": "4235e8a6-8f53-4d75-a1c5-242f5da6b895",
+			"name": "BryceCanyonUtah",
+			"container": {
+				"id": "d187fa92-1af7-4107-8093-01399fdc6d9b",
+				"type": 0
+			},
+			"contentItemState": {
+				"id": "adec5f11-79df-f29c-5695-f172fca8418b",
+				"name": "BryceCanyonUtah",
+				"type": 0,
+				"media": {
+					"path": "/Users/tedshaffer/Pictures/BangPhotos/BryceCanyonUtah.jpg",
+					"mediaType": 1
+				}
+			},
+			"volume": 0
+		},
+		"2bd1be23-49d7-40d7-94e6-7c30c7d93a7c": {
+			"id": "2bd1be23-49d7-40d7-94e6-7c30c7d93a7c",
+			"name": "Colorado",
+			"container": {
+				"id": "d187fa92-1af7-4107-8093-01399fdc6d9b",
+				"type": 0
+			},
+			"contentItemState": {
+				"id": "a5cb8e28-6fb8-f99d-10dc-4c38d6341c41",
+				"name": "Colorado",
+				"type": 0,
+				"media": {
+					"path": "/Users/tedshaffer/Pictures/BangPhotos/Colorado.jpg",
+					"mediaType": 1
+				}
+			},
+			"volume": 0
+		},
+		"cb89ab44-980f-4852-9e64-53d9838d505a": {
+			"id": "cb89ab44-980f-4852-9e64-53d9838d505a",
+			"name": "GlacierNationalPark",
+			"container": {
+				"id": "d187fa92-1af7-4107-8093-01399fdc6d9b",
+				"type": 0
+			},
+			"contentItemState": {
+				"id": "7080d8d1-8552-599c-c960-86b59f13ec5c",
+				"name": "GlacierNationalPark",
+				"type": 0,
+				"media": {
+					"path": "/Users/tedshaffer/Pictures/BangPhotos/GlacierNationalPark.jpg",
+					"mediaType": 1
+				}
+			},
+			"volume": 0
+		},
+		"ec258a65-c254-40a0-b854-a656db317230": {
+			"id": "ec258a65-c254-40a0-b854-a656db317230",
+			"name": "SignageLiveOSSupport.jpg",
+			"container": {
+				"id": "c9237717-bf8f-47be-8c0b-06e577b3eb2e",
+				"type": 0
+			},
+			"contentItemState": {
+				"id": "67e49203-9210-6d74-9e4c-bd0832c91d70",
+				"name": "SignageLiveOSSupport.jpg",
+				"type": 0,
+				"media": {
+					"path": "/Users/tedshaffer/Pictures/MixedMedia/SignageLiveOSSupport.jpg",
+					"mediaType": 1
+				}
+			},
+			"volume": 0
+		},
+		"aa9ff4ee-f697-4f47-a683-77b21f9752b0": {
+			"id": "aa9ff4ee-f697-4f47-a683-77b21f9752b0",
+			"name": "ManWithFeet.jpg",
+			"container": {
+				"id": "c9237717-bf8f-47be-8c0b-06e577b3eb2e",
+				"type": 0
+			},
+			"contentItemState": {
+				"id": "4953d347-4560-d8dd-759e-35decaec2486",
+				"name": "ManWithFeet.jpg",
+				"type": 0,
+				"media": {
+					"path": "/Users/tedshaffer/Pictures/MixedMedia/ManWithFeet.jpg",
+					"mediaType": 1
+				}
+			},
+			"volume": 0
+		},
+		"d63d60a5-f041-4431-bba4-57a4b28dfa01": {
+			"id": "d63d60a5-f041-4431-bba4-57a4b28dfa01",
+			"name": "0arc.mp4",
+			"container": {
+				"id": "c9237717-bf8f-47be-8c0b-06e577b3eb2e",
+				"type": 0
+			},
+			"contentItemState": {
+				"id": "a7c25f90-1c45-2d5d-1c6d-a9b1f79a3bbf",
+				"name": "0arc.mp4",
+				"type": 0,
+				"media": {
+					"path": "/Users/tedshaffer/Pictures/MixedMedia/0arc.mp4",
+					"mediaType": 0
+				}
+			},
+			"volume": 100
+		}
+	},
+	"events": {
+		"4131c7d8-df27-4a91-b30b-ee4b088cde0d": {
+			"id": "4131c7d8-df27-4a91-b30b-ee4b088cde0d",
+			"name": "undefined_ev",
+			"type": 1,
+			"mediaStateId": "4235e8a6-8f53-4d75-a1c5-242f5da6b895",
+			"data": {
+				"interval": 2
+			}
+		},
+		"49223e40-e761-4a09-9448-917d0664ddf2": {
+			"id": "49223e40-e761-4a09-9448-917d0664ddf2",
+			"name": "undefined_ev",
+			"type": 1,
+			"mediaStateId": "2bd1be23-49d7-40d7-94e6-7c30c7d93a7c",
+			"data": {
+				"interval": 4
+			}
+		},
+		"64b4f84f-ce3b-4cca-9a2d-d703c6cf8f5e": {
+			"id": "64b4f84f-ce3b-4cca-9a2d-d703c6cf8f5e",
+			"name": "undefined_ev",
+			"type": 1,
+			"mediaStateId": "cb89ab44-980f-4852-9e64-53d9838d505a",
+			"data": {
+				"interval": 6
+			}
+		},
+		"add8d628-6621-454c-a4bf-83509882916a": {
+			"id": "add8d628-6621-454c-a4bf-83509882916a",
+			"name": "undefined_ev",
+			"type": 1,
+			"mediaStateId": "ec258a65-c254-40a0-b854-a656db317230",
+			"data": {
+				"interval": 5
+			}
+		},
+		"f44f7e0c-5e8d-4bcc-b01f-a4de2fdc1a52": {
+			"id": "f44f7e0c-5e8d-4bcc-b01f-a4de2fdc1a52",
+			"name": "undefined_ev",
+			"type": 1,
+			"mediaStateId": "aa9ff4ee-f697-4f47-a683-77b21f9752b0",
+			"data": {
+				"interval": 5
+			}
+		},
+		"a52c5f51-5545-458d-94d6-b99696292a49": {
+			"id": "a52c5f51-5545-458d-94d6-b99696292a49",
+			"name": "undefined_ev",
+			"type": 0,
+			"mediaStateId": "d63d60a5-f041-4431-bba4-57a4b28dfa01"
+		}
+	},
+	"transitions": {
+		"c752769f-654d-4eb0-b186-77393b0f7ddc": {
+			"id": "c752769f-654d-4eb0-b186-77393b0f7ddc",
+			"name": "BryceCanyonUtah_tr",
+			"eventId": "4131c7d8-df27-4a91-b30b-ee4b088cde0d",
+			"targetMediaStateId": "2bd1be23-49d7-40d7-94e6-7c30c7d93a7c",
+			"type": 0
+		},
+		"872d7eb5-23ff-4bf3-b8d1-18af15f24c51": {
+			"id": "872d7eb5-23ff-4bf3-b8d1-18af15f24c51",
+			"name": "Colorado_tr",
+			"eventId": "49223e40-e761-4a09-9448-917d0664ddf2",
+			"targetMediaStateId": "cb89ab44-980f-4852-9e64-53d9838d505a",
+			"type": 0
+		},
+		"54a6164e-5ae5-4133-8b4e-075311f5315b": {
+			"id": "54a6164e-5ae5-4133-8b4e-075311f5315b",
+			"name": "GlacierNationalPark_tr",
+			"eventId": "64b4f84f-ce3b-4cca-9a2d-d703c6cf8f5e",
+			"targetMediaStateId": "4235e8a6-8f53-4d75-a1c5-242f5da6b895",
+			"type": 0
+		},
+		"ca03c512-3db8-4367-a230-6066cbac2f48": {
+			"id": "ca03c512-3db8-4367-a230-6066cbac2f48",
+			"name": "SignageLiveOSSupport.jpg_tr",
+			"eventId": "add8d628-6621-454c-a4bf-83509882916a",
+			"targetMediaStateId": "d63d60a5-f041-4431-bba4-57a4b28dfa01",
+			"type": 0
+		},
+		"3176f642-3cea-4dc6-86b7-c3285d737478": {
+			"id": "3176f642-3cea-4dc6-86b7-c3285d737478",
+			"name": "ManWithFeet.jpg_tr",
+			"eventId": "f44f7e0c-5e8d-4bcc-b01f-a4de2fdc1a52",
+			"targetMediaStateId": "ec258a65-c254-40a0-b854-a656db317230",
+			"type": 0
+		},
+		"50a9c543-8fc7-48c1-9e48-dc9e0f33522d": {
+			"id": "50a9c543-8fc7-48c1-9e48-dc9e0f33522d",
+			"name": "0arc.mp4_tr",
+			"eventId": "a52c5f51-5545-458d-94d6-b99696292a49",
+			"targetMediaStateId": "aa9ff4ee-f697-4f47-a683-77b21f9752b0",
+			"type": 0
+		}
+	},
+	"htmlSites": {},
+	"dataFeeds": {},
+	"userVariables": {}
+}
