@@ -37,7 +37,7 @@ export default class Zone extends Component {
 
     const currentState = states[this.state.assetIndex];
 
-    // let htmlItem = {};
+    let htmlItem = null;
 
     if (htmlItem) {
       return (

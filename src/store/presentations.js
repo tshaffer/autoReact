@@ -44,6 +44,7 @@ export function openPresentationFile(filePath) {
   return (dispatch, getState) => {
     getPresentationFile(filePath).then( (presentationData) => {
 
+      console.log('eat poo');
       dispatch(dmOpenSign(presentationData));
 
       let state = getState();
@@ -431,7 +432,7 @@ function getPlaylistStates(mediaStates, eventsById) {
         {
           autorunState.imageItem = {};
           autorunState.imageItem.fileName = mediaState.name;
-          autorunState.imageItem.filePath = mediaState.contentItem.media.path;
+          autorunState.imageItem.filePath = mediaState.contentItem.media.assetId;
 
           // TODO - fileIsLocal unused in current autorun - conceivable that it would be used?
           // autorunState.imageItem.fileIsLocal = true;
@@ -447,7 +448,7 @@ function getPlaylistStates(mediaStates, eventsById) {
         {
           autorunState.videoItem = {};
           autorunState.videoItem.fileName = mediaState.name;
-          autorunState.videoItem.filePath = mediaState.contentItem.media.path;
+          autorunState.videoItem.filePath = mediaState.contentItem.media.assetId;
           autorunState.videoItem.videoDisplayMode = '2D';
           autorunState.videoItem.automaticallyLoop = true;
           break;
