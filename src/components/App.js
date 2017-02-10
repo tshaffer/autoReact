@@ -6,7 +6,8 @@ import { bindActionCreators } from 'redux';
 
 import path from 'path';
 
-import { openPresentationFile } from '../store/presentations';
+// import { openPresentationFile } from '../store/presentations';
+import { openAndUpdatePresentationFile } from '../store/presentations';
 
 import Sign from './sign';
 
@@ -40,7 +41,8 @@ class App extends Component {
     // const presentationFile = "f0.bpf";
     const autoplayPath: string = path.join(dataPath, presentationFile);
 
-    this.props.openPresentationFile(autoplayPath);
+    // this.props.openPresentationFile(autoplayPath);
+    this.props.openAndUpdatePresentationFile(autoplayPath);
   }
 
   render() {
@@ -77,13 +79,15 @@ const mapStateToProps = (state) => ({
 
 const mapDispatchToProps = (dispatch) => {
   return bindActionCreators({
-    openPresentationFile,
+    // openPresentationFile,
+    openAndUpdatePresentationFile,
   }, dispatch);
 };
 
 App.propTypes = {
   presentations: React.PropTypes.object.isRequired,
-  openPresentationFile: React.PropTypes.func.isRequired
+  // openPresentationFile: React.PropTypes.func.isRequired
+  openAndUpdatePresentationFile: React.PropTypes.func.isRequired
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(App);

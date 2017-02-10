@@ -37,14 +37,14 @@ export default class Zone extends Component {
 
     const currentState = states[this.state.assetIndex];
 
-    let htmlItem = null;
+    // src={'file:///Users/tedshaffer/Documents/Projects/autoReact/data/test.html'}
 
-    if (htmlItem) {
+    if (currentState.htmlItem) {
       return (
         <iframe
           width={this.props.width}
           height={this.props.height}
-          src={'file:///Users/tedshaffer/Documents/Projects/autoReact/data/test.html'}
+          src={currentState.htmlItem.site.url}
         />
       );
     }

@@ -2,6 +2,11 @@ import fs from 'fs';
 
 import {
   dmOpenSign,
+  dmAddHtmlSite,
+  dmCreateHtmlContentItem,
+  dmPlaylistAppendMediaState,
+  dmGetZoneMediaStateContainer,
+  dmGetHtmlSiteById,
 } from '@brightsign/bsdatamodel';
 
 import { dmGetSignMetaData, dmGetZoneById, dmGetZoneSimplePlaylist, dmGetZonesForSign,
@@ -62,6 +67,40 @@ export function openPresentationFile(filePath) {
   };
 }
 
+export function openAndUpdatePresentationFile(filePath) {
+
+  return (dispatch, getState) => {
+
+    getPresentationFile(filePath).then((presentationData) => {
+
+      console.log('eat poo');
+      dispatch(dmOpenSign(presentationData));
+
+      let state = getState();
+      let {bsdm} = state;
+
+      let addHtmlSiteAction = dispatch(dmAddHtmlSite('TestSite',
+        'https://www.hdwallpapers.net/previews/lake-prags-italy-1053.jpg', false));
+      let htmlSiteId = addHtmlSiteAction.payload.id;
+      let contentItem = dmCreateHtmlContentItem('htmlItem', htmlSiteId);
+
+      const zoneIds = dmGetZonesForSign(bsdm);
+      let zoneContainer = dmGetZoneMediaStateContainer(zoneIds[0]);
+
+      dispatch(dmPlaylistAppendMediaState(zoneContainer, contentItem));
+      state = getState();
+      bsdm = state.bsdm;
+
+      debugger;
+      let autoplay = getAutorunAutoplay(bsdm);
+      console.log(autoplay);
+
+      dispatch(setAutoplay(autoplay));
+      state = getState();
+
+    });
+  };
+}
 // ------------------------------------
 // Actions
 // ------------------------------------
@@ -415,7 +454,7 @@ function getPlaylistMetadata(bsdm, zone) {
   return playlist;
 }
 
-function getPlaylistStates(mediaStates, eventsById) {
+function getPlaylistStates(bsdm, mediaStates, eventsById) {
 
   let states = [];
 
@@ -425,11 +464,14 @@ function getPlaylistStates(mediaStates, eventsById) {
 
     const mediaStateEvent = eventsById[mediaState.eventList[0].id];
 
-    const mediaType = mediaState.contentItem.media.mediaType;
+    const mediaStateType = mediaState.contentItem.type;
 
-    switch (mediaType) {
-      case MediaType.Image:
-        {
+    if (mediaStateType === 0) {
+
+      const mediaType = mediaState.contentItem.media.mediaType;
+
+      switch (mediaType) {
+        case MediaType.Image: {
           autorunState.imageItem = {};
           autorunState.imageItem.fileName = mediaState.name;
           autorunState.imageItem.filePath = mediaState.contentItem.media.assetId;
@@ -444,8 +486,7 @@ function getPlaylistStates(mediaStates, eventsById) {
           autorunState.imageItem.useImageBuffer = false; // TODO - bsdm
           break;
         }
-      case MediaType.Video:
-        {
+        case MediaType.Video: {
           autorunState.videoItem = {};
           autorunState.videoItem.fileName = mediaState.name;
           autorunState.videoItem.filePath = mediaState.contentItem.media.assetId;
@@ -453,8 +494,27 @@ function getPlaylistStates(mediaStates, eventsById) {
           autorunState.videoItem.automaticallyLoop = true;
           break;
         }
-      default:
-        break;
+        default:
+          break;
+      }
+    }
+
+    else if (mediaStateType === 1) {
+
+      debugger;
+
+      let htmlItem = {};
+      htmlItem.displayCursor = mediaState.contentItem.displayCursor;
+      htmlItem.enableExternalData = mediaState.contentItem.enableExternalData;
+      htmlItem.enableMouseEvents = mediaState.contentItem.enableMouseEvents;
+      htmlItem.hwzOn = mediaState.contentItem.hwzOn;
+      htmlItem.siteId = mediaState.contentItem.siteId;
+
+      // export function dmGetHtmlSiteById(state: DmState, props: DmIdParam) : DmHtmlSite;
+
+      htmlItem.site = dmGetHtmlSiteById(bsdm, { id: htmlItem.siteId });
+
+      autorunState.htmlItem = htmlItem;
     }
     states.push(autorunState);
   });
@@ -527,6 +587,6 @@ function getMediaStates(bsdm, zoneId, autorunPlaylist) {
   });
 
 
-  autorunPlaylist.states = getPlaylistStates(mediaStates, eventsById);
+  autorunPlaylist.states = getPlaylistStates(bsdm, mediaStates, eventsById);
   autorunPlaylist.transitions = getPlaylistTransitions(transitions, mediaStatesById, eventsById);
 }
