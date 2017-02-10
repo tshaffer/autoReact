@@ -79,8 +79,11 @@ export function openAndUpdatePresentationFile(filePath) {
       let state = getState();
       let {bsdm} = state;
 
+      // let addHtmlSiteAction = dispatch(dmAddHtmlSite('TestSite',
+      //   'https://www.hdwallpapers.net/previews/lake-prags-italy-1053.jpg', false));
       let addHtmlSiteAction = dispatch(dmAddHtmlSite('TestSite',
-        'https://www.hdwallpapers.net/previews/lake-prags-italy-1053.jpg', false));
+        'file:///Users/tedshaffer/Documents/Projects/autoReact/data/test.html', false));
+
       let htmlSiteId = addHtmlSiteAction.payload.id;
       let contentItem = dmCreateHtmlContentItem('htmlItem', htmlSiteId);
 
@@ -91,7 +94,6 @@ export function openAndUpdatePresentationFile(filePath) {
       state = getState();
       bsdm = state.bsdm;
 
-      debugger;
       let autoplay = getAutorunAutoplay(bsdm);
       console.log(autoplay);
 
@@ -500,8 +502,6 @@ function getPlaylistStates(bsdm, mediaStates, eventsById) {
     }
 
     else if (mediaStateType === 1) {
-
-      debugger;
 
       let htmlItem = {};
       htmlItem.displayCursor = mediaState.contentItem.displayCursor;
