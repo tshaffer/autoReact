@@ -7,3 +7,19 @@ body {
     color: blue;
 }
 
+.zoneTop {
+    position: absolute;
+    left: 0;
+    top: 0px;
+    width: 960px;
+    height: 540px;
+}
+
+.zoneBottom {
+    position: absolute;
+    left: 960px;
+    top: 540px;
+    width: 960px;
+    height: 540px;
+
+}
