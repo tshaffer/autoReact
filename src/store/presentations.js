@@ -2,15 +2,16 @@ import fs from 'fs';
 
 import {
   dmOpenSign,
-  dmAddHtmlSite,
-  dmCreateHtmlContentItem,
+  // dmAddHtmlSite,
+  dmCreateMediaContentItem,
+  // dmCreateHtmlContentItem,
   dmPlaylistAppendMediaState,
   dmGetZoneMediaStateContainer,
   dmGetHtmlSiteById,
   dmCreateAbsoluteRect,
-  dmNewSign,
-  VideoMode,
-  PlayerModel,
+  // dmNewSign,
+  // VideoMode,
+  // PlayerModel,
   dmAddZone,
   ZoneType,
   dmGetSignMetaData,
@@ -26,26 +27,27 @@ import {
   TransitionTypeName,
   EventTypeName,
   dmGetEventById,
-  GraphicsZOrderTypeName,
-  TouchCursorDisplayModeTypeName,
-  UdpAddressTypeName,
-  ZoneTypeCompactName,
+  // GraphicsZOrderTypeName,
+  // TouchCursorDisplayModeTypeName,
+  // UdpAddressTypeName,
+  // ZoneTypeCompactName,
   ViewModeTypeName,
   ImageModeTypeName,
-  AudioOutputSelectionTypeName,
+  // AudioOutputSelectionTypeName,
   AudioOutputSelectionSpecName,
-  AudioModeTypeName,
+  // AudioModeTypeName,
   AudioModeSpecName,
   AudioMappingTypeName,
-  AudioOutputNameString,
+  // AudioOutputNameString,
   AudioOutputTypeName,
   AudioMixModeTypeName,
-  DeviceWebPageDisplayName,
-  PlayerModelName,
-  MonitorOrientationTypeName,
-  VideoConnectorTypeName,
+  // DeviceWebPageDisplayName,
+  // PlayerModelName,
+  // MonitorOrientationTypeName,
+  // VideoConnectorTypeName,
   LiveVideoInputTypeName,
-  LiveVideoStandardTypeName
+  LiveVideoStandardTypeName,
+  ZoneTypeCompactName,
 } from '@brightsign/bsdatamodel';
 
 const deepcopy = require("deepcopy");
@@ -229,6 +231,22 @@ export function openAndUpdatePresentationFile(filePath) {
 
       console.log('eat poo');
       dispatch(dmOpenSign(presentationData));
+
+// add a second zone
+      let zoneRect = dmCreateAbsoluteRect(960,540,960,540);
+      let action = dispatch(dmAddZone('SecondZone', ZoneType.Video_Or_Images, 'z2', zoneRect));
+      let zoneContainer = dmGetZoneMediaStateContainer(action.payload.id);
+
+      let contentItem;
+      contentItem =
+        dmCreateMediaContentItem('image7093.jpg', '/Users/tedshaffer/Pictures/SanMateoCoast2013/IMG_7093.JPG',
+          MediaType.Image);
+      dispatch(dmPlaylistAppendMediaState(zoneContainer, contentItem));
+
+      contentItem =
+        dmCreateMediaContentItem('image7094.jpg', '/Users/tedshaffer/Pictures/SanMateoCoast2013/IMG_7094.JPG',
+          MediaType.Image);
+      dispatch(dmPlaylistAppendMediaState(zoneContainer, contentItem));
 
       let state = getState();
       let {bsdm} = state;
