@@ -1,0 +1,373 @@
+{
+  "sign": {
+    "properties": {
+      "id": "9b252d4c-211d-4cac-a939-eee43becb207",
+      "version": "0.1.1",
+      "name": "VideoPlusImage",
+      "videoMode": 0,
+      "model": 6,
+      "monitorOrientation": 0,
+      "videoConnector": 0,
+      "deviceWebPageDisplay": 1,
+      "backgroundScreenColor": {
+        "a": 255,
+        "r": 0,
+        "g": 0,
+        "b": 0
+      },
+      "forceResolution": false,
+      "tenBitColorEnabled": false,
+      "htmlEnableJavascriptConsole": false,
+      "alphabetizeVariableNames": false,
+      "autoCreateMediaCounterVariables": false,
+      "resetVariablesOnPresentationStart": false,
+      "networkedVariablesUpdateInterval": 300,
+      "delayScheduleChangeUntilMediaEndEvent": false,
+      "language": "English",
+      "languageKey": "eng",
+      "flipCoordinates": false,
+      "isMosaic": false,
+      "inactivityTimeout": false,
+      "inactivityTime": 30,
+      "touchCursorDisplayMode": 1,
+      "graphicsZOrder": 0,
+      "udpDestinationAddressType": 0,
+      "udpDestinationAddress": "255.255.255.255",
+      "udpDestinationPort": 5000,
+      "udpReceiverPort": 5000
+    },
+    "serialPortConfigurations": [
+      {
+        "port": 0,
+        "baudRate": 115200,
+        "dataBits": "8",
+        "parity": "N",
+        "stopBits": "1",
+        "protocol": "ASCII",
+        "sendEol": "CR",
+        "receiveEol": "CR",
+        "invertSignals": false,
+        "connectedDevice": "None"
+      },
+      {
+        "port": 1,
+        "baudRate": 115200,
+        "dataBits": "8",
+        "parity": "N",
+        "stopBits": "1",
+        "protocol": "ASCII",
+        "sendEol": "CR",
+        "receiveEol": "CR",
+        "invertSignals": false,
+        "connectedDevice": "None"
+      },
+      {
+        "port": 2,
+        "baudRate": 115200,
+        "dataBits": "8",
+        "parity": "N",
+        "stopBits": "1",
+        "protocol": "ASCII",
+        "sendEol": "CR",
+        "receiveEol": "CR",
+        "invertSignals": false,
+        "connectedDevice": "None"
+      },
+      {
+        "port": 3,
+        "baudRate": 115200,
+        "dataBits": "8",
+        "parity": "N",
+        "stopBits": "1",
+        "protocol": "ASCII",
+        "sendEol": "CR",
+        "receiveEol": "CR",
+        "invertSignals": false,
+        "connectedDevice": "None"
+      },
+      {
+        "port": 4,
+        "baudRate": 115200,
+        "dataBits": "8",
+        "parity": "N",
+        "stopBits": "1",
+        "protocol": "ASCII",
+        "sendEol": "CR",
+        "receiveEol": "CR",
+        "invertSignals": false,
+        "connectedDevice": "None"
+      },
+      {
+        "port": 5,
+        "baudRate": 115200,
+        "dataBits": "8",
+        "parity": "N",
+        "stopBits": "1",
+        "protocol": "ASCII",
+        "sendEol": "CR",
+        "receiveEol": "CR",
+        "invertSignals": false,
+        "connectedDevice": "None"
+      },
+      {
+        "port": 6,
+        "baudRate": 115200,
+        "dataBits": "8",
+        "parity": "N",
+        "stopBits": "1",
+        "protocol": "ASCII",
+        "sendEol": "CR",
+        "receiveEol": "CR",
+        "invertSignals": false,
+        "connectedDevice": "None"
+      },
+      {
+        "port": 7,
+        "baudRate": 115200,
+        "dataBits": "8",
+        "parity": "N",
+        "stopBits": "1",
+        "protocol": "ASCII",
+        "sendEol": "CR",
+        "receiveEol": "CR",
+        "invertSignals": false,
+        "connectedDevice": "None"
+      }
+    ],
+    "gpio": [
+      "input",
+      "input",
+      "input",
+      "input",
+      "input",
+      "input",
+      "input",
+      "input"
+    ],
+    "buttonPanels": {
+      "bp900a": {
+        "configureAutomatically": true,
+        "configuration": 0
+      },
+      "bp900b": {
+        "configureAutomatically": true,
+        "configuration": 0
+      },
+      "bp900c": {
+        "configureAutomatically": true,
+        "configuration": 0
+      },
+      "bp200a": {
+        "configureAutomatically": true,
+        "configuration": 0
+      },
+      "bp200b": {
+        "configureAutomatically": true,
+        "configuration": 0
+      },
+      "bp200c": {
+        "configureAutomatically": true,
+        "configuration": 0
+      }
+    },
+    "audioConfiguration": {
+      "analog1": {
+        "min": 0,
+        "max": 100
+      },
+      "analog2": {
+        "min": 0,
+        "max": 100
+      },
+      "analog3": {
+        "min": 0,
+        "max": 100
+      },
+      "usbA": {
+        "min": 0,
+        "max": 100
+      },
+      "usbB": {
+        "min": 0,
+        "max": 100
+      },
+      "usbC": {
+        "min": 0,
+        "max": 100
+      },
+      "usbD": {
+        "min": 0,
+        "max": 100
+      },
+      "hdmi": {
+        "min": 0,
+        "max": 100
+      },
+      "spdif": {
+        "min": 0,
+        "max": 100
+      }
+    }
+  },
+  "zones": {
+    "zonesById": {
+      "29f2a3ab-5b2a-45c3-b48c-148456f0f86d": {
+        "id": "29f2a3ab-5b2a-45c3-b48c-148456f0f86d",
+        "name": "Zone1",
+        "type": 0,
+        "tag": "vi1",
+        "nonInteractive": true,
+        "initialMediaStateId": "1fa70d6c-8360-451f-b9fe-15cba0306b99",
+        "position": {
+          "x": 0,
+          "y": 0,
+          "width": 100,
+          "height": 100,
+          "pct": true
+        },
+        "properties": {
+          "viewMode": 1,
+          "liveVideoInput": 0,
+          "liveVideoStandard": 0,
+          "brightness": 128,
+          "contrast": 64,
+          "saturation": 64,
+          "hue": 0,
+          "zOrderFront": true,
+          "mosaic": false,
+          "maxContentResolution": 4,
+          "audioOutput": 0,
+          "audioMode": 1,
+          "audioMapping": 0,
+          "audioOutputAssignments": {
+            "analog1": 0,
+            "analog2": 3,
+            "analog3": 3,
+            "usbA": 3,
+            "usbB": 3,
+            "usbC": 3,
+            "usbD": 3,
+            "hdmi": 0,
+            "spdif": 0
+          },
+          "audioMixMode": 0,
+          "audioVolume": 100,
+          "minimumVolume": 0,
+          "maximumVolume": 100,
+          "imageMode": 0
+        }
+      }
+    },
+    "allZones": [
+      "29f2a3ab-5b2a-45c3-b48c-148456f0f86d"
+    ]
+  },
+  "mediaStates": {
+    "1fa70d6c-8360-451f-b9fe-15cba0306b99": {
+      "id": "1fa70d6c-8360-451f-b9fe-15cba0306b99",
+      "name": "SignageLiveOSSupport.jpg",
+      "container": {
+        "id": "29f2a3ab-5b2a-45c3-b48c-148456f0f86d",
+        "type": 0
+      },
+      "contentItemState": {
+        "id": "63ad419f-6091-41fb-b5c3-3bddc5c883d3",
+        "name": "SignageLiveOSSupport.jpg",
+        "type": 0,
+        "media": {
+          "assetId": "/Users/tedshaffer/Pictures/MixedMedia/SignageLiveOSSupport.jpg",
+          "mediaType": 1
+        }
+      },
+      "volume": 0
+    },
+    "d1578067-16d0-416c-8db0-660eb39cf9d4": {
+      "id": "d1578067-16d0-416c-8db0-660eb39cf9d4",
+      "name": "ManWithFeet.jpg",
+      "container": {
+        "id": "29f2a3ab-5b2a-45c3-b48c-148456f0f86d",
+        "type": 0
+      },
+      "contentItemState": {
+        "id": "e0527ec7-9ce6-43a0-8103-050c71cf69ac",
+        "name": "ManWithFeet.jpg",
+        "type": 0,
+        "media": {
+          "assetId": "/Users/tedshaffer/Pictures/MixedMedia/ManWithFeet.jpg",
+          "mediaType": 1
+        }
+      },
+      "volume": 0
+    },
+    "f6e17cc6-9c89-4cc9-9389-55e24a943a89": {
+      "id": "f6e17cc6-9c89-4cc9-9389-55e24a943a89",
+      "name": "0arc.mp4",
+      "container": {
+        "id": "29f2a3ab-5b2a-45c3-b48c-148456f0f86d",
+        "type": 0
+      },
+      "contentItemState": {
+        "id": "ed9e351d-278a-4ae7-b8cb-c5493fda8222",
+        "name": "0arc.mp4",
+        "type": 0,
+        "media": {
+          "assetId": "/Users/tedshaffer/Pictures/MixedMedia/0arc.mp4",
+          "mediaType": 0
+        }
+      },
+      "volume": 100
+    }
+  },
+  "events": {
+    "1e0aeb2d-9759-489e-8da1-4d6f4560c212": {
+      "id": "1e0aeb2d-9759-489e-8da1-4d6f4560c212",
+      "name": "SignageLiveOSSupport.jpg_ev",
+      "type": 1,
+      "mediaStateId": "1fa70d6c-8360-451f-b9fe-15cba0306b99",
+      "data": {
+        "interval": 5
+      }
+    },
+    "bbb2d72f-0d75-4319-ae1c-eaae0baf6b60": {
+      "id": "bbb2d72f-0d75-4319-ae1c-eaae0baf6b60",
+      "name": "ManWithFeet.jpg_ev",
+      "type": 1,
+      "mediaStateId": "d1578067-16d0-416c-8db0-660eb39cf9d4",
+      "data": {
+        "interval": 5
+      }
+    },
+    "a69ad1e7-91f1-4469-991a-f70f99bb1181": {
+      "id": "a69ad1e7-91f1-4469-991a-f70f99bb1181",
+      "name": "0arc.mp4_ev",
+      "type": 0,
+      "mediaStateId": "f6e17cc6-9c89-4cc9-9389-55e24a943a89"
+    }
+  },
+  "transitions": {
+    "eea84af3-8b05-4485-8ede-d313b4ff3756": {
+      "id": "eea84af3-8b05-4485-8ede-d313b4ff3756",
+      "name": "SignageLiveOSSupport.jpg_tr",
+      "eventId": "1e0aeb2d-9759-489e-8da1-4d6f4560c212",
+      "targetMediaStateId": "f6e17cc6-9c89-4cc9-9389-55e24a943a89",
+      "type": 0
+    },
+    "59676ae5-1237-49ab-9970-ac74fdd4d50c": {
+      "id": "59676ae5-1237-49ab-9970-ac74fdd4d50c",
+      "name": "ManWithFeet.jpg_tr",
+      "eventId": "bbb2d72f-0d75-4319-ae1c-eaae0baf6b60",
+      "targetMediaStateId": "1fa70d6c-8360-451f-b9fe-15cba0306b99",
+      "type": 0
+    },
+    "64eade42-c024-477d-969b-e214817bf842": {
+      "id": "64eade42-c024-477d-969b-e214817bf842",
+      "name": "0arc.mp4_tr",
+      "eventId": "a69ad1e7-91f1-4469-991a-f70f99bb1181",
+      "targetMediaStateId": "d1578067-16d0-416c-8db0-660eb39cf9d4",
+      "type": 0
+    }
+  },
+  "htmlSites": {},
+  "dataFeeds": {},
+  "userVariables": {}
+}

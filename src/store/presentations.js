@@ -45,6 +45,105 @@ function getPresentationFile(resourceIdentifier = '') {
   });
 }
 
+// export function writePresentationFile(data, path) {
+//
+//   const bpfStr = JSON.stringify(data, null, '\t');
+//   fs.writeFileSync(path, bpfStr);
+//
+//   // return getFileName(path, '.bpf');
+// }
+
+// function writeBPF(getState, path) {
+//
+//   let {badm} = getState();
+//
+//   let bpf = badm;
+//   const bpfStr = JSON.stringify(bpf, null, '\t');
+//
+//   fs.writeFileSync(path, bpfStr);
+// }
+//
+// export function savePresentationAs(filePath) {
+//
+//   return function(dispatch, getState) {
+//
+//     writeBPF(getState, filePath);
+//
+//     const now = new Date().getTime();
+//
+//     // TODO - get actual name instead of deriving from path?
+//     const presentationName = getFileName(filePath, '.bpf');
+//     const presentation = new Presentation(
+//       filePath,
+//       presentationName,
+//       'presentation',
+//       '',
+//       now,
+//       now,
+//       now);
+//     dispatch(updatePresentationPersistToDB(presentation));
+//     dispatch(setRecentFilePersistToDB(presentation));
+//     dispatch(updateFileMenuItems());
+//     dispatch(setCurrentPresentation(presentation));
+//   };
+// }
+
+
+// export function savePresentation() {
+//
+//   return function(dispatch, getState) {
+//
+//     // get current presentation from the store
+//     let {app} = getState();
+//     let presentation = app.presentations.currentPresentation;
+//     // let path = presentation.path;
+//     // writeBPF(getState, path);
+//     writePresentationFile(getState().bsdm, presentation.path);
+//
+//     // update last modified in redux state, db
+//     const now = new Date().getTime();
+//     presentation.lastModified = now;
+//     presentation.lastAccessed = now;
+//     dispatch(updatePresentationPersistToDB(presentation));
+//     dispatch(setRecentFilePersistToDB(presentation));
+//     dispatch(updateFileMenuItems());
+//   };
+// }
+//
+export function savePresentationAs(bsdm, path) {
+
+  const bpfStr = JSON.stringify(bsdm, null, '\t');
+  fs.writeFileSync(path, bpfStr);
+
+  // return function(_, getState) {
+  //   const bpfStr = JSON.stringify(getState().bsdm, null, '\t');
+  //   fs.writeFileSync(path, bpfStr);
+  // };
+
+  // return function(dispatch, getState) {
+  //
+  //   writePresentationFile(getState().bsdm, filePath);
+
+    // TODO - any better way to get presentation name?
+    // const presentationName = writePresentationFile(getState().bsdm, filePath);
+
+    // const now = new Date().getTime();
+    // const presentation = new Presentation(
+    //   filePath,
+    //   presentationName,
+    //   'presentation',
+    //   '',
+    //   now,
+    //   now,
+    //   now);
+    // dispatch(updatePresentationPersistToDB(presentation));
+    // dispatch(setRecentFilePersistToDB(presentation));
+    // dispatch(updateFileMenuItems());
+    // dispatch(setCurrentPresentation(presentation));
+  // };
+}
+
+
 export function openPresentationFile(filePath) {
   return (dispatch, getState) => {
     getPresentationFile(filePath).then( (presentationData) => {
@@ -100,6 +199,8 @@ export function openAndUpdatePresentationFile(filePath) {
       dispatch(setAutoplay(autoplay));
       state = getState();
 
+      // savePresentationAs(state.bsdm, filePath);
+      // console.log('poo successfully saved');
     });
   };
 }
@@ -509,8 +610,7 @@ function getPlaylistStates(bsdm, mediaStates, eventsById) {
       htmlItem.enableMouseEvents = mediaState.contentItem.enableMouseEvents;
       htmlItem.hwzOn = mediaState.contentItem.hwzOn;
       htmlItem.siteId = mediaState.contentItem.siteId;
-
-      // export function dmGetHtmlSiteById(state: DmState, props: DmIdParam) : DmHtmlSite;
+      htmlItem.slideDelayInterval = mediaStateEvent.data.interval;
 
       htmlItem.site = dmGetHtmlSiteById(bsdm, { id: htmlItem.siteId });
 

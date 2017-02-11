@@ -29,6 +29,18 @@ export default class Zone extends Component {
     this.setState( { assetIndex: index });
   }
 
+  setHtmlTimeout(htmlItem: Object) {
+
+    let self = this;
+
+    setTimeout(
+      () => {
+        self.nextAsset();
+        // self.nextAsset.bind(self);
+      },
+      htmlItem.slideDelayInterval * 1000);
+  }
+
   render () {
 
     let self = this;
@@ -40,6 +52,9 @@ export default class Zone extends Component {
     // src={'file:///Users/tedshaffer/Documents/Projects/autoReact/data/test.html'}
 
     if (currentState.htmlItem) {
+
+      this.setHtmlTimeout(currentState.htmlItem);
+
       return (
         <iframe
           width={this.props.width}
@@ -48,6 +63,7 @@ export default class Zone extends Component {
         />
       );
     }
+
     else if (currentState.imageItem) {
 
       let resourceIdentifier;
