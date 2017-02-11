@@ -178,18 +178,20 @@ export function openAndUpdatePresentationFile(filePath) {
       let state = getState();
       let {bsdm} = state;
 
-      // let addHtmlSiteAction = dispatch(dmAddHtmlSite('TestSite',
-      //   'https://www.hdwallpapers.net/previews/lake-prags-italy-1053.jpg', false));
-      let addHtmlSiteAction = dispatch(dmAddHtmlSite('TestSite',
-        'file:///Users/tedshaffer/Documents/Projects/autoReact/data/test.html', false));
+// code to append an html site
+//       //   'https://www.hdwallpapers.net/previews/lake-prags-italy-1053.jpg', false));
+//       let addHtmlSiteAction = dispatch(dmAddHtmlSite('TestSite',
+//         'file:///Users/tedshaffer/Documents/Projects/autoReact/data/test.html', false));
+//
+//       let htmlSiteId = addHtmlSiteAction.payload.id;
+//       let contentItem = dmCreateHtmlContentItem('htmlItem', htmlSiteId);
+//
+//       const zoneIds = dmGetZonesForSign(bsdm);
+//       let zoneContainer = dmGetZoneMediaStateContainer(zoneIds[0]);
+//
+//       dispatch(dmPlaylistAppendMediaState(zoneContainer, contentItem));
 
-      let htmlSiteId = addHtmlSiteAction.payload.id;
-      let contentItem = dmCreateHtmlContentItem('htmlItem', htmlSiteId);
 
-      const zoneIds = dmGetZonesForSign(bsdm);
-      let zoneContainer = dmGetZoneMediaStateContainer(zoneIds[0]);
-
-      dispatch(dmPlaylistAppendMediaState(zoneContainer, contentItem));
       state = getState();
       bsdm = state.bsdm;
 
