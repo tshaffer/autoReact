@@ -229,28 +229,29 @@ export function openAndUpdatePresentationFile(filePath) {
 
     getPresentationFile(filePath).then((presentationData) => {
 
-      console.log('eat poo');
+      console.log('file ', filePath, 'opened');
+
       dispatch(dmOpenSign(presentationData));
 
 // add a second zone
-      let zoneRect = dmCreateAbsoluteRect(960,540,960,540);
-      let action = dispatch(dmAddZone('SecondZone', ZoneType.Video_Or_Images, 'z2', zoneRect));
-      let zoneContainer = dmGetZoneMediaStateContainer(action.payload.id);
+//       let zoneRect = dmCreateAbsoluteRect(960,540,960,540);
+//       let action = dispatch(dmAddZone('SecondZone', ZoneType.Video_Or_Images, 'z2', zoneRect));
+//       let zoneContainer = dmGetZoneMediaStateContainer(action.payload.id);
+//
+//       let contentItem;
+//       contentItem =
+//         dmCreateMediaContentItem('image7093.jpg', '/Users/tedshaffer/Pictures/SanMateoCoast2013/IMG_7093.JPG',
+//           MediaType.Image);
+//       dispatch(dmPlaylistAppendMediaState(zoneContainer, contentItem));
+//
+//       contentItem =
+//         dmCreateMediaContentItem('image7094.jpg', '/Users/tedshaffer/Pictures/SanMateoCoast2013/IMG_7094.JPG',
+//           MediaType.Image);
+//       dispatch(dmPlaylistAppendMediaState(zoneContainer, contentItem));
 
-      let contentItem;
-      contentItem =
-        dmCreateMediaContentItem('image7093.jpg', '/Users/tedshaffer/Pictures/SanMateoCoast2013/IMG_7093.JPG',
-          MediaType.Image);
-      dispatch(dmPlaylistAppendMediaState(zoneContainer, contentItem));
-
-      contentItem =
-        dmCreateMediaContentItem('image7094.jpg', '/Users/tedshaffer/Pictures/SanMateoCoast2013/IMG_7094.JPG',
-          MediaType.Image);
-      dispatch(dmPlaylistAppendMediaState(zoneContainer, contentItem));
-
-      let state = getState();
-      let {bsdm} = state;
-
+      // let state = getState();
+      // let {bsdm} = state;
+      //
 // code to append an html site
 //       //   'https://www.hdwallpapers.net/previews/lake-prags-italy-1053.jpg', false));
 //       let addHtmlSiteAction = dispatch(dmAddHtmlSite('TestSite',
@@ -266,8 +267,8 @@ export function openAndUpdatePresentationFile(filePath) {
 
       // let zoneRect = dmCreateAbsoluteRect(0,0,80,80);
 
-      state = getState();
-      bsdm = state.bsdm;
+      let state = getState();
+      let {bsdm} = state;
 
       let autoplay = getAutorunAutoplay(bsdm);
       console.log(autoplay);
@@ -276,7 +277,7 @@ export function openAndUpdatePresentationFile(filePath) {
       state = getState();
 
       // savePresentationAs(state.bsdm, filePath);
-      // console.log('poo successfully saved');
+      // console.log(filePath, ' successfully saved');
     });
 
   };

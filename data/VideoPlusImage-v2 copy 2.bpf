@@ -256,57 +256,10 @@
 					"maximumVolume": 100,
 					"imageMode": 0
 				}
-			},
-			"20c60019-5451-4c6b-b24b-7a7e0d0204c0": {
-				"id": "20c60019-5451-4c6b-b24b-7a7e0d0204c0",
-				"name": "SecondZone",
-				"type": 0,
-				"tag": "z2",
-				"nonInteractive": true,
-				"initialMediaStateId": "7230d179-730d-497a-b420-f8b6be125f43",
-				"position": {
-					"x": 960,
-					"y": 540,
-					"width": 960,
-					"height": 540,
-					"pct": false
-				},
-				"properties": {
-					"viewMode": 1,
-					"liveVideoInput": 0,
-					"liveVideoStandard": 0,
-					"brightness": 128,
-					"contrast": 64,
-					"saturation": 64,
-					"hue": 0,
-					"zOrderFront": true,
-					"mosaic": false,
-					"maxContentResolution": 4,
-					"audioOutput": 0,
-					"audioMode": 1,
-					"audioMapping": 0,
-					"audioOutputAssignments": {
-						"analog1": 0,
-						"analog2": 3,
-						"analog3": 3,
-						"usbA": 3,
-						"usbB": 3,
-						"usbC": 3,
-						"usbD": 3,
-						"hdmi": 0,
-						"spdif": 0
-					},
-					"audioMixMode": 0,
-					"audioVolume": 100,
-					"minimumVolume": 0,
-					"maximumVolume": 100,
-					"imageMode": 0
-				}
 			}
 		},
 		"allZones": [
-			"29f2a3ab-5b2a-45c3-b48c-148456f0f86d",
-			"20c60019-5451-4c6b-b24b-7a7e0d0204c0"
+			"29f2a3ab-5b2a-45c3-b48c-148456f0f86d"
 		]
 	},
 	"mediaStates": {
@@ -382,42 +335,6 @@
 				"hwzOn": false
 			},
 			"volume": 0
-		},
-		"7230d179-730d-497a-b420-f8b6be125f43": {
-			"id": "7230d179-730d-497a-b420-f8b6be125f43",
-			"name": "image7093.jpg",
-			"container": {
-				"id": "20c60019-5451-4c6b-b24b-7a7e0d0204c0",
-				"type": 0
-			},
-			"contentItemState": {
-				"id": "d33598e7-6f7d-4cc6-bdde-f8042e4f0ee2",
-				"name": "image7093.jpg",
-				"type": 0,
-				"media": {
-					"assetId": "/Users/tedshaffer/Pictures/SanMateoCoast2013/IMG_7093.JPG",
-					"mediaType": 1
-				}
-			},
-			"volume": 0
-		},
-		"fbb6a0f4-01ee-4daf-a426-2884f584860a": {
-			"id": "fbb6a0f4-01ee-4daf-a426-2884f584860a",
-			"name": "image7094.jpg",
-			"container": {
-				"id": "20c60019-5451-4c6b-b24b-7a7e0d0204c0",
-				"type": 0
-			},
-			"contentItemState": {
-				"id": "5ad0f0f4-e554-4399-8b45-dfabadc1c688",
-				"name": "image7094.jpg",
-				"type": 0,
-				"media": {
-					"assetId": "/Users/tedshaffer/Pictures/SanMateoCoast2013/IMG_7094.JPG",
-					"mediaType": 1
-				}
-			},
-			"volume": 0
 		}
 	},
 	"events": {
@@ -453,24 +370,6 @@
 			"data": {
 				"interval": 5
 			}
-		},
-		"4c127ef1-b7bd-4525-8967-2cb87c9046b5": {
-			"id": "4c127ef1-b7bd-4525-8967-2cb87c9046b5",
-			"name": "image7093.jpg_ev",
-			"type": 1,
-			"mediaStateId": "7230d179-730d-497a-b420-f8b6be125f43",
-			"data": {
-				"interval": 5
-			}
-		},
-		"d9da67de-fc6c-41cc-ab79-ca8b74d6c099": {
-			"id": "d9da67de-fc6c-41cc-ab79-ca8b74d6c099",
-			"name": "image7094.jpg_ev",
-			"type": 1,
-			"mediaStateId": "fbb6a0f4-01ee-4daf-a426-2884f584860a",
-			"data": {
-				"interval": 5
-			}
 		}
 	},
 	"transitions": {
@@ -500,20 +399,6 @@
 			"name": "htmlItem_tr",
 			"eventId": "dab4ad43-580c-4c07-84b7-b974fab54f91",
 			"targetMediaStateId": "1fa70d6c-8360-451f-b9fe-15cba0306b99",
-			"type": 0
-		},
-		"3d639b14-da91-4ed5-b333-56a7a2a96b11": {
-			"id": "3d639b14-da91-4ed5-b333-56a7a2a96b11",
-			"name": "image7093.jpg_tr",
-			"eventId": "4c127ef1-b7bd-4525-8967-2cb87c9046b5",
-			"targetMediaStateId": "fbb6a0f4-01ee-4daf-a426-2884f584860a",
-			"type": 0
-		},
-		"6c70621e-e428-4404-91ff-1f5791cd2d7d": {
-			"id": "6c70621e-e428-4404-91ff-1f5791cd2d7d",
-			"name": "image7094.jpg_tr",
-			"eventId": "d9da67de-fc6c-41cc-ab79-ca8b74d6c099",
-			"targetMediaStateId": "7230d179-730d-497a-b420-f8b6be125f43",
 			"type": 0
 		}
 	},
