@@ -1,9 +1,9 @@
 {
 	"sign": {
 		"properties": {
-			"id": "9b252d4c-211d-4cac-a939-eee43becb207",
+			"id": "1fad3c18-57ac-41ab-9101-5893a1c4a46d",
 			"version": "0.1.1",
-			"name": "VideoPlusImage",
+			"name": "TestSign",
 			"videoMode": 0,
 			"model": 6,
 			"monitorOrientation": 0,
@@ -211,13 +211,13 @@
 	},
 	"zones": {
 		"zonesById": {
-			"29f2a3ab-5b2a-45c3-b48c-148456f0f86d": {
-				"id": "29f2a3ab-5b2a-45c3-b48c-148456f0f86d",
-				"name": "Zone1",
+			"7c5b0160-fe74-4201-9837-2bf2cbde523e": {
+				"id": "7c5b0160-fe74-4201-9837-2bf2cbde523e",
+				"name": "VideoOrImages1",
 				"type": 0,
-				"tag": "vi1",
+				"tag": "z1",
 				"nonInteractive": true,
-				"initialMediaStateId": "1fa70d6c-8360-451f-b9fe-15cba0306b99",
+				"initialMediaStateId": "0",
 				"position": {
 					"x": 0,
 					"y": 0,
@@ -259,158 +259,13 @@
 			}
 		},
 		"allZones": [
-			"29f2a3ab-5b2a-45c3-b48c-148456f0f86d"
+			"7c5b0160-fe74-4201-9837-2bf2cbde523e"
 		]
 	},
-	"mediaStates": {
-		"1fa70d6c-8360-451f-b9fe-15cba0306b99": {
-			"id": "1fa70d6c-8360-451f-b9fe-15cba0306b99",
-			"name": "SignageLiveOSSupport.jpg",
-			"container": {
-				"id": "29f2a3ab-5b2a-45c3-b48c-148456f0f86d",
-				"type": 0
-			},
-			"contentItemState": {
-				"id": "63ad419f-6091-41fb-b5c3-3bddc5c883d3",
-				"name": "SignageLiveOSSupport.jpg",
-				"type": 0,
-				"media": {
-					"assetId": "/Users/tedshaffer/Pictures/MixedMedia/SignageLiveOSSupport.jpg",
-					"mediaType": 1
-				}
-			},
-			"volume": 0
-		},
-		"d1578067-16d0-416c-8db0-660eb39cf9d4": {
-			"id": "d1578067-16d0-416c-8db0-660eb39cf9d4",
-			"name": "ManWithFeet.jpg",
-			"container": {
-				"id": "29f2a3ab-5b2a-45c3-b48c-148456f0f86d",
-				"type": 0
-			},
-			"contentItemState": {
-				"id": "e0527ec7-9ce6-43a0-8103-050c71cf69ac",
-				"name": "ManWithFeet.jpg",
-				"type": 0,
-				"media": {
-					"assetId": "/Users/tedshaffer/Pictures/MixedMedia/ManWithFeet.jpg",
-					"mediaType": 1
-				}
-			},
-			"volume": 0
-		},
-		"f6e17cc6-9c89-4cc9-9389-55e24a943a89": {
-			"id": "f6e17cc6-9c89-4cc9-9389-55e24a943a89",
-			"name": "0arc.mp4",
-			"container": {
-				"id": "29f2a3ab-5b2a-45c3-b48c-148456f0f86d",
-				"type": 0
-			},
-			"contentItemState": {
-				"id": "ed9e351d-278a-4ae7-b8cb-c5493fda8222",
-				"name": "0arc.mp4",
-				"type": 0,
-				"media": {
-					"assetId": "/Users/tedshaffer/Pictures/MixedMedia/0arc.mp4",
-					"mediaType": 0
-				}
-			},
-			"volume": 100
-		},
-		"9aca6429-f1c3-4334-a977-93790e55872e": {
-			"id": "9aca6429-f1c3-4334-a977-93790e55872e",
-			"name": "htmlItem",
-			"container": {
-				"id": "29f2a3ab-5b2a-45c3-b48c-148456f0f86d",
-				"type": 0
-			},
-			"contentItemState": {
-				"id": "69bd85d6-b3aa-4b16-a96c-b4ea4f6d2855",
-				"name": "htmlItem",
-				"type": 1,
-				"siteId": "a26d0d6f-d237-4804-b31d-a6140f68e497",
-				"enableExternalData": false,
-				"enableMouseEvents": false,
-				"displayCursor": false,
-				"hwzOn": false
-			},
-			"volume": 0
-		}
-	},
-	"events": {
-		"1e0aeb2d-9759-489e-8da1-4d6f4560c212": {
-			"id": "1e0aeb2d-9759-489e-8da1-4d6f4560c212",
-			"name": "SignageLiveOSSupport.jpg_ev",
-			"type": 1,
-			"mediaStateId": "1fa70d6c-8360-451f-b9fe-15cba0306b99",
-			"data": {
-				"interval": 5
-			}
-		},
-		"bbb2d72f-0d75-4319-ae1c-eaae0baf6b60": {
-			"id": "bbb2d72f-0d75-4319-ae1c-eaae0baf6b60",
-			"name": "ManWithFeet.jpg_ev",
-			"type": 1,
-			"mediaStateId": "d1578067-16d0-416c-8db0-660eb39cf9d4",
-			"data": {
-				"interval": 5
-			}
-		},
-		"a69ad1e7-91f1-4469-991a-f70f99bb1181": {
-			"id": "a69ad1e7-91f1-4469-991a-f70f99bb1181",
-			"name": "0arc.mp4_ev",
-			"type": 0,
-			"mediaStateId": "f6e17cc6-9c89-4cc9-9389-55e24a943a89"
-		},
-		"dab4ad43-580c-4c07-84b7-b974fab54f91": {
-			"id": "dab4ad43-580c-4c07-84b7-b974fab54f91",
-			"name": "htmlItem_ev",
-			"type": 1,
-			"mediaStateId": "9aca6429-f1c3-4334-a977-93790e55872e",
-			"data": {
-				"interval": 5
-			}
-		}
-	},
-	"transitions": {
-		"eea84af3-8b05-4485-8ede-d313b4ff3756": {
-			"id": "eea84af3-8b05-4485-8ede-d313b4ff3756",
-			"name": "SignageLiveOSSupport.jpg_tr",
-			"eventId": "1e0aeb2d-9759-489e-8da1-4d6f4560c212",
-			"targetMediaStateId": "f6e17cc6-9c89-4cc9-9389-55e24a943a89",
-			"type": 0
-		},
-		"59676ae5-1237-49ab-9970-ac74fdd4d50c": {
-			"id": "59676ae5-1237-49ab-9970-ac74fdd4d50c",
-			"name": "ManWithFeet.jpg_tr",
-			"eventId": "bbb2d72f-0d75-4319-ae1c-eaae0baf6b60",
-			"targetMediaStateId": "9aca6429-f1c3-4334-a977-93790e55872e",
-			"type": 0
-		},
-		"64eade42-c024-477d-969b-e214817bf842": {
-			"id": "64eade42-c024-477d-969b-e214817bf842",
-			"name": "0arc.mp4_tr",
-			"eventId": "a69ad1e7-91f1-4469-991a-f70f99bb1181",
-			"targetMediaStateId": "d1578067-16d0-416c-8db0-660eb39cf9d4",
-			"type": 0
-		},
-		"7c95ee32-e067-47da-9ab0-3a2c190a0356": {
-			"id": "7c95ee32-e067-47da-9ab0-3a2c190a0356",
-			"name": "htmlItem_tr",
-			"eventId": "dab4ad43-580c-4c07-84b7-b974fab54f91",
-			"targetMediaStateId": "1fa70d6c-8360-451f-b9fe-15cba0306b99",
-			"type": 0
-		}
-	},
-	"htmlSites": {
-		"a26d0d6f-d237-4804-b31d-a6140f68e497": {
-			"id": "a26d0d6f-d237-4804-b31d-a6140f68e497",
-			"name": "TestSite",
-			"url": "file:///Users/tedshaffer/Documents/Projects/autoReact/data/test.html",
-			"localContent": false,
-			"queryString": ""
-		}
-	},
+	"mediaStates": {},
+	"events": {},
+	"transitions": {},
+	"htmlSites": {},
 	"dataFeeds": {},
 	"userVariables": {}
 }

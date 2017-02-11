@@ -7,14 +7,48 @@ import {
   dmPlaylistAppendMediaState,
   dmGetZoneMediaStateContainer,
   dmGetHtmlSiteById,
+  dmCreateAbsoluteRect,
+  dmNewSign,
+  VideoMode,
+  PlayerModel,
+  dmAddZone,
+  ZoneType,
+  dmGetSignMetaData,
+  dmGetZonesForSign,
+  dmGetZoneById,
+  dmGetMediaStateById,
+  dmGetZoneSimplePlaylist,
+  dmGetEventIdsForMediaState,
+  dmGetTransitionIdsForEvent,
+  dmGetTransitionById,
+  MediaType,
+  VideoModeName,
+  TransitionTypeName,
+  EventTypeName,
+  dmGetEventById,
+  GraphicsZOrderTypeName,
+  TouchCursorDisplayModeTypeName,
+  UdpAddressTypeName,
+  ZoneTypeCompactName,
+  ViewModeTypeName,
+  ImageModeTypeName,
+  AudioOutputSelectionTypeName,
+  AudioOutputSelectionSpecName,
+  AudioModeTypeName,
+  AudioModeSpecName,
+  AudioMappingTypeName,
+  AudioOutputNameString,
+  AudioOutputTypeName,
+  AudioMixModeTypeName,
+  DeviceWebPageDisplayName,
+  PlayerModelName,
+  MonitorOrientationTypeName,
+  VideoConnectorTypeName,
+  LiveVideoInputTypeName,
+  LiveVideoStandardTypeName
 } from '@brightsign/bsdatamodel';
 
-import { dmGetSignMetaData, dmGetZoneById, dmGetZoneSimplePlaylist, dmGetZonesForSign,
-  dmGetMediaStateById } from '@brightsign/bsdatamodel';
-import { dmGetEventIdsForMediaState, dmGetEventById, dmGetTransitionIdsForEvent,
-  dmGetTransitionById} from '@brightsign/bsdatamodel';
-import { EventTypeName, VideoModeName, TransitionTypeName, MediaType } from '@brightsign/bsdatamodel';
-
+const deepcopy = require("deepcopy");
 
 // ------------------------------------
 // Constants
@@ -170,6 +204,27 @@ export function openAndUpdatePresentationFile(filePath) {
 
   return (dispatch, getState) => {
 
+    // getPresentationFile(filePath).then((presentationData) => {
+    //
+    //   console.log('eat poo');
+    //   dispatch(dmOpenSign(presentationData));
+    //
+    //   let state = getState();
+    //   let {bsdm} = state;
+    // });
+
+
+// code to create a new sign
+//     dispatch(dmNewSign('TestSign', VideoMode.v1920x1080x60p, PlayerModel.XT1143));
+//     let zoneRect = dmCreateAbsoluteRect(0,0,960,540);
+//     let action = dispatch(dmAddZone('VideoOrImages1', ZoneType.Video_Or_Images, 'z1', zoneRect));
+//
+//     debugger;
+//     let state = getState();
+//
+//     savePresentationAs(state.bsdm, filePath);
+//     console.log('poo successfully saved');
+
     getPresentationFile(filePath).then((presentationData) => {
 
       console.log('eat poo');
@@ -191,6 +246,7 @@ export function openAndUpdatePresentationFile(filePath) {
 //
 //       dispatch(dmPlaylistAppendMediaState(zoneContainer, contentItem));
 
+      // let zoneRect = dmCreateAbsoluteRect(0,0,80,80);
 
       state = getState();
       bsdm = state.bsdm;
@@ -204,6 +260,7 @@ export function openAndUpdatePresentationFile(filePath) {
       // savePresentationAs(state.bsdm, filePath);
       // console.log('poo successfully saved');
     });
+
   };
 }
 // ------------------------------------
@@ -473,75 +530,55 @@ function getSignMetadata(bsdm) {
 
 function getZoneMetadata(bsdm, zoneId) {
 
-  const bsdmZoneMetadata = dmGetZoneById(bsdm, { id: zoneId });
+  const zone = dmGetZoneById(bsdm, { id: zoneId });
+  const zoneProperties = zone.properties;
 
-  let appZoneMetadata = bsdmZoneMetadata;
+  let appZoneMetadata = {};
+  appZoneMetadata.properties = deepcopy(zoneProperties);
 
-  // const bsdmZoneTypeName = ZoneTypeName(bsdmZoneMetadata.type);
-  // ZoneType[ZoneType['Video_Or_Images'] = 0] = 'Video_Or_Images';
-  // ZoneType[ZoneType['Video_Only'] = 1] = 'Video_Only';
-  // ZoneType[ZoneType['Images'] = 2] = 'Images';
-  // ZoneType[ZoneType['Audio_Only'] = 3] = 'Audio_Only';
-  // ZoneType[ZoneType['Enhanced_Audio'] = 4] = 'Enhanced_Audio';
-  // ZoneType[ZoneType['Ticker'] = 5] = 'Ticker';
-  // ZoneType[ZoneType['Clock'] = 6] = 'Clock';
-  // ZoneType[ZoneType['Background_Image'] = 7] = 'Background_Image';
+  appZoneMetadata.type = ZoneTypeCompactName(zone.type);
+  appZoneMetadata.position = zone.position;
+  appZoneMetadata.id = zone.id;
+  appZoneMetadata.initialMediaStateId = zone.initialMediaStateId;
+  appZoneMetadata.name = zone.name;
+  appZoneMetadata.nonInteractive = zone.nonInteractive;
 
-  // convert zone type until bsdm produces what BA needs
-  // switch (bsdmZoneTypeName) {
-  //   case 'Video Or Images':
-  //   {
-  //     break;
-  //   }
-  //   case 'Image':
-  //   {
-  //     break;
-  //   }
-  // }
+  appZoneMetadata.properties.viewMode = ViewModeTypeName(zoneProperties.viewMode);
+  appZoneMetadata.properties.imageMode = ImageModeTypeName(zoneProperties.imageMode);
 
-  // but, we only support one zone type now
-  appZoneMetadata.type = 'VideoOrImages';
+  appZoneMetadata.properties.audioOutput = AudioOutputSelectionSpecName(zoneProperties.audioOutput);
+  appZoneMetadata.properties.audioMode = AudioModeSpecName(zoneProperties.audioMode);
+  appZoneMetadata.properties.audioMapping = AudioMappingTypeName(zoneProperties.audioMapping);
+  appZoneMetadata.properties.audioMixMode = AudioMixModeTypeName(zoneProperties.audioMixMode);
 
-  // TODO - eliminate any of the following that the autorun does not actually use / need
+  appZoneMetadata.properties.liveVideoInput = LiveVideoInputTypeName(zoneProperties.liveVideoInput);
+  appZoneMetadata.properties.liveVideoStandard = LiveVideoStandardTypeName(zoneProperties.liveVideoStandard);
 
-  // TODO - implement the following in one of either bsdm or app
-  appZoneMetadata.x = 0;
-  appZoneMetadata.y = 0;
-  appZoneMetadata.width = 1920;
-  appZoneMetadata.height = 1080;
-  appZoneMetadata.id = 1;
+  console.log(AudioOutputTypeName(zoneProperties.audioOutputAssignments.analog1));
+  appZoneMetadata.properties.analogOutput = 'Pcm';
+  appZoneMetadata.properties.analog2Output = 'None';
+  appZoneMetadata.properties.analog3Output = 'None';
+  appZoneMetadata.properties.hdmiOutput = 'Pcm';
+  appZoneMetadata.properties.spdifOutput = 'None';
+  appZoneMetadata.properties.usbOutputA = 'None';
+  appZoneMetadata.properties.usbOutputB = 'None';
+  appZoneMetadata.properties.usbOutputC = 'None';
+  appZoneMetadata.properties.usbOutputD = 'None';
 
-  let zoneSpecificParameters = {};
-  zoneSpecificParameters.viewMode = 'Fill Screen and Centered';
-  zoneSpecificParameters.audioOutput = 'Analog Audio';
-  zoneSpecificParameters.audioMode = 'Multichannel Surround';
-  zoneSpecificParameters.audioMapping = 'Audio-1';
-  zoneSpecificParameters.analogOutput = 'None';
-  zoneSpecificParameters.analog2Output = 'None';
-  zoneSpecificParameters.analog3Output = 'None';
-  zoneSpecificParameters.hdmiOutput = 'None';
-  zoneSpecificParameters.spdifOutput = 'None';
-  zoneSpecificParameters.usbOutput = 'None';
-  zoneSpecificParameters.usbOutputA = 'None';
-  zoneSpecificParameters.usbOutputB = 'None';
-  zoneSpecificParameters.usbOutputC = 'None';
-  zoneSpecificParameters.usbOutputD = 'None';
-  zoneSpecificParameters.audioMixMode = 'Stereo';
-  zoneSpecificParameters.videoVolume = 100;
-  zoneSpecificParameters.audioVolume = 100;
-  zoneSpecificParameters.minimumVolume = 0;
-  zoneSpecificParameters.maximumVolume = 100;
-  zoneSpecificParameters.liveVideoInput = 'S-Video';
-  zoneSpecificParameters.liveVideoStandard = 'NTSC-M';
-  zoneSpecificParameters.brightness = 128;
-  zoneSpecificParameters.contrast = 64;
-  zoneSpecificParameters.saturation = 64;
-  zoneSpecificParameters.hue = 0;
-  zoneSpecificParameters.zOrderFront = true;
-  zoneSpecificParameters.mosaic = false;
-  zoneSpecificParameters.maxContentResolution = '_NotApplicable';
-  zoneSpecificParameters.imageMode = 'Scale to Fit';
-  appZoneMetadata.zoneSpecificParameters = zoneSpecificParameters;
+  appZoneMetadata.properties.analogOutput = AudioOutputTypeName(zoneProperties.audioOutputAssignments.analog1);
+  appZoneMetadata.properties.analog2Output = AudioOutputTypeName(zoneProperties.audioOutputAssignments.analog2);
+  appZoneMetadata.properties.analog3Output = AudioOutputTypeName(zoneProperties.audioOutputAssignments.analog3);
+  appZoneMetadata.properties.hdmiOutput = AudioOutputTypeName(zoneProperties.audioOutputAssignments.hdmi);
+  appZoneMetadata.properties.spdifOutput = AudioOutputTypeName(zoneProperties.audioOutputAssignments.spdif);
+  appZoneMetadata.properties.usbOutputA = AudioOutputTypeName(zoneProperties.audioOutputAssignments.usbA);
+  appZoneMetadata.properties.usbOutputB = AudioOutputTypeName(zoneProperties.audioOutputAssignments.usbB);
+  appZoneMetadata.properties.usbOutputC = AudioOutputTypeName(zoneProperties.audioOutputAssignments.usbC);
+  appZoneMetadata.properties.usbOutputD = AudioOutputTypeName(zoneProperties.audioOutputAssignments.usbD);
+
+
+  // the following don't exist
+  //    mosaicDecoderName
+  //    videoVolume
 
   return appZoneMetadata;
 }

@@ -15,10 +15,10 @@ export default class Sign extends Component {
         <Zone
           platform={this.props.platform}
           playlist={zone.playlist}
-          x={Number(zone.x)}
-          y={Number(zone.y)}
-          width={Number(zone.width)}
-          height={Number(zone.height)}
+          x={Number(zone.position.x)}
+          y={Number(zone.position.y)}
+          width={Number(zone.position.width)}
+          height={Number(zone.position.height)}
         />
       </div>
     );

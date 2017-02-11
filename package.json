@@ -25,6 +25,7 @@
   },
   "dependencies": {
     "@brightsign/bsdatamodel": "0.2.19",
+    "deepcopy": "^0.6.3",
     "material-ui": "^0.16.4",
     "react": "^15.4.2",
     "react-dom": "^15.4.2",
