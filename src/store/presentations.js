@@ -233,6 +233,9 @@ export function openAndUpdatePresentationFile(filePath) {
 
     getPresentationFile(filePath).then((presentationData) => {
 
+      let state;
+      let bsdm;
+
       console.log('file ', filePath, 'opened');
 
       dispatch(dmOpenSign(presentationData));
@@ -246,11 +249,18 @@ export function openAndUpdatePresentationFile(filePath) {
       let dataFeedId = innerAction.payload.id;
       let contentItem = dmCreateDataFeedContentItem('NewsFeed', dataFeedId);
       dispatch(dmPlaylistAppendMediaState(tickerZoneContainer, contentItem));
-      retVal.then( () => {
-        debugger;
-        const mZone = dmGetZoneById(bsdm, { id: action.payload.id });
-        const mState = dmGetMediaStateById(bsdm, { id: mZone.initialMediaStateId});
-      });
+
+      state = getState();
+      bsdm = state.bsdm;
+
+      const mZone = dmGetZoneById(bsdm, { id: action.payload.id });
+      const mState = dmGetMediaStateById(bsdm, { id: mZone.initialMediaStateId});
+
+      // retVal.then( () => {
+      //   debugger;
+      //   const mZone = dmGetZoneById(bsdm, { id: action.payload.id });
+      //   const mState = dmGetMediaStateById(bsdm, { id: mZone.initialMediaStateId});
+      // });
 // add a second zone
 //       let zoneRect = dmCreateAbsoluteRect(960,540,960,540);
 //       let action = dispatch(dmAddZone('SecondZone', ZoneType.Video_Or_Images, 'z2', zoneRect));
@@ -285,8 +295,8 @@ export function openAndUpdatePresentationFile(filePath) {
 
       // let zoneRect = dmCreateAbsoluteRect(0,0,80,80);
 
-      let state = getState();
-      let {bsdm} = state;
+      state = getState();
+      bdsmj = state.bsdm;
 
       let autoplay = getAutorunAutoplay(bsdm);
       console.log(autoplay);
@@ -294,8 +304,8 @@ export function openAndUpdatePresentationFile(filePath) {
       dispatch(setAutoplay(autoplay));
       state = getState();
 
-      savePresentationAs(state.bsdm, filePath);
-      console.log(filePath, ' successfully saved');
+      // savePresentationAs(state.bsdm, filePath);
+      // console.log(filePath, ' successfully saved');
     });
 
   };
