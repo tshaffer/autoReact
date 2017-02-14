@@ -1,9 +1,14 @@
 import fs from 'fs';
 
 import {
+  StringParameterType,
+  DataFeedTypeName,
+  dmGetDataFeedById,
+  dmGetMediaStateStateById,
+  ContentItemTypeName,
   dmOpenSign,
   // dmAddHtmlSite,
-  dmCreateMediaContentItem,
+  // dmCreateMediaContentItem,
   // dmCreateHtmlContentItem,
   dmPlaylistAppendMediaState,
   dmGetZoneMediaStateContainer,
@@ -253,8 +258,8 @@ export function openAndUpdatePresentationFile(filePath) {
       state = getState();
       bsdm = state.bsdm;
 
-      const mZone = dmGetZoneById(bsdm, { id: action.payload.id });
-      const mState = dmGetMediaStateById(bsdm, { id: mZone.initialMediaStateId});
+      // const mZone = dmGetZoneById(bsdm, { id: action.payload.id });
+      // const mState = dmGetMediaStateById(bsdm, { id: mZone.initialMediaStateId});
 
       // retVal.then( () => {
       //   debugger;
@@ -296,7 +301,7 @@ export function openAndUpdatePresentationFile(filePath) {
       // let zoneRect = dmCreateAbsoluteRect(0,0,80,80);
 
       state = getState();
-      bdsmj = state.bsdm;
+      bsdm = state.bsdm;
 
       let autoplay = getAutorunAutoplay(bsdm);
       console.log(autoplay);
@@ -304,8 +309,8 @@ export function openAndUpdatePresentationFile(filePath) {
       dispatch(setAutoplay(autoplay));
       state = getState();
 
-      // savePresentationAs(state.bsdm, filePath);
-      // console.log(filePath, ' successfully saved');
+      savePresentationAs(state.bsdm, filePath);
+      console.log(filePath, ' successfully saved');
     });
 
   };
@@ -658,9 +663,11 @@ function getPlaylistStates(bsdm, mediaStates, eventsById) {
 
     const mediaStateEvent = eventsById[mediaState.eventList[0].id];
 
-    const mediaStateType = mediaState.contentItem.type;
+    // const mediaStateType = mediaState.contentItem.type;
+    const mediaStateType = ContentItemTypeName(mediaState.contentItem.type);
+    // console.log(ContentItemTypeName(mediaStateType));
 
-    if (mediaStateType === 0) {
+    if (mediaStateType === 'Media') {
 
       const mediaType = mediaState.contentItem.media.mediaType;
 
@@ -693,7 +700,7 @@ function getPlaylistStates(bsdm, mediaStates, eventsById) {
       }
     }
 
-    else if (mediaStateType === 1) {
+    else if (mediaStateType === 'Html') {
 
       let htmlItem = {};
       htmlItem.displayCursor = mediaState.contentItem.displayCursor;
@@ -707,12 +714,46 @@ function getPlaylistStates(bsdm, mediaStates, eventsById) {
 
       autorunState.htmlItem = htmlItem;
     }
+
+    else if (mediaStateType === 'DataFeed') {
+
+      console.log(mediaState);
+      debugger;
+
+      let dataFeedId = mediaState.contentItem.dataFeedId;
+      let dataFeed = dmGetDataFeedById(bsdm, { id: dataFeedId });
+      let dataFeedType = dataFeed.type;
+      let dataFeedTypeName = DataFeedTypeName(dataFeedType);
+      if (dataFeedTypeName === 'URLDataFeed') {
+        let rssUrl = dmGetSimpleStringFromParameterizedString(dataFeed.url);
+
+      }
+      // let simpleRSSItem = {};
+      // simpleRSSItem
+      // let dataFeedItem;
+    }
     states.push(autorunState);
   });
 
   return states;
 }
 
+export const dmGetSimpleStringFromParameterizedString = (ps) => {
+  let returnString = undefined;
+  if (typeof ps === "object" && ps.params && ps.params.length) {
+    ps.params.forEach(param => {
+      if (param.type === StringParameterType.UserVariable) {
+        return undefined;
+      }
+      if (returnString) {
+        returnString = returnString + param.value;
+      } else {
+        returnString = param.value;
+      }
+    });
+  }
+  return returnString;
+};
 function getPlaylistTransitions(transitions, mediaStatesById, eventsById) {
 
   let autorunTransitions = [];
@@ -753,24 +794,43 @@ function getPlaylistTransitions(transitions, mediaStatesById, eventsById) {
 
 function getMediaStates(bsdm, zoneId, autorunPlaylist) {
 
-  const zone = dmGetZoneById(bsdm, { id: zoneId });
-
-  if (zone.type === ZoneType.Ticker) {
-
-    debugger;
-
-    const tickerMediaState = dmGetMediaStateById(bsdm, { id: zone.initialMediaStateId});
-
-  }
-
-  let mediaStates = [];
-  let mediaStatesById = {};
-
   let events = [];
   let eventsById = {};
   let transitions = [];
 
-  const mediaStateIds = dmGetZoneSimplePlaylist(bsdm, { id: zoneId});
+  const zone = dmGetZoneById(bsdm, { id: zoneId });
+
+  let mediaStateIds = [];
+  let mediaStates = [];
+
+  if (zone.type === ZoneType.Ticker) {
+    // const tickerMediaState = dmGetMediaStateById(bsdm, {id: zone.initialMediaStateId});
+    mediaStateIds.push(zone.initialMediaStateId);
+  }
+  else {
+    mediaStateIds = dmGetZoneSimplePlaylist(bsdm, { id: zoneId});
+  }
+
+    // // export function dmGetMediaStateStateById(state: DmState, props: DmIdParam) : DmMediaStateState;
+    // let dmMediaStateState = dmGetMediaStateById(bsdm,  { id: zone.initialMediaStateId});
+    //
+    //
+    // const eventIdsForMediaState = dmGetEventIdsForMediaState(bsdm, { id: zone.initialMediaStateId});
+    // const eventId = eventIdsForMediaState[0];
+    // const event = dmGetEventById(bsdm, { id: eventId});
+    // events.push(event);
+    // eventsById[eventId] = event;
+    //
+    // const transitionIdsForEvent = dmGetTransitionIdsForEvent(bsdm, { id: eventIdsForMediaState[0]});
+    // const transition = dmGetTransitionById(bsdm, { id: transitionIdsForEvent[0]});
+    // transitions.push(transition);
+    //
+    // autorunPlaylist.states = getPlaylistStates(bsdm, [tickerMediaState], eventsById);
+    // autorunPlaylist.transitions = getPlaylistTransitions(transitions, mediaStatesById, eventsById);
+
+  let mediaStatesById = {};
+
+  // const mediaStateIds = dmGetZoneSimplePlaylist(bsdm, { id: zoneId});
   mediaStateIds.forEach( (mediaStateId) => {
     const mediaState = dmGetMediaStateById(bsdm, { id: mediaStateId});
     mediaStates.push(mediaState);
