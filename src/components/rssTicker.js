@@ -2,6 +2,8 @@
 
 import React, { Component } from 'react';
 
+const xml2js = require('xml2js');
+
 export default class RSSTicker extends Component {
 
   componentWillMount() {
@@ -14,40 +16,27 @@ export default class RSSTicker extends Component {
       .then( (response) => {
         let blobPromise = response.text();
         blobPromise.then( (content) => {
-          debugger;
+          let parser = new xml2js.Parser();
+          try {
+            parser.parseString(content, (err, jsonResponse) => {
+              if (err) {
+                console.log(err);
+                debugger;
+              }
+              console.log(jsonResponse);
+              // resolve(jsonResponse);
+            });
+          }
+          catch (e) {
+            console.log(e);
+            debugger;
+          }
         })
-
-
-        // let blobPromise = response.blob();
-        // blobPromise.then( (blobData) => {
-        //   let reader = new FileReader();
-        //   reader.addEventListener('loadend', function() {
-        //     const buf = self.toBuffer(reader.result);
-        //     debugger;
-        //     // nodeWrappers.writeFile(destinationFilePath, buf).then( () => {
-        //     //   resolve();
-        //     // }).catch( (err) => {
-        //     //   reject(err);
-        //     // });
-        //   });
-        //   reader.readAsArrayBuffer(blobData);
-        // });
       }).catch( (err) => {
       console.log(err);
       debugger;
     });
   }
-
-  // From ArrayBuffer to Buffer
-  toBuffer(ab) {
-    let buf = new Buffer(ab.byteLength);
-    let view = new Uint8Array(ab);
-    for (let i = 0; i < buf.length; ++i) {
-      buf[i] = view[i];
-    }
-    return buf;
-  }
-
 
   render () {
 

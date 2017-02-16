@@ -307,10 +307,10 @@ export function openAndUpdatePresentationFile(filePath) {
       console.log(autoplay);
 
       dispatch(setAutoplay(autoplay));
-      state = getState();
-
-      savePresentationAs(state.bsdm, filePath);
-      console.log(filePath, ' successfully saved');
+      // state = getState();
+      //
+      // savePresentationAs(state.bsdm, filePath);
+      // console.log(filePath, ' successfully saved');
     });
 
   };
