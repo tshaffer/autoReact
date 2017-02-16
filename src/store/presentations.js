@@ -718,19 +718,25 @@ function getPlaylistStates(bsdm, mediaStates, eventsById) {
     else if (mediaStateType === 'DataFeed') {
 
       console.log(mediaState);
-      debugger;
+
+      let rssItem = {};
 
       let dataFeedId = mediaState.contentItem.dataFeedId;
       let dataFeed = dmGetDataFeedById(bsdm, { id: dataFeedId });
-      let dataFeedType = dataFeed.type;
-      let dataFeedTypeName = DataFeedTypeName(dataFeedType);
-      if (dataFeedTypeName === 'URLDataFeed') {
-        let rssUrl = dmGetSimpleStringFromParameterizedString(dataFeed.url);
 
-      }
-      // let simpleRSSItem = {};
-      // simpleRSSItem
-      // let dataFeedItem;
+      // proper way to do it
+      // let dataFeedType = dataFeed.type;
+      // let dataFeedTypeName = DataFeedTypeName(dataFeedType);
+      // if (dataFeedTypeName === 'URLDataFeed') {
+      //   feedUrl = dmGetSimpleStringFromParameterizedString(dataFeed.url);
+      // }
+      const feedUrl = dmGetSimpleStringFromParameterizedString(dataFeed.url);
+
+      // http://docs.brightsign.biz/display/DOC/BSTicker
+
+      rssItem.feedUrl = feedUrl;
+
+      autorunState.rssItem = rssItem;
     }
     states.push(autorunState);
   });

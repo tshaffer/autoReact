@@ -4,6 +4,7 @@ import React, { Component } from 'react';
 
 import Image from './image';
 import Video from './video';
+import RSSTicker from './rssTicker';
 
 export default class Zone extends Component {
 
@@ -51,7 +52,16 @@ export default class Zone extends Component {
 
     // src={'file:///Users/tedshaffer/Documents/Projects/autoReact/data/test.html'}
 
-    if (currentState.htmlItem) {
+    if (currentState.rssItem) {
+      return (
+        <RSSTicker
+          width={this.props.width}
+          height={this.props.height}
+          feedUrl={currentState.rssItem.feedUrl}
+        />
+      )
+    }
+    else if (currentState.htmlItem) {
 
       this.setHtmlTimeout(currentState.htmlItem);
 
