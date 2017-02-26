@@ -199,7 +199,7 @@ export default class NewZone extends Component {
               }
               else {
                 debugger;
-                autorunState.resourceIdentifier = "pool/" + currentState.imageItem.fileName;
+                // autorunState.resourceIdentifier = "pool/" + currentState.imageItem.fileName;
               }
               break;
             }
@@ -211,12 +211,12 @@ export default class NewZone extends Component {
               }
               else {
                 debugger;
-                autorunState.resourceIdentifier = "pool/" + currentState.imageItem.fileName;
+                // autorunState.resourceIdentifier = "pool/" + currentState.imageItem.fileName;
               }
               break;
             }
             default: {
-              debuggger;
+              debugger;
             }
           }
         }
@@ -261,6 +261,9 @@ export default class NewZone extends Component {
     }
 
     let autorunState = this.state.autorunStates[this.state.stateIndex];
+
+    console.log('newZone.js::render(), zoneId: ', this.props.zone.id, ' autorunState; ', autorunState);
+
     let { contentItemType } = autorunState;
 
     switch (contentItemType) {
@@ -311,31 +314,34 @@ export default class NewZone extends Component {
               />
             );
           }
-          case MediaType.Html: {
-
-            console.log(autorunState);
-            debugger;
-            // let resourceIdentifier;
-            // if (this.props.platform === 'desktop') {
-            //   resourceIdentifier = .htmlItem.site.url;
-            // }
-            // else {
-            //   resourceIdentifier = 'pool/test.html';
-            // }
-            //
-            // return (
-            //   <iframe
-            //     width={this.props.width}
-            //     height={this.props.height}
-            //     src={resourceIdentifier}
-            //   />
-            // );
-            break;
-          }
           default: {
             debugger;
           }
         }
+        break;
+      }
+      case 'html': {
+
+        console.log(autorunState);
+        // let resourceIdentifier;
+        // if (this.props.platform === 'desktop') {
+        //   resourceIdentifier = currentState.htmlItem.site.url;
+        // }
+        // else {
+        //   resourceIdentifier = 'pool/test.html';
+        // }
+        //
+        return (
+          <iframe
+            width={this.props.width}
+            height={this.props.height}
+            src={autorunState.url}
+          />
+        );
+      }
+
+      default: {
+        debugger;
       }
     }
 

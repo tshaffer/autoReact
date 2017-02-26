@@ -300,13 +300,13 @@ export function openAndUpdatePresentationFile(filePath) {
 
       // let zoneRect = dmCreateAbsoluteRect(0,0,80,80);
 
-      state = getState();
-      bsdm = state.bsdm;
-
-      let autoplay = getAutorunAutoplay(bsdm);
-      console.log(autoplay);
-
-      dispatch(setAutoplay(autoplay));
+      // state = getState();
+      // bsdm = state.bsdm;
+      //
+      // let autoplay = getAutorunAutoplay(bsdm);
+      // console.log(autoplay);
+      //
+      // dispatch(setAutoplay(autoplay));
       // state = getState();
       //
       // savePresentationAs(state.bsdm, filePath);
