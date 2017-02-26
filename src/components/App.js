@@ -9,8 +9,7 @@ import path from 'path';
 // import { openPresentationFile } from '../store/presentations';
 import { openAndUpdatePresentationFile } from '../store/presentations';
 
-// import Sign from './sign';
-import NewSign from './newSign';
+import Sign from './sign';
 
 class App extends Component {
 
@@ -47,28 +46,16 @@ class App extends Component {
   }
 
   shouldComponentUpdate(nextProps, nextState) {
-    // console.log('currentProps');
-    // console.log(this.props);
-    // console.log('nextProps');
-    // console.log(nextProps);
-    // console.log('currentState');
-    // console.log(this.state);
-    // console.log('nextState');
-    // console.log(nextState);
 
     const existingSignName = this.props.bsdm.sign.properties.name;
     const nextSignName = nextProps.bsdm.sign.properties.name;
     if (existingSignName !== nextSignName) {
-      // console.log('YES - App.js should update');
       return true;
     }
-    // console.log('NO - App.js should not update');
     return false;
   }
 
   render() {
-
-    // console.log("render invoked");
 
     // TODO - what else needs to be checked to ensure that a sign is loaded?
     if (!this.props.bsdm || this.props.bsdm.sign.properties.name === 'Untitled') {
@@ -80,7 +67,7 @@ class App extends Component {
     }
 
     return (
-      <NewSign
+      <Sign
         platform={this.state.platform}
         bsdm={this.props.bsdm}
       />
