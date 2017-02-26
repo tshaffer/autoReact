@@ -18,7 +18,7 @@ import {
   // dmCreateHtmlContentItem,
   // dmPlaylistAppendMediaState,
   // dmGetZoneMediaStateContainer,
-  // dmGetHtmlSiteById,
+  dmGetHtmlSiteById,
   // dmCreateAbsoluteRect,
   // dmNewSign,
   // VideoMode,
@@ -77,7 +77,8 @@ export default class NewZone extends Component {
       zoneType: '',
       mediaStateIds: [],
       mediaStates: [],
-      mediaStateIndex: 0,
+      autorunStates: [],
+      stateIndex: 0,
     };
   }
 
@@ -104,6 +105,130 @@ export default class NewZone extends Component {
 
     this.setState( { mediaStateIds });
     this.setState( { mediaStates });
+
+    let autorunStates = [];
+
+    mediaStates.forEach( mediaState => {
+
+      let assetId;
+      let mediaType;
+      let duration;
+
+      let autorunState = {};
+
+      const mediaStateContainer = mediaState.container;
+      const mediaStateContainerType = mediaStateContainer.type;
+
+      const mediaStateContentItem = mediaState.contentItem;
+      const mediaStateContentItemType = mediaStateContentItem.type;
+      const contentItemType = ContentItemTypeName(mediaStateContentItemType).toLowerCase();
+      switch (contentItemType) {
+        case 'media': {
+
+          const name = mediaStateContentItem.name;
+          const mediaObject = mediaStateContentItem.media;
+
+          assetId = mediaObject.assetId;
+          mediaType = mediaObject.mediaType;
+          break;
+        }
+        case 'html': {
+          autorunState.displayCursor = mediaStateContentItem.displayCursor;
+          autorunState.enableExternalData = mediaStateContentItem.enableExternalData;
+          autorunState.enableMouseEvents = mediaStateContentItem.enableMouseEvents;
+          autorunState.hwzOn = mediaStateContentItem.hwzOn;
+          const htmlSiteId = mediaStateContentItem.siteId;
+          const site = dmGetHtmlSiteById(this.props.bsdm, { id: htmlSiteId });
+          autorunState.url = site.url;
+          break;
+        }
+        case 'mrssfeed': {
+          debugger;
+          break;
+        }
+        case 'datafeed': {
+          debugger;
+          break;
+        }
+        default: {
+          break;
+        }
+      }
+
+      let eventIds = dmGetEventIdsForMediaState(this.props.bsdm, { id : mediaState.id });
+      if (eventIds.length !== 1) {
+        debugger;
+      }
+
+      let event = dmGetEventById(this.props.bsdm, { id : eventIds[0] });
+      if (!event) {
+        debugger;
+      }
+
+      const eventName = EventTypeName(event.type);
+      console.log('eventName: ', eventName, ' assetId: ', assetId);
+      switch(eventName) {
+        case 'Timer': {
+          duration = event.data.interval;
+          break;
+        }
+        case 'MediaEnd': {
+          duration = 10;
+          break;
+        }
+        default: {
+          debugger;
+        }
+      }
+
+      autorunState.contentItemType = contentItemType;
+      switch (contentItemType) {
+        case 'media': {
+
+          const mediaObject = mediaStateContentItem.media;
+
+          autorunState.assetId = mediaObject.assetId;
+          autorunState.mediaType = mediaObject.mediaType;
+
+          switch (mediaType) {
+            case MediaType.Image: {
+
+              let resourceIdentifier;
+              if (this.props.platform === 'desktop') {
+                autorunState.resourceIdentifier = "file://" + assetId;
+              }
+              else {
+                debugger;
+                autorunState.resourceIdentifier = "pool/" + currentState.imageItem.fileName;
+              }
+              break;
+            }
+            case MediaType.Video: {
+
+              let resourceIdentifier;
+              if (this.props.platform === 'desktop') {
+                autorunState.resourceIdentifier = "file://" + assetId;
+              }
+              else {
+                debugger;
+                autorunState.resourceIdentifier = "pool/" + currentState.imageItem.fileName;
+              }
+              break;
+            }
+            default: {
+              debuggger;
+            }
+          }
+        }
+      }
+
+      // TODO
+      autorunState.duration = duration;
+
+      autorunStates.push(autorunState);
+    });
+
+    this.setState( { autorunStates });
   }
 
   state: Object;
@@ -111,22 +236,16 @@ export default class NewZone extends Component {
 
   nextAsset() {
 
-    debugger;
-    // let { states } = this.props.playlist;
-    //
-    // let index: number = this.state.assetIndex;
-    // index++;
-    // if (index >= states.length) {
-    //   index = 0;
-    // }
-    this.setState( { assetIndex: index });
+    let nextStateIndex = this.state.stateIndex + 1;
+    if (nextStateIndex >= this.state.autorunStates.length) {
+      nextStateIndex = 0;
+    }
+    this.setState( { stateIndex: nextStateIndex });
   }
 
 
   render() {
 
-    let assetId;
-    let duration;
     let self = this;
 
     if (!this.state.mediaStateIds && this.state.mediaStateIds.length === 0) {
@@ -141,90 +260,14 @@ export default class NewZone extends Component {
       );
     }
 
-    console.log(this.state.mediaStateIds);
-    console.log(this.state.mediaStates);
-
-    const currentMediaState = this.state.mediaStates[this.state.mediaStateIndex];
-
-    const mediaStateContainer = currentMediaState.container;
-    const mediaStateContainerType = mediaStateContainer.type;
-
-    const mediaStateContentItem = currentMediaState.contentItem;
-    const mediaStateContentItemType = mediaStateContentItem.type;
-    const contentItemType = ContentItemTypeName(mediaStateContentItemType).toLowerCase();
-    switch (contentItemType) {
-      case 'media': {
-
-        const name = mediaStateContentItem.name;
-        const mediaObject = mediaStateContentItem.media;
-
-        assetId = mediaObject.assetId;
-        const mediaType = mediaObject.mediaType;
-
-        // switch (mediaType) {
-        //   case MediaType.Image: {
-        //     break;
-        //   }
-        //   case MediaType.Video: {
-        //     break;
-        //   }
-        //   default: {
-        //     debugger;
-        //   }
-        // }
-        break;
-      }
-      case 'html': {
-        debugger;
-        break;
-      }
-      case 'mrssfeed': {
-        debugger;
-        break;
-      }
-      case 'datafeed': {
-        debugger;
-        break;
-      }
-      default: {
-        break;
-      }
-    }
-
-    let eventIds = dmGetEventIdsForMediaState(this.props.bsdm, { id : currentMediaState.id });
-    if (eventIds.length !== 1) {
-      debugger;
-    }
-
-    let event = dmGetEventById(this.props.bsdm, { id : eventIds[0] });
-    if (!event) {
-      debugger;
-    }
-
-    const eventName = EventTypeName(event.type);
-    console.log('eventName: ', eventName, ' assetId: ', assetId);
-    switch(eventName) {
-      case 'Timer': {
-        duration = event.data.interval;
-        break;
-      }
-      case 'MediaEnd': {
-        debugger;
-        break;
-      }
-      default: {
-        debugger;
-      }
-    }
+    let autorunState = this.state.autorunStates[this.state.stateIndex];
+    let { contentItemType } = autorunState;
 
     switch (contentItemType) {
+
       case 'media': {
 
-        const name = mediaStateContentItem.name;
-        const mediaObject = mediaStateContentItem.media;
-
-        assetId = mediaObject.assetId;
-        const mediaType = mediaObject.mediaType;
+        let { assetId, mediaType, duration } = autorunState;
 
         switch (mediaType) {
           case MediaType.Image: {
@@ -235,7 +278,7 @@ export default class NewZone extends Component {
             }
             else {
               debugger;
-              resourceIdentifier = "pool/" + currentState.imageItem.fileName;
+              // resourceIdentifier = "pool/" + currentState.imageItem.fileName;
             }
 
             return (
@@ -247,11 +290,50 @@ export default class NewZone extends Component {
                 onTimeout={self.nextAsset.bind(this)}
               />
             );
+          }
+          case MediaType.Video: {
 
+            let resourceIdentifier;
+            if (this.props.platform === 'desktop') {
+              resourceIdentifier = "file://" + assetId;
+            }
+            else {
+              debugger;
+              // resourceIdentifier = "pool/" + currentState.imageItem.fileName;
+            }
+
+            return (
+              <Video
+                resourceIdentifier={resourceIdentifier}
+                width={this.props.width}
+                height={this.props.height}
+                onVideoEnd={self.nextAsset.bind(this)}
+              />
+            );
+          }
+          case MediaType.Html: {
+
+            console.log(autorunState);
+            debugger;
+            // let resourceIdentifier;
+            // if (this.props.platform === 'desktop') {
+            //   resourceIdentifier = .htmlItem.site.url;
+            // }
+            // else {
+            //   resourceIdentifier = 'pool/test.html';
+            // }
+            //
+            // return (
+            //   <iframe
+            //     width={this.props.width}
+            //     height={this.props.height}
+            //     src={resourceIdentifier}
+            //   />
+            // );
             break;
           }
           default: {
-            debuggger;
+            debugger;
           }
         }
       }
