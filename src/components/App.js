@@ -9,7 +9,8 @@ import path from 'path';
 // import { openPresentationFile } from '../store/presentations';
 import { openAndUpdatePresentationFile } from '../store/presentations';
 
-import Sign from './sign';
+// import Sign from './sign';
+import NewSign from './newSign';
 
 class App extends Component {
 
@@ -49,25 +50,41 @@ class App extends Component {
 
     console.log("render invoked");
 
-    if (this.props.presentations && this.props.presentations.autoplay.BrightAuthor) {
-
-      const brightAuthor: Object = this.props.presentations.autoplay.BrightAuthor;
-
-      return (
-        <Sign
-          platform={this.state.platform}
-          sign={brightAuthor}
-        />
-      );
-    }
-    else {
-
+    // TODO - what else needs to be checked to ensure that a sign is loaded?
+    if (!this.props.bsdm || this.props.bsdm.sign.properties.name === 'Untitled') {
       return (
         <div>
           Sign Pizza
         </div>
       );
     }
+
+    return (
+      <NewSign
+        platform={this.state.platform}
+        bsdm={this.props.bsdm}
+      />
+    );
+
+    // if (this.props.presentations && this.props.presentations.autoplay.BrightAuthor) {
+    //
+    //   const brightAuthor: Object = this.props.presentations.autoplay.BrightAuthor;
+    //
+    //   return (
+    //     <Sign
+    //       platform={this.state.platform}
+    //       sign={brightAuthor}
+    //     />
+    //   );
+    // }
+    // else {
+    //
+    //   return (
+    //     <div>
+    //       Sign Pizza
+    //     </div>
+    //   );
+    // }
   }
 }
 
