@@ -46,9 +46,29 @@ class App extends Component {
     this.props.openAndUpdatePresentationFile(autoplayPath);
   }
 
+  shouldComponentUpdate(nextProps, nextState) {
+    // console.log('currentProps');
+    // console.log(this.props);
+    // console.log('nextProps');
+    // console.log(nextProps);
+    // console.log('currentState');
+    // console.log(this.state);
+    // console.log('nextState');
+    // console.log(nextState);
+
+    const existingSignName = this.props.bsdm.sign.properties.name;
+    const nextSignName = nextProps.bsdm.sign.properties.name;
+    if (existingSignName !== nextSignName) {
+      // console.log('YES - App.js should update');
+      return true;
+    }
+    // console.log('NO - App.js should not update');
+    return false;
+  }
+
   render() {
 
-    console.log("render invoked");
+    // console.log("render invoked");
 
     // TODO - what else needs to be checked to ensure that a sign is loaded?
     if (!this.props.bsdm || this.props.bsdm.sign.properties.name === 'Untitled') {
@@ -65,26 +85,6 @@ class App extends Component {
         bsdm={this.props.bsdm}
       />
     );
-
-    // if (this.props.presentations && this.props.presentations.autoplay.BrightAuthor) {
-    //
-    //   const brightAuthor: Object = this.props.presentations.autoplay.BrightAuthor;
-    //
-    //   return (
-    //     <Sign
-    //       platform={this.state.platform}
-    //       sign={brightAuthor}
-    //     />
-    //   );
-    // }
-    // else {
-    //
-    //   return (
-    //     <div>
-    //       Sign Pizza
-    //     </div>
-    //   );
-    // }
   }
 }
 
@@ -96,7 +96,6 @@ const mapStateToProps = (state) => ({
 
 const mapDispatchToProps = (dispatch) => {
   return bindActionCreators({
-    // openPresentationFile,
     openAndUpdatePresentationFile,
   }, dispatch);
 };

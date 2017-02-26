@@ -166,14 +166,13 @@ export default class NewZone extends Component {
       }
 
       const eventName = EventTypeName(event.type);
-      console.log('eventName: ', eventName, ' assetId: ', assetId);
       switch(eventName) {
         case 'Timer': {
           duration = event.data.interval;
           break;
         }
         case 'MediaEnd': {
-          duration = 10 * 1000;
+          // duration = 10 * 1000;
           break;
         }
         default: {
@@ -236,6 +235,8 @@ export default class NewZone extends Component {
 
   nextAsset() {
 
+    console.log('nextAsset invoked');
+
     let nextStateIndex = this.state.stateIndex + 1;
     if (nextStateIndex >= this.state.autorunStates.length) {
       nextStateIndex = 0;
@@ -271,9 +272,11 @@ export default class NewZone extends Component {
       );
     }
 
+    console.log('zone.js::render invoked');
+
     let autorunState = this.state.autorunStates[this.state.stateIndex];
 
-    console.log('newZone.js::render(), zoneId: ', this.props.zone.id, ' autorunState; ', autorunState);
+    // console.log('newZone.js::render(), zoneId: ', this.props.zone.id, ' autorunState; ', autorunState);
 
     let { contentItemType } = autorunState;
 
@@ -294,6 +297,8 @@ export default class NewZone extends Component {
               debugger;
               // resourceIdentifier = "pool/" + currentState.imageItem.fileName;
             }
+
+            console.log('set timeout to ', duration, ' seconds.');
 
             return (
               <Image
@@ -356,10 +361,6 @@ export default class NewZone extends Component {
         debugger;
       }
     }
-
-    return (
-      <div>poo</div>
-    );
   }
 }
 
