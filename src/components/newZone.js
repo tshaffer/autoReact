@@ -173,7 +173,7 @@ export default class NewZone extends Component {
           break;
         }
         case 'MediaEnd': {
-          duration = 10;
+          duration = 10 * 1000;
           break;
         }
         default: {
@@ -241,6 +241,17 @@ export default class NewZone extends Component {
       nextStateIndex = 0;
     }
     this.setState( { stateIndex: nextStateIndex });
+  }
+
+  setHtmlTimeout() {
+
+    let self = this;
+
+    setTimeout(
+      () => {
+        self.nextAsset();
+      },
+      4 * 1000);
   }
 
 
@@ -322,7 +333,8 @@ export default class NewZone extends Component {
       }
       case 'html': {
 
-        console.log(autorunState);
+        this.setHtmlTimeout();
+
         // let resourceIdentifier;
         // if (this.props.platform === 'desktop') {
         //   resourceIdentifier = currentState.htmlItem.site.url;
