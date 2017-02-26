@@ -1,5 +1,7 @@
 // @flow
 
+import path from 'path';
+
 import React, { Component } from 'react';
 
 import Image from './image';
@@ -138,7 +140,14 @@ export default class Zone extends Component {
           autorunState.hwzOn = mediaStateContentItem.hwzOn;
           const htmlSiteId = mediaStateContentItem.siteId;
           const site = dmGetHtmlSiteById(this.props.bsdm, { id: htmlSiteId });
-          autorunState.url = site.url;
+
+          // HACK
+          if (this.props.platform === 'brightsign') {
+            autorunState.url = 'pool/test.html';
+          }
+          else {
+            autorunState.url = site.url;
+          }
           break;
         }
         case 'mrssfeed': {
@@ -184,7 +193,6 @@ export default class Zone extends Component {
 
           const mediaObject = mediaStateContentItem.media;
 
-          autorunState.assetId = mediaObject.assetId;
           autorunState.mediaType = mediaObject.mediaType;
 
           switch (mediaType) {
@@ -195,8 +203,7 @@ export default class Zone extends Component {
                 autorunState.resourceIdentifier = "file://" + assetId;
               }
               else {
-                debugger;
-                // autorunState.resourceIdentifier = "pool/" + currentState.imageItem.fileName;
+                autorunState.resourceIdentifier = "pool/" + path.basename(assetId);
               }
               break;
             }
@@ -207,8 +214,7 @@ export default class Zone extends Component {
                 autorunState.resourceIdentifier = "file://" + assetId;
               }
               else {
-                debugger;
-                // autorunState.resourceIdentifier = "pool/" + currentState.imageItem.fileName;
+                autorunState.resourceIdentifier = "pool/" + path.basename(assetId);
               }
               break;
             }
@@ -229,8 +235,6 @@ export default class Zone extends Component {
 
 
   nextAsset() {
-
-    console.log('nextAsset invoked');
 
     let nextStateIndex = this.state.stateIndex + 1;
     if (nextStateIndex >= this.state.autorunStates.length) {
@@ -267,11 +271,7 @@ export default class Zone extends Component {
       );
     }
 
-    console.log('zone.js::render invoked');
-
     let autorunState = this.state.autorunStates[this.state.stateIndex];
-
-    // console.log('zone.js::render(), zoneId: ', this.props.zone.id, ' autorunState; ', autorunState);
 
     let { contentItemType } = autorunState;
 
@@ -279,21 +279,12 @@ export default class Zone extends Component {
 
       case 'media': {
 
-        let { assetId, mediaType, duration } = autorunState;
+        let { mediaType, duration } = autorunState;
 
         switch (mediaType) {
           case MediaType.Image: {
 
-            let resourceIdentifier;
-            if (this.props.platform === 'desktop') {
-              resourceIdentifier = "file://" + assetId;
-            }
-            else {
-              debugger;
-              // resourceIdentifier = "pool/" + currentState.imageItem.fileName;
-            }
-
-            console.log('set timeout to ', duration, ' seconds.');
+            const resourceIdentifier = autorunState.resourceIdentifier;
 
             return (
               <Image
@@ -307,14 +298,7 @@ export default class Zone extends Component {
           }
           case MediaType.Video: {
 
-            let resourceIdentifier;
-            if (this.props.platform === 'desktop') {
-              resourceIdentifier = "file://" + assetId;
-            }
-            else {
-              debugger;
-              // resourceIdentifier = "pool/" + currentState.imageItem.fileName;
-            }
+            const resourceIdentifier = autorunState.resourceIdentifier;
 
             return (
               <Video
@@ -335,14 +319,6 @@ export default class Zone extends Component {
 
         this.setHtmlTimeout();
 
-        // let resourceIdentifier;
-        // if (this.props.platform === 'desktop') {
-        //   resourceIdentifier = currentState.htmlItem.site.url;
-        // }
-        // else {
-        //   resourceIdentifier = 'pool/test.html';
-        // }
-        //
         return (
           <iframe
             width={this.props.width}
