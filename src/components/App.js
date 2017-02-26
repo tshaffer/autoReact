@@ -17,8 +17,8 @@ class App extends Component {
     super(props);
 
     this.state = {
-      // platform: 'brightsign'
-      platform: 'desktop'
+      platform: 'brightsign'
+      // platform: 'desktop'
     };
   }
 
@@ -27,6 +27,8 @@ class App extends Component {
   componentDidMount() {
 
     console.log("app.js::componentDidMount invoked");
+
+    console.log('__dirname = ' + __dirname);
 
     let dataPath: string = '';
     if (this.state.platform === 'desktop') {
@@ -37,8 +39,6 @@ class App extends Component {
     }
 
     const presentationFile: string = "VideoPlusImage-v3.bpf";
-    // const presentationFile: string = "VideoPlusImage.bpf";
-    // const presentationFile = "f0.bpf";
     const autoplayPath: string = path.join(dataPath, presentationFile);
 
     // this.props.openPresentationFile(autoplayPath);

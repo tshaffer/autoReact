@@ -41,20 +41,36 @@ export default class RSSTicker extends Component {
     });
   }
 
-  parseRSS(rssData) {
+  parseRSS(rssData : Object) {
 
-    // TODO - do this elsewhere
-    if (this.props.platform === 'brightsign') {
-      // TODO - get this from a prop
-      const bsTicker = new BSTicker(0, 880, 1920, 200, 0);
-      const speed = bsTicker.SetPixelsPerSecond(180);
-      console.log('bsTicker speed: ' + speed);
-      bsTicker.AddString("First line is a pizza");
-      bsTicker.AddString("Second line is a milk shake");
-      bsTicker.AddString("Third line is a sandwich");
-    }
+    const rssChannel = rssData.rss.channel[0];
+    const rssTitle = rssChannel.title[0];
+    const rssUrl = rssChannel.link[0];
+    const lastBuildDate = rssChannel.lastBuildDate[0];
+    const description = rssChannel.description[0];
+    const rssItemSpecs = rssChannel.item;
+    let rssItems = rssItemSpecs.map( rssItemSpec => {
+      return {
+        description: rssItemSpec.description[0],
+        title: rssItemSpec.title[0],
+      };
+    });
+
+    this.populateTicker(rssItems);
   }
 
+  populateTicker(rssItems) {
+
+    if (this.props.platform === 'brightsign') {
+      // TODO - get location, dimensions from a prop
+      const bsTicker = new BSTicker(0, 880, 1920, 200, 0);
+      const speed = bsTicker.SetPixelsPerSecond(200);
+
+      rssItems.forEach( rssItem => {
+        bsTicker.AddString(rssItem.title);
+      });
+    }
+  }
 
   render () {
 
