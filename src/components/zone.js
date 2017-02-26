@@ -51,6 +51,7 @@ export default class Zone extends Component {
     const currentState = states[this.state.assetIndex];
 
     // src={'file:///Users/tedshaffer/Documents/Projects/autoReact/data/test.html'}
+    // src={currentState.htmlItem.site.url}
 
     if (currentState.rssItem) {
       return (
@@ -65,11 +66,21 @@ export default class Zone extends Component {
 
       this.setHtmlTimeout(currentState.htmlItem);
 
+      // src={'file:///storage/sd/pool/test.html'}
+
+      let resourceIdentifier;
+      if (this.props.platform === 'desktop') {
+        resourceIdentifier = currentState.htmlItem.site.url;
+      }
+      else {
+        resourceIdentifier = 'pool/test.html';
+      }
+
       return (
         <iframe
           width={this.props.width}
           height={this.props.height}
-          src={currentState.htmlItem.site.url}
+          src={resourceIdentifier}
         />
       );
     }

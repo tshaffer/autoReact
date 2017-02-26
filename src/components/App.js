@@ -36,7 +36,7 @@ class App extends Component {
       dataPath = "/storage/sd";
     }
 
-    const presentationFile: string = "VideoPlusImage-v2.bpf";
+    const presentationFile: string = "VideoPlusImage-v3.bpf";
     // const presentationFile: string = "VideoPlusImage.bpf";
     // const presentationFile = "f0.bpf";
     const autoplayPath: string = path.join(dataPath, presentationFile);
