@@ -17,8 +17,8 @@ class App extends Component {
     super(props);
 
     this.state = {
-      platform: 'brightsign'
-      // platform: 'desktop'
+      // platform: 'brightsign'
+      platform: 'desktop'
     };
   }
 
