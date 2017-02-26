@@ -1,5 +1,7 @@
 // @flow
 
+// http://docs.brightsign.biz/display/DOC/BSTicker
+
 import React, { Component } from 'react';
 
 const xml2js = require('xml2js');
@@ -25,6 +27,7 @@ export default class RSSTicker extends Component {
               }
               console.log(jsonResponse);
               // resolve(jsonResponse);
+              this.parseRSS(jsonResponse);
             });
           }
           catch (e) {
@@ -38,6 +41,21 @@ export default class RSSTicker extends Component {
     });
   }
 
+  parseRSS(rssData) {
+
+    // TODO - do this elsewhere
+    if (this.props.platform === 'brightsign') {
+      // TODO - get this from a prop
+      const bsTicker = new BSTicker(0, 880, 1920, 200, 0);
+      const speed = bsTicker.SetPixelsPerSecond(180);
+      console.log('bsTicker speed: ' + speed);
+      bsTicker.AddString("First line is a pizza");
+      bsTicker.AddString("Second line is a milk shake");
+      bsTicker.AddString("Third line is a sandwich");
+    }
+  }
+
+
   render () {
 
     let self = this;
@@ -49,6 +67,7 @@ export default class RSSTicker extends Component {
 }
 
 RSSTicker.propTypes = {
+  platform: React.PropTypes.string.isRequired,
   width: React.PropTypes.number.isRequired,
   height: React.PropTypes.number.isRequired,
   feedUrl: React.PropTypes.string.isRequired

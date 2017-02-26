@@ -56,6 +56,7 @@ export default class Zone extends Component {
     if (currentState.rssItem) {
       return (
         <RSSTicker
+          platform={this.props.platform}
           width={this.props.width}
           height={this.props.height}
           feedUrl={currentState.rssItem.feedUrl}
