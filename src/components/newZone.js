@@ -108,7 +108,26 @@ export default class NewZone extends Component {
 
   state: Object;
 
+
+  nextAsset() {
+
+    debugger;
+    // let { states } = this.props.playlist;
+    //
+    // let index: number = this.state.assetIndex;
+    // index++;
+    // if (index >= states.length) {
+    //   index = 0;
+    // }
+    this.setState( { assetIndex: index });
+  }
+
+
   render() {
+
+    let assetId;
+    let duration;
+    let self = this;
 
     if (!this.state.mediaStateIds && this.state.mediaStateIds.length === 0) {
       return (
@@ -125,8 +144,6 @@ export default class NewZone extends Component {
     console.log(this.state.mediaStateIds);
     console.log(this.state.mediaStates);
 
-    debugger;
-
     const currentMediaState = this.state.mediaStates[this.state.mediaStateIndex];
 
     const mediaStateContainer = currentMediaState.container;
@@ -141,7 +158,7 @@ export default class NewZone extends Component {
         const name = mediaStateContentItem.name;
         const mediaObject = mediaStateContentItem.media;
 
-        const assetId = mediaObject.assetId;
+        assetId = mediaObject.assetId;
         const mediaType = mediaObject.mediaType;
 
         // switch (mediaType) {
@@ -185,9 +202,10 @@ export default class NewZone extends Component {
     }
 
     const eventName = EventTypeName(event.type);
+    console.log('eventName: ', eventName, ' assetId: ', assetId);
     switch(eventName) {
       case 'Timer': {
-        const timeout = event.data.interval;
+        duration = event.data.interval;
         break;
       }
       case 'MediaEnd': {
@@ -196,6 +214,46 @@ export default class NewZone extends Component {
       }
       default: {
         debugger;
+      }
+    }
+
+    switch (contentItemType) {
+      case 'media': {
+
+        const name = mediaStateContentItem.name;
+        const mediaObject = mediaStateContentItem.media;
+
+        assetId = mediaObject.assetId;
+        const mediaType = mediaObject.mediaType;
+
+        switch (mediaType) {
+          case MediaType.Image: {
+
+            let resourceIdentifier;
+            if (this.props.platform === 'desktop') {
+              resourceIdentifier = "file://" + assetId;
+            }
+            else {
+              debugger;
+              resourceIdentifier = "pool/" + currentState.imageItem.fileName;
+            }
+
+            return (
+              <Image
+                resourceIdentifier={resourceIdentifier}
+                width={this.props.width}
+                height={this.props.height}
+                duration={duration * 1000}
+                onTimeout={self.nextAsset.bind(this)}
+              />
+            );
+
+            break;
+          }
+          default: {
+            debuggger;
+          }
+        }
       }
     }
 
