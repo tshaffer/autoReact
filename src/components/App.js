@@ -6,6 +6,68 @@ import { bindActionCreators } from 'redux';
 
 import path from 'path';
 
+import {
+  // StringParameterType,
+  // DataFeedTypeName,
+  // dmGetDataFeedById,
+  // dmGetMediaStateStateById,
+  // ContentItemTypeName,
+  // dmOpenSign,
+  // dmAddHtmlSite,
+  // dmCreateMediaContentItem,
+  // dmCreateHtmlContentItem,
+  // dmPlaylistAppendMediaState,
+  // dmGetZoneMediaStateContainer,
+  // dmGetHtmlSiteById,
+  // dmCreateAbsoluteRect,
+  // dmNewSign,
+  // VideoMode,
+  // PlayerModel,
+  // dmAddZone,
+  // ZoneType,
+  // dmGetSignMetaData,
+  // dmGetZonesForSign,
+  dmGetZoneById,
+  // dmMediaState,
+  // dmGetMediaStateById,
+  // dmGetZoneSimplePlaylist,
+  // dmGetEventIdsForMediaState,
+  // dmGetTransitionIdsForEvent,
+  // dmGetTransitionById,
+  // MediaType,
+  // VideoModeName,
+  // TransitionTypeName,
+  // EventTypeName,
+  // dmGetEventById,
+  // GraphicsZOrderTypeName,
+  // TouchCursorDisplayModeTypeName,
+  // UdpAddressTypeName,
+  // ZoneTypeCompactName,
+  // ViewModeTypeName,
+  // ImageModeTypeName,
+  // AudioOutputSelectionTypeName,
+  // AudioOutputSelectionSpecName,
+  // AudioModeTypeName,
+  // AudioModeSpecName,
+  // AudioMappingTypeName,
+  // AudioOutputNameString,
+  // AudioOutputTypeName,
+  // AudioMixModeTypeName,
+  // DeviceWebPageDisplayName,
+  // PlayerModelName,
+  // MonitorOrientationTypeName,
+  // VideoConnectorTypeName,
+  // LiveVideoInputTypeName,
+  // LiveVideoStandardTypeName,
+  // ZoneTypeCompactName,
+  // dmGetParameterizedStringFromString,
+  // dmAddDataFeed,
+  // DataFeedUsageType,
+  // dmCreateDataFeedContentItem,
+} from '@brightsign/bsdatamodel';
+
+
+
 // import { openPresentationFile } from '../store/presentations';
 import { openAndUpdatePresentationFile } from '../store/presentations';
 
@@ -17,8 +79,8 @@ class App extends Component {
     super(props);
 
     this.state = {
-      // platform: 'brightsign'
-      platform: 'desktop'
+      platform: 'brightsign'
+      // platform: 'desktop'
     };
   }
 
@@ -47,12 +109,53 @@ class App extends Component {
 
   shouldComponentUpdate(nextProps, nextState) {
 
-    const existingSignName = this.props.bsdm.sign.properties.name;
-    const nextSignName = nextProps.bsdm.sign.properties.name;
-    if (existingSignName !== nextSignName) {
+    let currentDoneLoading = false;
+    let nextDoneLoading = false;
+
+    nextProps.bsdm.zones.allZones.forEach( zoneId => {
+      let zone = dmGetZoneById(nextProps.bsdm, { id: zoneId });
+      if (zone.type === 5) {
+        if (zone.initialMediaStateId && zone.initialMediaStateId !== '0')
+        {
+          nextDoneLoading = true;
+        }
+      }
+    });
+
+    this.props.bsdm.zones.allZones.forEach( zoneId => {
+      let zone = dmGetZoneById(this.props.bsdm, { id: zoneId });
+      if (zone.type === 5) {
+        if (zone.initialMediaStateId && zone.initialMediaStateId !== '0')
+        {
+          currentDoneLoading = true;
+        }
+      }
+    });
+
+    if (nextDoneLoading && !currentDoneLoading) {
       return true;
     }
+
     return false;
+
+    // const existingSignName = this.props.bsdm.sign.properties.name;
+    // const nextSignName = nextProps.bsdm.sign.properties.name;
+    // // if (existingSignName !== nextSignName) {
+    // //   return true;
+    // // }
+    //
+    // if (nextProps.bsdm.zones.allZones.length === 3 && this.props.bsdm.zones.allZones.length === 2) {
+    //   nextProps.bsdm.zones.allZones.forEach( zoneId => {
+    //     let zone = dmGetZoneById(nextProps.bsdm, { id: zoneId });
+    //     if (zone.type === 5) {
+    //       tickerTypeZone = true;
+    //     }
+    //   });
+    //   console.log('App.js::shouldComponentUpdate, existingSignName: ', this.props.bsdm.sign.properties.name);
+    //   return true;
+    // }
+    //
+    // return false;
   }
 
   render() {
@@ -62,6 +165,15 @@ class App extends Component {
       return (
         <div>
           Sign Pizza
+        </div>
+      );
+    }
+
+    // check to make sure the third zone has been added
+    if (this.props.bsdm.zones.allZones.length < 3) {
+      return (
+        <div>
+          Waiting for ticker zone...
         </div>
       );
     }

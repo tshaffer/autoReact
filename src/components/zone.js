@@ -11,7 +11,7 @@ import RSSTicker from './rssTicker';
 import {
   // StringParameterType,
   // DataFeedTypeName,
-  // dmGetDataFeedById,
+  dmGetDataFeedById,
   // dmGetMediaStateStateById,
   ContentItemTypeName,
   // dmOpenSign,
@@ -86,24 +86,31 @@ export default class Zone extends Component {
 
   componentWillMount() {
 
+    let mediaStateIds = [];
+    let mediaStates = [];
+
     let zoneType = ZoneTypeCompactName(this.props.zone.type);
     this.setState( { zoneType });
 
     switch (zoneType) {
-      case 'Ticker': {
-        return;
-      }
       case 'VideoOrImages': {
+        mediaStateIds = dmGetZoneSimplePlaylist(this.props.bsdm, { id: this.props.zone.id });
+        mediaStates = mediaStateIds.map( mediaStateId => {
+          return dmGetMediaStateById(this.props.bsdm, { id : mediaStateId })
+        });
+        break;
+      }
+      case 'Ticker': {
+        const mediaStateId = this.props.zone.initialMediaStateId;
+        mediaStateIds.push(mediaStateId);
+        const mediaState = dmGetMediaStateById(this.props.bsdm, { id : mediaStateId });
+        mediaStates.push(mediaState);
         break;
       }
       default: {
         debugger;
       }
     }
-    const mediaStateIds = dmGetZoneSimplePlaylist(this.props.bsdm, { id: this.props.zone.id });
-    let mediaStates = mediaStateIds.map( mediaStateId => {
-      return dmGetMediaStateById(this.props.bsdm, { id : mediaStateId })
-    });
 
     this.setState( { mediaStateIds });
     this.setState( { mediaStates });
@@ -155,7 +162,16 @@ export default class Zone extends Component {
           break;
         }
         case 'datafeed': {
-          debugger;
+
+          let rssItem = {};
+
+          let dataFeedId = mediaStateContentItem.dataFeedId;
+          let dataFeed = dmGetDataFeedById(this.props.bsdm, { id: dataFeedId });
+          const feedUrl = dmGetSimpleStringFromParameterizedString(dataFeed.url);
+          rssItem.feedUrl = feedUrl;
+
+          autorunState.rssItem = rssItem;
+
           break;
         }
         default: {
@@ -222,6 +238,11 @@ export default class Zone extends Component {
               debugger;
             }
           }
+          break;
+        }
+        case 'datafeed': {
+          console.log('datafeed in rss, anything to do here?');
+          break;
         }
       }
 
@@ -232,7 +253,6 @@ export default class Zone extends Component {
   }
 
   state: Object;
-
 
   nextAsset() {
 
@@ -265,17 +285,36 @@ export default class Zone extends Component {
       );
     }
 
-    if (this.state.zoneType === 'Ticker') {
-      return (
-        <div>Ticker support pending</div>
-      );
-    }
+    // if (this.state.zoneType === 'Ticker') {
+    //   return (
+    //     <div>Ticker support pending</div>
+    //   );
+    // }
 
     let autorunState = this.state.autorunStates[this.state.stateIndex];
 
     let { contentItemType } = autorunState;
 
     switch (contentItemType) {
+
+      case 'datafeed': {
+
+        if (this.props.platform === 'brightsign') {
+          return (
+            <RSSTicker
+              platform={this.props.platform}
+              width={this.props.width}
+              height={this.props.height}
+              feedUrl={autorunState.rssItem.feedUrl}
+            />
+          );
+        }
+        else {
+          return (
+            <div>Ticker support lacking</div>
+          );
+        }
+      }
 
       case 'media': {
 
@@ -334,6 +373,27 @@ export default class Zone extends Component {
     }
   }
 }
+
+const dmGetSimpleStringFromParameterizedString = (ps) => {
+  let returnString = undefined;
+  if (typeof ps === "object" && ps.params && ps.params.length) {
+    ps.params.every(param => {
+      returnString = param.value;
+      return true;
+      // if (param.type === StringParameterType.UserVariable) {
+      //   returnString = undefined;
+      //   return false;
+      // }
+      // if (returnString) {
+      //   returnString = returnString + param.value;
+      // } else {
+      //   returnString = param.value;
+      // }
+      // return true;
+    });
+  }
+  return returnString;
+};
 
 Zone.propTypes = {
   platform: React.PropTypes.string.isRequired,
