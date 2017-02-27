@@ -9,65 +9,20 @@ import Video from './video';
 import RSSTicker from './rssTicker';
 
 import {
-  // StringParameterType,
-  // DataFeedTypeName,
+  StringParameterType,
   dmGetDataFeedById,
-  // dmGetMediaStateStateById,
   ContentItemTypeName,
-  // dmOpenSign,
-  // dmAddHtmlSite,
-  // dmCreateMediaContentItem,
-  // dmCreateHtmlContentItem,
-  // dmPlaylistAppendMediaState,
-  // dmGetZoneMediaStateContainer,
   dmGetHtmlSiteById,
-  // dmCreateAbsoluteRect,
-  // dmNewSign,
-  // VideoMode,
-  // PlayerModel,
-  // dmAddZone,
   ZoneType,
-  // dmGetSignMetaData,
-  // dmGetZonesForSign,
-  // dmGetZoneById,
   dmMediaState,
   dmGetMediaStateById,
   dmGetZoneSimplePlaylist,
   dmGetEventIdsForMediaState,
-  // dmGetTransitionIdsForEvent,
-  // dmGetTransitionById,
   MediaType,
-  // VideoModeName,
-  // TransitionTypeName,
   EventTypeName,
   dmGetEventById,
-  // GraphicsZOrderTypeName,
-  // TouchCursorDisplayModeTypeName,
-  // UdpAddressTypeName,
   ZoneTypeCompactName,
-  // ViewModeTypeName,
-  // ImageModeTypeName,
-  // AudioOutputSelectionTypeName,
-  // AudioOutputSelectionSpecName,
-  // AudioModeTypeName,
-  // AudioModeSpecName,
-  // AudioMappingTypeName,
-  // AudioOutputNameString,
-  // AudioOutputTypeName,
-  // AudioMixModeTypeName,
-  // DeviceWebPageDisplayName,
-  // PlayerModelName,
-  // MonitorOrientationTypeName,
-  // VideoConnectorTypeName,
-  // LiveVideoInputTypeName,
-  // LiveVideoStandardTypeName,
-  // ZoneTypeCompactName,
-  // dmGetParameterizedStringFromString,
-  // dmAddDataFeed,
-  // DataFeedUsageType,
-  // dmCreateDataFeedContentItem,
 } from '@brightsign/bsdatamodel';
-
 
 
 export default class Zone extends Component {
@@ -378,18 +333,16 @@ const dmGetSimpleStringFromParameterizedString = (ps) => {
   let returnString = undefined;
   if (typeof ps === "object" && ps.params && ps.params.length) {
     ps.params.every(param => {
-      returnString = param.value;
+      if (param.type === StringParameterType.UserVariable) {
+        returnString = undefined;
+        return false;
+      }
+      if (returnString) {
+        returnString = returnString + param.value;
+      } else {
+        returnString = param.value;
+      }
       return true;
-      // if (param.type === StringParameterType.UserVariable) {
-      //   returnString = undefined;
-      //   return false;
-      // }
-      // if (returnString) {
-      //   returnString = returnString + param.value;
-      // } else {
-      //   returnString = param.value;
-      // }
-      // return true;
     });
   }
   return returnString;

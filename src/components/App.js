@@ -7,65 +7,8 @@ import { bindActionCreators } from 'redux';
 import path from 'path';
 
 import {
-  // StringParameterType,
-  // DataFeedTypeName,
-  // dmGetDataFeedById,
-  // dmGetMediaStateStateById,
-  // ContentItemTypeName,
-  // dmOpenSign,
-  // dmAddHtmlSite,
-  // dmCreateMediaContentItem,
-  // dmCreateHtmlContentItem,
-  // dmPlaylistAppendMediaState,
-  // dmGetZoneMediaStateContainer,
-  // dmGetHtmlSiteById,
-  // dmCreateAbsoluteRect,
-  // dmNewSign,
-  // VideoMode,
-  // PlayerModel,
-  // dmAddZone,
-  // ZoneType,
-  // dmGetSignMetaData,
-  // dmGetZonesForSign,
   dmGetZoneById,
-  // dmMediaState,
-  // dmGetMediaStateById,
-  // dmGetZoneSimplePlaylist,
-  // dmGetEventIdsForMediaState,
-  // dmGetTransitionIdsForEvent,
-  // dmGetTransitionById,
-  // MediaType,
-  // VideoModeName,
-  // TransitionTypeName,
-  // EventTypeName,
-  // dmGetEventById,
-  // GraphicsZOrderTypeName,
-  // TouchCursorDisplayModeTypeName,
-  // UdpAddressTypeName,
-  // ZoneTypeCompactName,
-  // ViewModeTypeName,
-  // ImageModeTypeName,
-  // AudioOutputSelectionTypeName,
-  // AudioOutputSelectionSpecName,
-  // AudioModeTypeName,
-  // AudioModeSpecName,
-  // AudioMappingTypeName,
-  // AudioOutputNameString,
-  // AudioOutputTypeName,
-  // AudioMixModeTypeName,
-  // DeviceWebPageDisplayName,
-  // PlayerModelName,
-  // MonitorOrientationTypeName,
-  // VideoConnectorTypeName,
-  // LiveVideoInputTypeName,
-  // LiveVideoStandardTypeName,
-  // ZoneTypeCompactName,
-  // dmGetParameterizedStringFromString,
-  // dmAddDataFeed,
-  // DataFeedUsageType,
-  // dmCreateDataFeedContentItem,
 } from '@brightsign/bsdatamodel';
-
 
 
 // import { openPresentationFile } from '../store/presentations';
@@ -79,8 +22,8 @@ class App extends Component {
     super(props);
 
     this.state = {
-      platform: 'brightsign'
-      // platform: 'desktop'
+      // platform: 'brightsign'
+      platform: 'desktop'
     };
   }
 

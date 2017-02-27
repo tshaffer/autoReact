@@ -12,8 +12,6 @@ export default class RSSTicker extends Component {
 
     let self = this;
 
-    console.log('RSSTicker::componentWillMount: ', this.props.feedUrl);
-
     fetch(this.props.feedUrl)
       .then( (response) => {
         let blobPromise = response.text();
