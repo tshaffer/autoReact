@@ -50,7 +50,7 @@ class App extends Component {
     this.props.openAndUpdatePresentationFile(autoplayPath);
   }
 
-  shouldComponentUpdate(nextProps, nextState) {
+  shouldComponentUpdate(nextProps, _) {
 
     let currentDoneLoading = false;
     let nextDoneLoading = false;
@@ -80,25 +80,6 @@ class App extends Component {
     }
 
     return false;
-
-    // const existingSignName = this.props.bsdm.sign.properties.name;
-    // const nextSignName = nextProps.bsdm.sign.properties.name;
-    // // if (existingSignName !== nextSignName) {
-    // //   return true;
-    // // }
-    //
-    // if (nextProps.bsdm.zones.allZones.length === 3 && this.props.bsdm.zones.allZones.length === 2) {
-    //   nextProps.bsdm.zones.allZones.forEach( zoneId => {
-    //     let zone = dmGetZoneById(nextProps.bsdm, { id: zoneId });
-    //     if (zone.type === 5) {
-    //       tickerTypeZone = true;
-    //     }
-    //   });
-    //   console.log('App.js::shouldComponentUpdate, existingSignName: ', this.props.bsdm.sign.properties.name);
-    //   return true;
-    // }
-    //
-    // return false;
   }
 
   render() {
@@ -145,7 +126,8 @@ const mapDispatchToProps = (dispatch) => {
 App.propTypes = {
   presentations: React.PropTypes.object.isRequired,
   // openPresentationFile: React.PropTypes.func.isRequired
-  openAndUpdatePresentationFile: React.PropTypes.func.isRequired
+  openAndUpdatePresentationFile: React.PropTypes.func.isRequired,
+  bsdm: React.PropTypes.object.isRequired,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(App);

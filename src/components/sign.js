@@ -19,7 +19,7 @@ export default class Sign extends Component {
 
     let zones = zoneIds.map( zoneId => {
       return dmGetZoneById(bsdm, { id: zoneId });
-    })
+    });
 
     return (
       <div>
@@ -27,15 +27,13 @@ export default class Sign extends Component {
           zones.map( (zone, index) =>
             <div
               key={index}
-              style={
-              {
+              style={{
                 position: 'absolute',
                 left: zone.absolutePosition.x,
                 top: zone.absolutePosition.y,
                 width: zone.absolutePosition.width,
                 height: zone.absolutePosition.height
-              }
-              }
+              }}
             >
               <Zone
                 platform={this.props.platform}

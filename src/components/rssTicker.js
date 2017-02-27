@@ -10,8 +10,6 @@ export default class RSSTicker extends Component {
 
   componentWillMount() {
 
-    let self = this;
-
     fetch(this.props.feedUrl)
       .then( (response) => {
         let blobPromise = response.text();
@@ -32,20 +30,20 @@ export default class RSSTicker extends Component {
             console.log(e);
             debugger;
           }
-        })
+        });
       }).catch( (err) => {
-      console.log(err);
-      debugger;
-    });
+        console.log(err);
+        debugger;
+      });
   }
 
   parseRSS(rssData : Object) {
 
     const rssChannel = rssData.rss.channel[0];
-    const rssTitle = rssChannel.title[0];
-    const rssUrl = rssChannel.link[0];
-    const lastBuildDate = rssChannel.lastBuildDate[0];
-    const description = rssChannel.description[0];
+    // const rssTitle = rssChannel.title[0];
+    // const rssUrl = rssChannel.link[0];
+    // const lastBuildDate = rssChannel.lastBuildDate[0];
+    // const description = rssChannel.description[0];
     const rssItemSpecs = rssChannel.item;
     let rssItems = rssItemSpecs.map( rssItemSpec => {
       return {
@@ -57,12 +55,12 @@ export default class RSSTicker extends Component {
     this.populateTicker(rssItems);
   }
 
-  populateTicker(rssItems) {
+  populateTicker(rssItems : Array<Object>) {
 
     if (this.props.platform === 'brightsign') {
       // TODO - get location, dimensions from a prop
       const bsTicker = new BSTicker(0, 880, 1920, 200, 0);
-      const speed = bsTicker.SetPixelsPerSecond(200);
+      bsTicker.SetPixelsPerSecond(200);
 
       rssItems.forEach( rssItem => {
         bsTicker.AddString(rssItem.title);
@@ -71,8 +69,6 @@ export default class RSSTicker extends Component {
   }
 
   render () {
-
-    let self = this;
 
     return (
       <div>Loading...</div>

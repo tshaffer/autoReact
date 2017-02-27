@@ -13,8 +13,6 @@ import {
   dmGetDataFeedById,
   ContentItemTypeName,
   dmGetHtmlSiteById,
-  ZoneType,
-  dmMediaState,
   dmGetMediaStateById,
   dmGetZoneSimplePlaylist,
   dmGetEventIdsForMediaState,
@@ -39,6 +37,8 @@ export default class Zone extends Component {
     };
   }
 
+  state: Object;
+
   componentWillMount() {
 
     let mediaStateIds = [];
@@ -51,7 +51,7 @@ export default class Zone extends Component {
       case 'VideoOrImages': {
         mediaStateIds = dmGetZoneSimplePlaylist(this.props.bsdm, { id: this.props.zone.id });
         mediaStates = mediaStateIds.map( mediaStateId => {
-          return dmGetMediaStateById(this.props.bsdm, { id : mediaStateId })
+          return dmGetMediaStateById(this.props.bsdm, { id : mediaStateId });
         });
         break;
       }
@@ -74,13 +74,10 @@ export default class Zone extends Component {
 
     mediaStates.forEach( mediaState => {
 
-      let assetId;
+      let assetId = '';
       let mediaType;
 
       let autorunState = {};
-
-      const mediaStateContainer = mediaState.container;
-      const mediaStateContainerType = mediaStateContainer.type;
 
       const mediaStateContentItem = mediaState.contentItem;
       const mediaStateContentItemType = mediaStateContentItem.type;
@@ -88,7 +85,6 @@ export default class Zone extends Component {
       switch (contentItemType) {
         case 'media': {
 
-          const name = mediaStateContentItem.name;
           const mediaObject = mediaStateContentItem.media;
 
           assetId = mediaObject.assetId;
@@ -169,7 +165,6 @@ export default class Zone extends Component {
           switch (mediaType) {
             case MediaType.Image: {
 
-              let resourceIdentifier;
               if (this.props.platform === 'desktop') {
                 autorunState.resourceIdentifier = "file://" + assetId;
               }
@@ -180,7 +175,6 @@ export default class Zone extends Component {
             }
             case MediaType.Video: {
 
-              let resourceIdentifier;
               if (this.props.platform === 'desktop') {
                 autorunState.resourceIdentifier = "file://" + assetId;
               }
@@ -206,8 +200,6 @@ export default class Zone extends Component {
 
     this.setState( { autorunStates });
   }
-
-  state: Object;
 
   nextAsset() {
 

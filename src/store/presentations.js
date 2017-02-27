@@ -2,9 +2,9 @@ import fs from 'fs';
 
 import {
   StringParameterType,
-  DataFeedTypeName,
+  // DataFeedTypeName,
   dmGetDataFeedById,
-  dmGetMediaStateStateById,
+  // dmGetMediaStateStateById,
   ContentItemTypeName,
   dmOpenSign,
   // dmAddHtmlSite,
@@ -213,7 +213,7 @@ export function openPresentationFile(filePath) {
 
 export function openAndUpdatePresentationFile(filePath) {
 
-  return (dispatch, getState) => {
+  return (dispatch) => {
 
     // getPresentationFile(filePath).then((presentationData) => {
     //
@@ -238,8 +238,7 @@ export function openAndUpdatePresentationFile(filePath) {
 
     getPresentationFile(filePath).then((presentationData) => {
 
-      let state;
-      let bsdm;
+      // let state;
 
       console.log('file ', filePath, 'opened');
 
@@ -255,8 +254,8 @@ export function openAndUpdatePresentationFile(filePath) {
       let contentItem = dmCreateDataFeedContentItem('NewsFeed', dataFeedId);
       dispatch(dmPlaylistAppendMediaState(tickerZoneContainer, contentItem));
 
-      state = getState();
-      bsdm = state.bsdm;
+      // state = getState();
+      // bsdm = state.bsdm;
 
       // const mZone = dmGetZoneById(bsdm, { id: action.payload.id });
       // const mState = dmGetMediaStateById(bsdm, { id: mZone.initialMediaStateId});
