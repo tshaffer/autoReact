@@ -50,37 +50,37 @@ class App extends Component {
     this.props.openAndUpdatePresentationFile(autoplayPath);
   }
 
-  shouldComponentUpdate(nextProps, _) {
-
-    let currentDoneLoading = false;
-    let nextDoneLoading = false;
-
-    nextProps.bsdm.zones.allZones.forEach( zoneId => {
-      let zone = dmGetZoneById(nextProps.bsdm, { id: zoneId });
-      if (zone.type === 5) {
-        if (zone.initialMediaStateId && zone.initialMediaStateId !== '0')
-        {
-          nextDoneLoading = true;
-        }
-      }
-    });
-
-    this.props.bsdm.zones.allZones.forEach( zoneId => {
-      let zone = dmGetZoneById(this.props.bsdm, { id: zoneId });
-      if (zone.type === 5) {
-        if (zone.initialMediaStateId && zone.initialMediaStateId !== '0')
-        {
-          currentDoneLoading = true;
-        }
-      }
-    });
-
-    if (nextDoneLoading && !currentDoneLoading) {
-      return true;
-    }
-
-    return false;
-  }
+  // shouldComponentUpdate(nextProps, _) {
+  //
+  //   let currentDoneLoading = false;
+  //   let nextDoneLoading = false;
+  //
+  //   nextProps.bsdm.zones.allZones.forEach( zoneId => {
+  //     let zone = dmGetZoneById(nextProps.bsdm, { id: zoneId });
+  //     if (zone.type === 5) {
+  //       if (zone.initialMediaStateId && zone.initialMediaStateId !== '0')
+  //       {
+  //         nextDoneLoading = true;
+  //       }
+  //     }
+  //   });
+  //
+  //   this.props.bsdm.zones.allZones.forEach( zoneId => {
+  //     let zone = dmGetZoneById(this.props.bsdm, { id: zoneId });
+  //     if (zone.type === 5) {
+  //       if (zone.initialMediaStateId && zone.initialMediaStateId !== '0')
+  //       {
+  //         currentDoneLoading = true;
+  //       }
+  //     }
+  //   });
+  //
+  //   if (nextDoneLoading && !currentDoneLoading) {
+  //     return true;
+  //   }
+  //
+  //   return false;
+  // }
 
   render() {
 
@@ -102,10 +102,20 @@ class App extends Component {
       );
     }
 
+    debugger;
+    if (!this.props.autoplayZones || this.props.autoplayZones.length === 0) {
+      return (
+        <div>
+          Waiting for autoplay parsing...
+        </div>
+      );
+    }
+
     return (
       <Sign
         platform={this.state.platform}
         bsdm={this.props.bsdm}
+        autoplay={this.props.autoplay}
       />
     );
   }
@@ -113,7 +123,9 @@ class App extends Component {
 
 const mapStateToProps = (state) => ({
   bsdm: state.bsdm,
-  presentations: state.presentations
+  presentations: state.presentations,
+  autoplay: state.autoplay,
+  autoplayZones: state.autoplay.zones,
 });
 
 
@@ -128,6 +140,8 @@ App.propTypes = {
   // openPresentationFile: React.PropTypes.func.isRequired
   openAndUpdatePresentationFile: React.PropTypes.func.isRequired,
   bsdm: React.PropTypes.object.isRequired,
+  autoplay: React.PropTypes.object.isRequired,
+  autoplayZones: React.PropTypes.array.isRequired,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(App);

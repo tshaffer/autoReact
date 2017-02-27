@@ -41,6 +41,8 @@ export default class Zone extends Component {
 
   componentWillMount() {
 
+    debugger;
+
     let mediaStateIds = [];
     let mediaStates = [];
 
@@ -346,4 +348,5 @@ Zone.propTypes = {
   zone: React.PropTypes.object.isRequired,
   width: React.PropTypes.number.isRequired,
   height: React.PropTypes.number.isRequired,
+  autoplayZone: React.PropTypes.object.isRequired,
 };
