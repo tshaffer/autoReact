@@ -22,17 +22,18 @@ import {
 // ------------------------------------
 // Constants
 // ------------------------------------
+export const SET_AUTOPLAY_ZONES = 'SET_AUTOPLAY_ZONES';
 
 // ------------------------------------
 // Action Creators
 // ------------------------------------
 export function parseAutoplay() {
 
-  return (dispatch, getState) => {
+  return (dispatch: Function, getState: Function) => {
 
     debugger;
 
-    const state = getState();
+    let state = getState();
     const bsdm = state.bsdm;
     // const sign = bsdm.sign;
 
@@ -44,6 +45,8 @@ export function parseAutoplay() {
     zones.forEach( zone => {
       parseZone(bsdm, zone);
     });
+    dispatch(setAutoplayZones(zones));
+    state = getState();
 
     debugger;
   };
@@ -236,10 +239,36 @@ const dmGetSimpleStringFromParameterizedString = (ps) => {
 // ------------------------------------
 // Actions
 // ------------------------------------
+export function setAutoplayZones(autoplayZones: Array<Object>) {
+
+  return {
+    type: SET_AUTOPLAY_ZONES,
+    payload: autoplayZones
+  };
+}
+
 
 // ------------------------------------
 // Reducer
 // ------------------------------------
+const initialState = {
+  zones: [],
+};
+
+export default function(state : Object = initialState, action: Object) {
+
+  switch (action.type) {
+
+    case SET_AUTOPLAY_ZONES: {
+      let newState = Object.assign({}, state);
+      newState.zones = action.payload;
+
+      return newState;
+    }
+  }
+
+  return state;
+}
 
 // ------------------------------------
 // Utilities
