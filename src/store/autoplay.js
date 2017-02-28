@@ -228,7 +228,7 @@ export function incrementStateIndex(zoneIndex: number) {
     }
 
     dispatch(setStateIndex(zoneIndex, stateIndex));
-  }
+  };
 }
 // ------------------------------------
 // Actions

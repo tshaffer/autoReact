@@ -67,19 +67,10 @@ class App extends Component {
       );
     }
 
-    if (!this.props.autoplayZones || this.props.autoplayZones.length === 0) {
-      return (
-        <div>
-          Waiting for autoplay parsing...
-        </div>
-      );
-    }
-
     return (
       <Sign
         platform={this.state.platform}
         bsdm={this.props.bsdm}
-        autoplay={this.props.autoplay}
         incrementStateIndex={this.props.incrementStateIndex}
       />
     );
@@ -89,8 +80,6 @@ class App extends Component {
 const mapStateToProps = (state) => ({
   bsdm: state.bsdm,
   presentations: state.presentations,
-  autoplay: state.autoplay,
-  autoplayZones: state.autoplay.zones,
 });
 
 
@@ -106,8 +95,6 @@ App.propTypes = {
   // openPresentationFile: React.PropTypes.func.isRequired
   openAndUpdatePresentationFile: React.PropTypes.func.isRequired,
   bsdm: React.PropTypes.object.isRequired,
-  autoplay: React.PropTypes.object.isRequired,
-  autoplayZones: React.PropTypes.array.isRequired,
   incrementStateIndex: React.PropTypes.func.isRequired,
 };
 

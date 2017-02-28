@@ -9,8 +9,6 @@ export default class Image extends Component {
     this.timeout = null;
   }
 
-  timeout : ?number;
-
   shouldComponentUpdate() {
 
     if (this.timeout) {
@@ -18,6 +16,8 @@ export default class Image extends Component {
     }
     return true;
   }
+
+  timeout : ?number;
 
   render () {
 

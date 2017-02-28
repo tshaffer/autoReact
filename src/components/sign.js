@@ -12,40 +12,45 @@ import {
 
 export default class Sign extends Component {
 
+  getZoneJSX(bsdm: Object, zoneId: string, zoneIndex: number) {
+
+    const zone = dmGetZoneById(bsdm, { id: zoneId });
+
+    return (
+      <div
+        key={zoneIndex}
+        style={{
+          position: 'absolute',
+          left: zone.absolutePosition.x,
+          top: zone.absolutePosition.y,
+          width: zone.absolutePosition.width,
+          height: zone.absolutePosition.height
+        }}
+      >
+        <Zone
+          platform={this.props.platform}
+          bsdm={bsdm}
+          zone={zone}
+          width={Number(zone.absolutePosition.width)}
+          height={Number(zone.absolutePosition.height)}
+          incrementStateIndex={this.props.incrementStateIndex}
+          zoneIndex={zoneIndex}
+        />
+      </div>
+    );
+  }
+
   render() {
 
     const bsdm = this.props.bsdm;
-    const zoneIds = dmGetZonesForSign(bsdm);
 
-    let zones = zoneIds.map( zoneId => {
-      return dmGetZoneById(bsdm, { id: zoneId });
-    });
+    const zoneIds = dmGetZonesForSign(bsdm);
 
     return (
       <div>
         {
-          zones.map( (zone, index) =>
-            <div
-              key={index}
-              style={{
-                position: 'absolute',
-                left: zone.absolutePosition.x,
-                top: zone.absolutePosition.y,
-                width: zone.absolutePosition.width,
-                height: zone.absolutePosition.height
-              }}
-            >
-              <Zone
-                platform={this.props.platform}
-                bsdm={this.props.bsdm}
-                zone={zone}
-                width={Number(zone.absolutePosition.width)}
-                height={Number(zone.absolutePosition.height)}
-                autoplayZone={this.props.autoplay.zones[index]}
-                incrementStateIndex={this.props.incrementStateIndex}
-                zoneIndex={index}
-              />
-            </div>
+          zoneIds.map((zoneId, index) =>
+            this.getZoneJSX(bsdm, zoneId, index)
           )
         }
       </div>
@@ -56,6 +61,5 @@ export default class Sign extends Component {
 Sign.propTypes = {
   bsdm: React.PropTypes.object.isRequired,
   platform: React.PropTypes.string.isRequired,
-  autoplay: React.PropTypes.object.isRequired,
   incrementStateIndex: React.PropTypes.func.isRequired,
 };
