@@ -209,7 +209,7 @@ function parseZone(bsdm : Object, zone : Object) {
     autorunStates.push(autorunState);
   });
 
-  zone.autorunStates = zone;
+  zone.autorunStates = autorunStates;
   zone.stateIndex = 0;
 }
 
