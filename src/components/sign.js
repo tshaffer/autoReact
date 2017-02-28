@@ -42,6 +42,8 @@ export default class Sign extends Component {
                 width={Number(zone.absolutePosition.width)}
                 height={Number(zone.absolutePosition.height)}
                 autoplayZone={this.props.autoplay.zones[index]}
+                incrementStateIndex={this.props.incrementStateIndex}
+                zoneIndex={index}
               />
             </div>
           )
@@ -55,4 +57,5 @@ Sign.propTypes = {
   bsdm: React.PropTypes.object.isRequired,
   platform: React.PropTypes.string.isRequired,
   autoplay: React.PropTypes.object.isRequired,
+  incrementStateIndex: React.PropTypes.func.isRequired,
 };

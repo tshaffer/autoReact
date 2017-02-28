@@ -23,6 +23,7 @@ import {
 // Constants
 // ------------------------------------
 export const SET_AUTOPLAY_ZONES = 'SET_AUTOPLAY_ZONES';
+const SET_STATE_INDEX = 'SET_STATE_INDEX';
 
 // ------------------------------------
 // Action Creators
@@ -213,6 +214,79 @@ function parseZone(bsdm : Object, zone : Object) {
   zone.stateIndex = 0;
 }
 
+export function incrementStateIndex(zoneIndex: number) {
+
+  return (dispatch: Function, getState: Function) => {
+
+    let state = getState();
+    const autoplay = state.autoplay;
+    const zone = autoplay.zones[zoneIndex];
+    let stateIndex = zone.stateIndex;
+    stateIndex++;
+    if (stateIndex >= zone.mediaStates.length) {
+      stateIndex = 0;
+    }
+
+    dispatch(setStateIndex(zoneIndex, stateIndex));
+  }
+}
+// ------------------------------------
+// Actions
+// ------------------------------------
+export function setAutoplayZones(autoplayZones: Array<Object>) {
+
+  return {
+    type: SET_AUTOPLAY_ZONES,
+    payload: autoplayZones
+  };
+}
+
+function setStateIndex(zoneIndex: number, stateIndex: number) {
+
+  return {
+    type: SET_STATE_INDEX,
+    payload: {
+      zoneIndex,
+      stateIndex
+    }
+  };
+}
+
+// ------------------------------------
+// Reducer
+// ------------------------------------
+const initialState = {
+  zones: [],
+};
+
+export default function(state : Object = initialState, action: Object) {
+
+  switch (action.type) {
+
+    case SET_AUTOPLAY_ZONES: {
+      let newState = Object.assign({}, state);
+      newState.zones = action.payload;
+
+      return newState;
+    }
+
+    case SET_STATE_INDEX: {
+      let newState = Object.assign({}, state);
+      let { zoneIndex, stateIndex } = action.payload;
+      newState.zones[zoneIndex].stateIndex = stateIndex;
+
+      console.log('SET_STATE_INDEX: ', newState);
+
+      return newState;
+    }
+  }
+
+  return state;
+}
+
+// ------------------------------------
+// Utilities
+// ------------------------------------
 const dmGetSimpleStringFromParameterizedString = (ps) => {
   let returnString = undefined;
   if (typeof ps === "object" && ps.params && ps.params.length) {
@@ -232,44 +306,6 @@ const dmGetSimpleStringFromParameterizedString = (ps) => {
   return returnString;
 };
 
-
-// ------------------------------------
-// Actions
-// ------------------------------------
-export function setAutoplayZones(autoplayZones: Array<Object>) {
-
-  return {
-    type: SET_AUTOPLAY_ZONES,
-    payload: autoplayZones
-  };
-}
-
-
-// ------------------------------------
-// Reducer
-// ------------------------------------
-const initialState = {
-  zones: [],
-};
-
-export default function(state : Object = initialState, action: Object) {
-
-  switch (action.type) {
-
-    case SET_AUTOPLAY_ZONES: {
-      let newState = Object.assign({}, state);
-      newState.zones = action.payload;
-
-      return newState;
-    }
-  }
-
-  return state;
-}
-
-// ------------------------------------
-// Utilities
-// ------------------------------------
 
 // ------------------------------------
 // Selectors

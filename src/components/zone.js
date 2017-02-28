@@ -15,6 +15,8 @@ export default class Zone extends Component {
 
   nextAsset() {
 
+    this.props.incrementStateIndex(this.props.zoneIndex);
+
     // let nextStateIndex = this.state.stateIndex + 1;
     // if (nextStateIndex >= this.state.autorunStates.length) {
     //   nextStateIndex = 0;
@@ -135,4 +137,6 @@ Zone.propTypes = {
   width: React.PropTypes.number.isRequired,
   height: React.PropTypes.number.isRequired,
   autoplayZone: React.PropTypes.object.isRequired,
+  incrementStateIndex: React.PropTypes.func.isRequired,
+  zoneIndex: React.PropTypes.number.isRequired,
 };
