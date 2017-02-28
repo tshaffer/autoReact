@@ -198,7 +198,9 @@ export default class Zone extends Component {
       autorunStates.push(autorunState);
     });
 
+    console.log('before setState(autorunStates');
     this.setState( { autorunStates });
+    console.log('after setState(autorunStates');
   }
 
   nextAsset() {
@@ -223,6 +225,8 @@ export default class Zone extends Component {
 
 
   render() {
+
+    console.log('zone.js::render() invoked');
 
     let self = this;
 
