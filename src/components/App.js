@@ -6,9 +6,9 @@ import { bindActionCreators } from 'redux';
 
 import path from 'path';
 
-import {
-  dmGetZoneById,
-} from '@brightsign/bsdatamodel';
+// import {
+//   dmGetZoneById,
+// } from '@brightsign/bsdatamodel';
 
 
 // import { openPresentationFile } from '../store/presentations';
