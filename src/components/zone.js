@@ -13,32 +13,14 @@ import {
 
 export default class Zone extends Component {
 
-  constructor(props : Object) {
-    super(props);
-    this.state = { stateIndex : 0 };
-  }
-
-  componentWillMount() {
-
-    console.log('zone.js::componentWillMount invoked');
-    // debugger;
-
-  }
-
-  componentDidMount() {
-    console.log('zone.js::componentDidMount invoked');
-  }
-
-  state: Object;
-
   nextAsset() {
 
-    let nextStateIndex = this.state.stateIndex + 1;
-    if (nextStateIndex >= this.state.autorunStates.length) {
-      nextStateIndex = 0;
-    }
-    debugger;
-    this.setState( { stateIndex: nextStateIndex });
+    // let nextStateIndex = this.state.stateIndex + 1;
+    // if (nextStateIndex >= this.state.autorunStates.length) {
+    //   nextStateIndex = 0;
+    // }
+    // debugger;
+    // this.setState( { stateIndex: nextStateIndex });
   }
 
   setHtmlTimeout() {
