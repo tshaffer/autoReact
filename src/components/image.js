@@ -11,10 +11,7 @@ export default class Image extends Component {
 
   timeout : ?number;
 
-  shouldComponentUpdate(_, __) {
-
-    console.log('shouldComponentRender called for zone: ', this.props);
-    console.log('this.timeout: ', this.timeout);
+  shouldComponentUpdate() {
 
     if (this.timeout) {
       return false;
@@ -24,8 +21,6 @@ export default class Image extends Component {
 
   render () {
 
-    console.log('image.js::render invoked: ', this.props);
-
     let self = this;
 
     if (this.timeout) {
@@ -33,7 +28,6 @@ export default class Image extends Component {
     }
 
     this.timeout = setTimeout( () => {
-      console.log('image.js::render timeout occurred: ', self.props);
       this.timeout = null;
       self.props.onTimeout();
     }

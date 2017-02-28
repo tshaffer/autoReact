@@ -14,15 +14,7 @@ import {
 export default class Zone extends Component {
 
   nextAsset() {
-
     this.props.incrementStateIndex(this.props.zoneIndex);
-
-    // let nextStateIndex = this.state.stateIndex + 1;
-    // if (nextStateIndex >= this.state.autorunStates.length) {
-    //   nextStateIndex = 0;
-    // }
-    // debugger;
-    // this.setState( { stateIndex: nextStateIndex });
   }
 
   setHtmlTimeout() {

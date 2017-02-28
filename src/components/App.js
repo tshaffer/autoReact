@@ -6,11 +6,6 @@ import { bindActionCreators } from 'redux';
 
 import path from 'path';
 
-// import {
-//   dmGetZoneById,
-// } from '@brightsign/bsdatamodel';
-
-
 // import { openPresentationFile } from '../store/presentations';
 import { openAndUpdatePresentationFile } from '../store/presentations';
 
@@ -51,38 +46,6 @@ class App extends Component {
     // this.props.openPresentationFile(autoplayPath);
     this.props.openAndUpdatePresentationFile(autoplayPath);
   }
-
-  // shouldComponentUpdate(nextProps, _) {
-  //
-  //   let currentDoneLoading = false;
-  //   let nextDoneLoading = false;
-  //
-  //   nextProps.bsdm.zones.allZones.forEach( zoneId => {
-  //     let zone = dmGetZoneById(nextProps.bsdm, { id: zoneId });
-  //     if (zone.type === 5) {
-  //       if (zone.initialMediaStateId && zone.initialMediaStateId !== '0')
-  //       {
-  //         nextDoneLoading = true;
-  //       }
-  //     }
-  //   });
-  //
-  //   this.props.bsdm.zones.allZones.forEach( zoneId => {
-  //     let zone = dmGetZoneById(this.props.bsdm, { id: zoneId });
-  //     if (zone.type === 5) {
-  //       if (zone.initialMediaStateId && zone.initialMediaStateId !== '0')
-  //       {
-  //         currentDoneLoading = true;
-  //       }
-  //     }
-  //   });
-  //
-  //   if (nextDoneLoading && !currentDoneLoading) {
-  //     return true;
-  //   }
-  //
-  //   return false;
-  // }
 
   render() {
 
