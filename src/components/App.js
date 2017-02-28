@@ -102,7 +102,6 @@ class App extends Component {
       );
     }
 
-    debugger;
     if (!this.props.autoplayZones || this.props.autoplayZones.length === 0) {
       return (
         <div>

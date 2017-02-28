@@ -41,8 +41,6 @@ export default class Zone extends Component {
 
   componentWillMount() {
 
-    debugger;
-
     let mediaStateIds = [];
     let mediaStates = [];
 
