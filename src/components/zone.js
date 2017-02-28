@@ -27,12 +27,20 @@ export default class Zone extends Component {
   constructor(props : Object) {
     super(props);
     this.state = { stateIndex : 0 };
+    this.numStates = 0;
   }
 
   state : Object;
+  numStates : number;
 
   nextAsset() {
-    this.props.incrementStateIndex(this.props.zoneIndex);
+    // this.props.incrementStateIndex(this.props.zoneIndex);
+    let stateIndex = this.state.stateIndex + 1;
+    if (stateIndex >= this.numStates) {
+      stateIndex = 0;
+    }
+
+    this.setState( { stateIndex });
   }
 
   setHtmlTimeout() {
@@ -67,12 +75,13 @@ export default class Zone extends Component {
       case 'VideoOrImages': {
         mediaStateIds = dmGetZoneSimplePlaylist(bsdm, { id: zone.id });
         mediaState = dmGetMediaStateById(bsdm, { id : mediaStateIds[this.state.stateIndex]});
+        this.numStates = mediaStateIds.length;
         break;
       }
       case 'Ticker': {
         const mediaStateId = zone.initialMediaStateId;
         mediaState = dmGetMediaStateById(bsdm, { id : mediaStateId });
-        debugger;
+        this.numStates = 1;
         break;
       }
       default: {
