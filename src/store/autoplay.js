@@ -210,6 +210,7 @@ function parseZone(bsdm : Object, zone : Object) {
   });
 
   zone.autorunStates = zone;
+  zone.stateIndex = 0;
 }
 
 const dmGetSimpleStringFromParameterizedString = (ps) => {
