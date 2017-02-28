@@ -67,6 +67,14 @@ class App extends Component {
       );
     }
 
+    if (this.props.bsdm.zones.zonesById[this.props.bsdm.zones.allZones[2]].initialMediaStateId === '0') {
+      return (
+        <div>
+          Waiting for ticker zone initialMediaStateId...
+        </div>
+      );
+    }
+
     return (
       <Sign
         platform={this.state.platform}

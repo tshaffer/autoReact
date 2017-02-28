@@ -49,8 +49,6 @@ export default class Zone extends Component {
 
   render() {
 
-    debugger;
-
     let bsdm : Object = this.props.bsdm;
     let platform = this.props.platform;
 
@@ -72,11 +70,9 @@ export default class Zone extends Component {
         break;
       }
       case 'Ticker': {
+        const mediaStateId = zone.initialMediaStateId;
+        mediaState = dmGetMediaStateById(bsdm, { id : mediaStateId });
         debugger;
-        // const mediaStateId = zone.initialMediaStateId;
-        // mediaStateIds.push(mediaStateId);
-        // const mediaState = dmGetMediaStateById(bsdm, { id : mediaStateId });
-        // mediaStates.push(mediaState);
         break;
       }
       default: {
