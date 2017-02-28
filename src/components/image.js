@@ -4,14 +4,26 @@ import React, { Component } from 'react';
 
 export default class Image extends Component {
 
+  constructor(props : Object) {
+    super(props);
+    this.timeout = null;
+  }
+
+  timeout : ?number;
+
   render () {
 
     let self = this;
-    setTimeout(
-      () => {
-        self.props.onTimeout();
-      },
-      this.props.duration);
+
+    if (this.timeout) {
+      debugger;
+    }
+
+    this.timeout = setTimeout( () => {
+      this.timeout = null;
+      self.props.onTimeout();
+    }
+      ,this.props.duration);
 
     return (
       <img

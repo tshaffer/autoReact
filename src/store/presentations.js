@@ -256,7 +256,9 @@ export function openAndUpdatePresentationFile(filePath) {
       let contentItem = dmCreateDataFeedContentItem('NewsFeed', dataFeedId);
       dispatch(dmPlaylistAppendMediaState(tickerZoneContainer, contentItem));
 
+      console.log('invoke parseAutoplay');
       dispatch(parseAutoplay());
+      console.log('parseAutoplay complete');
 
       // state = getState();
       // bsdm = state.bsdm;

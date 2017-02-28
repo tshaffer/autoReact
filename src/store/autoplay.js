@@ -31,8 +31,6 @@ export function parseAutoplay() {
 
   return (dispatch: Function, getState: Function) => {
 
-    debugger;
-
     let state = getState();
     const bsdm = state.bsdm;
     // const sign = bsdm.sign;
@@ -47,8 +45,6 @@ export function parseAutoplay() {
     });
     dispatch(setAutoplayZones(zones));
     state = getState();
-
-    debugger;
   };
 }
 
@@ -214,6 +210,7 @@ function parseZone(bsdm : Object, zone : Object) {
   });
 
   zone.autorunStates = zone;
+  zone.stateIndex = 0;
 }
 
 const dmGetSimpleStringFromParameterizedString = (ps) => {
