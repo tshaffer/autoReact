@@ -7,7 +7,6 @@ import { bindActionCreators } from 'redux';
 import path from 'path';
 
 import { openPresentationFile } from '../store/presentations';
-// import { openAndUpdatePresentationFile } from '../store/presentations';
 
 import Sign from './sign';
 
@@ -42,7 +41,6 @@ class App extends Component {
     const autoplayPath: string = path.join(dataPath, presentationFile);
 
     this.props.openPresentationFile(autoplayPath);
-    // this.props.openAndUpdatePresentationFile(autoplayPath);
   }
 
   render() {
@@ -50,7 +48,7 @@ class App extends Component {
     if (this.props.bsdm.zones.allZones.length === 0) {
       return (
         <div>
-          Waiting for ticker zone...
+          Waiting for for presentation to be loaded...
         </div>
       );
     }
@@ -66,21 +64,17 @@ class App extends Component {
 
 const mapStateToProps = (state) => ({
   bsdm: state.bsdm,
-  presentations: state.presentations,
 });
 
 
 const mapDispatchToProps = (dispatch) => {
   return bindActionCreators({
-    // openAndUpdatePresentationFile,
     openPresentationFile,
   }, dispatch);
 };
 
 App.propTypes = {
-  presentations: React.PropTypes.object.isRequired,
   openPresentationFile: React.PropTypes.func.isRequired,
-  // openAndUpdatePresentationFile: React.PropTypes.func.isRequired,
   bsdm: React.PropTypes.object.isRequired,
 };
 
