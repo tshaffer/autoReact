@@ -34,7 +34,6 @@ export default class Zone extends Component {
   numStates : number;
 
   nextAsset() {
-    // this.props.incrementStateIndex(this.props.zoneIndex);
     let stateIndex = this.state.stateIndex + 1;
     if (stateIndex >= this.numStates) {
       stateIndex = 0;
@@ -222,7 +221,6 @@ Zone.propTypes = {
   zone: React.PropTypes.object.isRequired,
   width: React.PropTypes.number.isRequired,
   height: React.PropTypes.number.isRequired,
-  incrementStateIndex: React.PropTypes.func.isRequired,
   zoneIndex: React.PropTypes.number.isRequired,
 };
 

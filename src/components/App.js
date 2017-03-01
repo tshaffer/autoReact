@@ -9,8 +9,6 @@ import path from 'path';
 // import { openPresentationFile } from '../store/presentations';
 import { openAndUpdatePresentationFile } from '../store/presentations';
 
-import { incrementStateIndex } from '../store/autoplay';
-
 import Sign from './sign';
 
 class App extends Component {
@@ -79,7 +77,6 @@ class App extends Component {
       <Sign
         platform={this.state.platform}
         bsdm={this.props.bsdm}
-        incrementStateIndex={this.props.incrementStateIndex}
       />
     );
   }
@@ -94,7 +91,6 @@ const mapStateToProps = (state) => ({
 const mapDispatchToProps = (dispatch) => {
   return bindActionCreators({
     openAndUpdatePresentationFile,
-    incrementStateIndex,
   }, dispatch);
 };
 
@@ -103,7 +99,6 @@ App.propTypes = {
   // openPresentationFile: React.PropTypes.func.isRequired
   openAndUpdatePresentationFile: React.PropTypes.func.isRequired,
   bsdm: React.PropTypes.object.isRequired,
-  incrementStateIndex: React.PropTypes.func.isRequired,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(App);

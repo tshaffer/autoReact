@@ -33,7 +33,6 @@ export default class Sign extends Component {
           zone={zone}
           width={Number(zone.absolutePosition.width)}
           height={Number(zone.absolutePosition.height)}
-          incrementStateIndex={this.props.incrementStateIndex}
           zoneIndex={zoneIndex}
         />
       </div>
@@ -61,5 +60,4 @@ export default class Sign extends Component {
 Sign.propTypes = {
   bsdm: React.PropTypes.object.isRequired,
   platform: React.PropTypes.string.isRequired,
-  incrementStateIndex: React.PropTypes.func.isRequired,
 };

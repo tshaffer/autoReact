@@ -61,8 +61,6 @@ import {
 
 const deepcopy = require("deepcopy");
 
-import { parseAutoplay } from './autoplay';
-
 // ------------------------------------
 // Constants
 // ------------------------------------
@@ -255,10 +253,6 @@ export function openAndUpdatePresentationFile(filePath) {
       let dataFeedId = innerAction.payload.id;
       let contentItem = dmCreateDataFeedContentItem('NewsFeed', dataFeedId);
       dispatch(dmPlaylistAppendMediaState(tickerZoneContainer, contentItem));
-
-      // console.log('invoke parseAutoplay');
-      // dispatch(parseAutoplay());
-      // console.log('parseAutoplay complete');
 
       // state = getState();
       // bsdm = state.bsdm;
