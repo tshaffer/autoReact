@@ -47,28 +47,10 @@ class App extends Component {
 
   render() {
 
-    // TODO - what else needs to be checked to ensure that a sign is loaded?
-    if (!this.props.bsdm || this.props.bsdm.sign.properties.name === 'Untitled') {
-      return (
-        <div>
-          Sign Pizza
-        </div>
-      );
-    }
-
-    // check to make sure the third zone has been added
-    if (this.props.bsdm.zones.allZones.length < 3) {
+    if (this.props.bsdm.zones.allZones.length === 0) {
       return (
         <div>
           Waiting for ticker zone...
-        </div>
-      );
-    }
-
-    if (this.props.bsdm.zones.zonesById[this.props.bsdm.zones.allZones[2]].initialMediaStateId === '0') {
-      return (
-        <div>
-          Waiting for ticker zone initialMediaStateId...
         </div>
       );
     }
