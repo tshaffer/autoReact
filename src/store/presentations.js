@@ -213,7 +213,7 @@ export function openPresentationFile(filePath) {
 
 export function openAndUpdatePresentationFile(filePath) {
 
-  return (dispatch) => {
+  return (dispatch, getState) => {
 
     // getPresentationFile(filePath).then((presentationData) => {
     //
@@ -238,7 +238,7 @@ export function openAndUpdatePresentationFile(filePath) {
 
     getPresentationFile(filePath).then((presentationData) => {
 
-      // let state;
+      let state;
 
       console.log('file ', filePath, 'opened');
 
@@ -306,10 +306,11 @@ export function openAndUpdatePresentationFile(filePath) {
       // console.log(autoplay);
       //
       // dispatch(setAutoplay(autoplay));
-      // state = getState();
-      //
-      // savePresentationAs(state.bsdm, filePath);
-      // console.log(filePath, ' successfully saved');
+
+      state = getState();
+      savePresentationAs(state.bsdm, filePath);
+      console.log(filePath, ' successfully saved');
+      debugger;
     });
 
   };

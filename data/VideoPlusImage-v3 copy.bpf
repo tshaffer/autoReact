@@ -302,62 +302,11 @@
 					"maximumVolume": 100,
 					"imageMode": 0
 				}
-			},
-			"91f7e126-c214-4816-a767-6353ecc32162": {
-				"id": "91f7e126-c214-4816-a767-6353ecc32162",
-				"name": "Ticker",
-				"type": 5,
-				"tag": "t1",
-				"nonInteractive": true,
-				"initialMediaStateId": "ff3d1a4f-115d-4078-a489-94a0010ff71a",
-				"position": {
-					"x": 0,
-					"y": 880,
-					"width": 1920,
-					"height": 200,
-					"pct": false
-				},
-				"properties": {
-					"textWidget": {
-						"numberOfLines": 3,
-						"delay": 5,
-						"rotation": 0,
-						"alignment": 0,
-						"scrollingMethod": 0
-					},
-					"widget": {
-						"foregroundTextColor": {
-							"a": 255,
-							"r": 160,
-							"g": 160,
-							"b": 160
-						},
-						"backgroundTextColor": {
-							"a": 255,
-							"r": 0,
-							"g": 0,
-							"b": 0
-						},
-						"font": "System",
-						"fontSize": 0,
-						"backgroundBitmapAssetId": "",
-						"stretchBitmapFile": false,
-						"safeTextRegion": {
-							"x": 0,
-							"y": 0,
-							"width": 100,
-							"height": 100,
-							"pct": true
-						}
-					},
-					"scrollSpeed": 100
-				}
 			}
 		},
 		"allZones": [
 			"29f2a3ab-5b2a-45c3-b48c-148456f0f86d",
-			"20c60019-5451-4c6b-b24b-7a7e0d0204c0",
-			"91f7e126-c214-4816-a767-6353ecc32162"
+			"20c60019-5451-4c6b-b24b-7a7e0d0204c0"
 		]
 	},
 	"mediaStates": {
@@ -469,20 +418,6 @@
 				}
 			},
 			"volume": 0
-		},
-		"ff3d1a4f-115d-4078-a489-94a0010ff71a": {
-			"id": "ff3d1a4f-115d-4078-a489-94a0010ff71a",
-			"name": "NewsFeed",
-			"container": {
-				"id": "91f7e126-c214-4816-a767-6353ecc32162",
-				"type": 0
-			},
-			"contentItemState": {
-				"id": "16b89f39-8c0e-4ffe-83fb-78f7988867ce",
-				"name": "NewsFeed",
-				"type": 3,
-				"dataFeedId": "b16943bd-09ad-45a3-a6fb-c4643f9853d6"
-			}
 		}
 	},
 	"events": {
@@ -536,15 +471,6 @@
 			"data": {
 				"interval": 5
 			}
-		},
-		"89c2da2e-e3a7-4105-8746-288ec39ac000": {
-			"id": "89c2da2e-e3a7-4105-8746-288ec39ac000",
-			"name": "NewsFeed_ev",
-			"type": 1,
-			"mediaStateId": "ff3d1a4f-115d-4078-a489-94a0010ff71a",
-			"data": {
-				"interval": 5
-			}
 		}
 	},
 	"transitions": {
@@ -589,13 +515,6 @@
 			"eventId": "d9da67de-fc6c-41cc-ab79-ca8b74d6c099",
 			"targetMediaStateId": "7230d179-730d-497a-b420-f8b6be125f43",
 			"type": 0
-		},
-		"db0dab3a-fcd9-4a48-bdab-5aa5c6b2877c": {
-			"id": "db0dab3a-fcd9-4a48-bdab-5aa5c6b2877c",
-			"name": "NewsFeed_tr",
-			"eventId": "89c2da2e-e3a7-4105-8746-288ec39ac000",
-			"targetMediaStateId": "ff3d1a4f-115d-4078-a489-94a0010ff71a",
-			"type": 0
 		}
 	},
 	"htmlSites": {
@@ -607,26 +526,6 @@
 			"queryString": ""
 		}
 	},
-	"dataFeeds": {
-		"b16943bd-09ad-45a3-a6fb-c4643f9853d6": {
-			"id": "b16943bd-09ad-45a3-a6fb-c4643f9853d6",
-			"name": "UsNewsFeed",
-			"type": 0,
-			"url": {
-				"params": [
-					{
-						"type": 0,
-						"value": "http://feeds.reuters.com/Reuters/domesticNews"
-					}
-				]
-			},
-			"usage": 0,
-			"updateInterval": 300,
-			"useHeadRequest": true,
-			"parserPlugin": "0",
-			"autoGenerateUserVariables": false,
-			"userVariableAccess": 0
-		}
-	},
+	"dataFeeds": {},
 	"userVariables": {}
 }
