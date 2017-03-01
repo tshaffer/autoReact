@@ -55,23 +55,48 @@ export default class Zone extends Component {
   }
 
 
+  renderTickerItem( bsdm: Object, mediaStateId : string) {
+
+    this.numStates = 1;
+
+    const mediaState = dmGetMediaStateById(bsdm, { id : mediaStateId });
+    const mediaStateContentItem = mediaState.contentItem;
+
+    const dataFeedId = mediaStateContentItem.dataFeedId;
+    const dataFeed = dmGetDataFeedById(bsdm, {id: dataFeedId});
+    const feedUrl = dmGetSimpleStringFromParameterizedString(dataFeed.url);
+
+    if (this.props.platform === 'brightsign') {
+      return (
+        <RSSTicker
+          platform={this.props.platform}
+          width={this.props.width}
+          height={this.props.height}
+          feedUrl={feedUrl}
+        />
+      );
+    }
+    else {
+      return (
+        <div>Ticker support lacking</div>
+      );
+    }
+  }
+
   render() {
 
-    let bsdm : Object = this.props.bsdm;
-    let platform = this.props.platform;
-
+    let assetId = '';
+    let mediaType : string = '';
     let mediaStateIds : Array<string> = [];
     let mediaState : Object = {};
+    let duration : number = 1;
 
-    let self = this;
-
-    // get media state associated with this.state.stateIndex
-
+    const self = this;
+    const platform : string = this.props.platform;
+    const bsdm : Object = this.props.bsdm;
     const zone = this.props.zone;
 
-    let zoneType = ZoneTypeCompactName(zone.type);
-
-    switch (zoneType) {
+    switch (ZoneTypeCompactName(zone.type)) {
       case 'VideoOrImages': {
         mediaStateIds = dmGetZoneSimplePlaylist(bsdm, { id: zone.id });
         mediaState = dmGetMediaStateById(bsdm, { id : mediaStateIds[this.state.stateIndex]});
@@ -79,20 +104,12 @@ export default class Zone extends Component {
         break;
       }
       case 'Ticker': {
-        const mediaStateId = zone.initialMediaStateId;
-        mediaState = dmGetMediaStateById(bsdm, { id : mediaStateId });
-        this.numStates = 1;
-        break;
+        return this.renderTickerItem(bsdm, zone.initialMediaStateId);
       }
       default: {
         debugger;
       }
     }
-
-
-    let autorunState = {};
-    let duration : number = 1;
-
 
     let eventIds = dmGetEventIdsForMediaState(bsdm, { id : mediaState.id });
     if (eventIds.length !== 1) {
@@ -118,13 +135,6 @@ export default class Zone extends Component {
       }
     }
 
-
-
-
-    let assetId = '';
-    let mediaType;
-
-
     const mediaStateContentItem = mediaState.contentItem;
     const mediaStateContentItemType = mediaStateContentItem.type;
     const contentItemType = ContentItemTypeName(mediaStateContentItemType).toLowerCase();
@@ -134,121 +144,16 @@ export default class Zone extends Component {
         assetId = mediaObject.assetId;
         mediaType = mediaObject.mediaType;
 
-        autorunState.mediaType = mediaObject.mediaType;
+        let resourceIdentifier = '';
+        if (platform === 'desktop') {
+          resourceIdentifier = "file://" + assetId;
+        }
+        else {
+          resourceIdentifier = "pool/" + path.basename(assetId);
+        }
 
         switch (mediaType) {
           case MediaType.Image: {
-
-            if (platform === 'desktop') {
-              autorunState.resourceIdentifier = "file://" + assetId;
-            }
-            else {
-              autorunState.resourceIdentifier = "pool/" + path.basename(assetId);
-            }
-            break;
-          }
-          case MediaType.Video: {
-
-            if (platform === 'desktop') {
-              autorunState.resourceIdentifier = "file://" + assetId;
-            }
-            else {
-              autorunState.resourceIdentifier = "pool/" + path.basename(assetId);
-            }
-            break;
-          }
-          default: {
-            debugger;
-          }
-        }
-
-
-
-
-
-
-
-        break;
-      }
-      case 'html': {
-        autorunState.displayCursor = mediaStateContentItem.displayCursor;
-        autorunState.enableExternalData = mediaStateContentItem.enableExternalData;
-        autorunState.enableMouseEvents = mediaStateContentItem.enableMouseEvents;
-        autorunState.hwzOn = mediaStateContentItem.hwzOn;
-        const htmlSiteId = mediaStateContentItem.siteId;
-        const site = dmGetHtmlSiteById(bsdm, {id: htmlSiteId});
-
-        // HACK
-        if (platform === 'brightsign') {
-          autorunState.url = 'pool/test.html';
-        }
-        else {
-          autorunState.url = site.url;
-        }
-        break;
-      }
-      case 'mrssfeed': {
-        debugger;
-        break;
-      }
-      case 'datafeed': {
-
-        let rssItem = {};
-
-        let dataFeedId = mediaStateContentItem.dataFeedId;
-        let dataFeed = dmGetDataFeedById(bsdm, {id: dataFeedId});
-        const feedUrl = dmGetSimpleStringFromParameterizedString(dataFeed.url);
-        rssItem.feedUrl = feedUrl;
-
-        autorunState.rssItem = rssItem;
-
-        break;
-      }
-      default: {
-        break;
-      }
-    }
-
-
-    // if (!this.props.autoplayZone.mediaStateIds && this.props.autoplayZone.mediaStateIds.length === 0) {
-    //   return (
-    //     <div>Loading</div>
-    //   );
-    // }
-
-    // let autorunState = this.props.autoplayZone.autorunStates[this.props.autoplayZone.stateIndex];
-
-    // let { contentItemType } = autorunState;
-
-
-    switch (contentItemType) {
-
-      case 'datafeed': {
-
-        if (this.props.platform === 'brightsign') {
-          return (
-            <RSSTicker
-              platform={this.props.platform}
-              width={this.props.width}
-              height={this.props.height}
-              feedUrl={autorunState.rssItem.feedUrl}
-            />
-          );
-        }
-        else {
-          return (
-            <div>Ticker support lacking</div>
-          );
-        }
-      }
-
-      case 'media': {
-
-        switch (mediaType) {
-          case MediaType.Image: {
-
-            const resourceIdentifier = autorunState.resourceIdentifier;
-
             return (
               <Image
                 resourceIdentifier={resourceIdentifier}
@@ -260,9 +165,6 @@ export default class Zone extends Component {
             );
           }
           case MediaType.Video: {
-
-            const resourceIdentifier = autorunState.resourceIdentifier;
-
             return (
               <Video
                 resourceIdentifier={resourceIdentifier}
@@ -280,19 +182,35 @@ export default class Zone extends Component {
       }
       case 'html': {
 
+        // displayCursor = mediaStateContentItem.displayCursor;
+        // enableExternalData = mediaStateContentItem.enableExternalData;
+        // enableMouseEvents = mediaStateContentItem.enableMouseEvents;
+        // hwzOn = mediaStateContentItem.hwzOn;
+
+        const htmlSiteId = mediaStateContentItem.siteId;
+        const site = dmGetHtmlSiteById(bsdm, {id: htmlSiteId});
+
+        // HACK
+        let url = '';
+        if (platform === 'brightsign') {
+          url = 'pool/test.html';
+        }
+        else {
+          url = site.url;
+        }
+
         this.setHtmlTimeout();
 
         return (
           <iframe
             width={this.props.width}
             height={this.props.height}
-            src={autorunState.url}
+            src={url}
           />
         );
       }
-
       default: {
-        debugger;
+        break;
       }
     }
   }
