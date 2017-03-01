@@ -3,6 +3,7 @@
 import React, { Component } from 'react';
 
 import Zone from './zone';
+import MediaZone from './mediaZone';
 
 import {
   dmGetZonesForSign,
@@ -25,7 +26,7 @@ export default class Sign extends Component {
           height: zone.absolutePosition.height
         }}
       >
-        <Zone
+        <MediaZone
           platform={this.props.platform}
           bsdm={bsdm}
           zone={zone}
