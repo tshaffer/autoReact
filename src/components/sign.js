@@ -7,15 +7,13 @@ import Zone from './zone';
 import {
   dmGetZonesForSign,
   dmGetZoneById,
+  ZoneTypeCompactName,
 } from '@brightsign/bsdatamodel';
 
 
 export default class Sign extends Component {
 
-  getZoneJSX(bsdm: Object, zoneId: string, zoneIndex: number) {
-
-    const zone = dmGetZoneById(bsdm, { id: zoneId });
-
+  getMediaZone(bsdm: Object, zone : Object, zoneIndex : number) {
     return (
       <div
         key={zoneIndex}
@@ -37,6 +35,47 @@ export default class Sign extends Component {
         />
       </div>
     );
+  }
+
+  getTickerZone(bsdm: Object, zone : Object, zoneIndex : number) {
+    return (
+      <div
+        key={zoneIndex}
+        style={{
+          position: 'absolute',
+          left: zone.absolutePosition.x,
+          top: zone.absolutePosition.y,
+          width: zone.absolutePosition.width,
+          height: zone.absolutePosition.height
+        }}
+      >
+        <Zone
+          platform={this.props.platform}
+          bsdm={bsdm}
+          zone={zone}
+          width={Number(zone.absolutePosition.width)}
+          height={Number(zone.absolutePosition.height)}
+          zoneIndex={zoneIndex}
+        />
+      </div>
+    );
+  }
+
+  getZoneJSX(bsdm: Object, zoneId: string, zoneIndex: number) {
+
+    const zone = dmGetZoneById(bsdm, { id: zoneId });
+
+    switch (ZoneTypeCompactName(zone.type)) {
+      case 'VideoOrImages': {
+        return this.getMediaZone(bsdm, zone, zoneIndex);
+      }
+      case 'Ticker': {
+        return this.getTickerZone(bsdm, zone, zoneIndex);
+      }
+      default: {
+        debugger;
+      }
+    }
   }
 
   render() {
