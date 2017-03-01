@@ -2,8 +2,8 @@
 
 import React, { Component } from 'react';
 
-import Zone from './zone';
 import MediaZone from './mediaZone';
+import TickerZone from './tickerZone';
 
 import {
   dmGetZonesForSign,
@@ -50,7 +50,7 @@ export default class Sign extends Component {
           height: zone.absolutePosition.height
         }}
       >
-        <Zone
+        <TickerZone
           platform={this.props.platform}
           bsdm={bsdm}
           zone={zone}
