@@ -32,7 +32,8 @@ class App extends Component {
 
     let dataPath: string = '';
     if (this.state.platform === 'desktop') {
-      dataPath = "/Users/tedshaffer/Documents/Projects/autoReact/data/";
+      // dataPath = "/Users/tedshaffer/Documents/Projects/autoReact/data/";
+      dataPath = '/Users/tedshaffer/Desktop/baconSD';
     }
     else {
       dataPath = "/storage/sd";
