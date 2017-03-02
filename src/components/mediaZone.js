@@ -50,31 +50,22 @@ export default class MediaZone extends Component {
   }
 
 
-  render() {
+  renderMediaItem(mediaStateContentItem: Object, event : Object) {
 
-    let assetId = '';
-    let mediaType : string = '';
-    let mediaStateIds : Array<string> = [];
-    let mediaState : Object = {};
-    let duration : number = 1;
+    let duration : number = 10;
 
-    const self = this;
-    const platform : string = this.props.platform;
-    const bsdm : Object = this.props.bsdm;
-    const zone = this.props.zone;
+    let self = this;
 
-    mediaStateIds = dmGetZoneSimplePlaylist(bsdm, { id: zone.id });
-    mediaState = dmGetMediaStateById(bsdm, { id : mediaStateIds[this.state.stateIndex]});
-    this.numStates = mediaStateIds.length;
+    const mediaObject = mediaStateContentItem.media;
+    const assetId = mediaObject.assetId;
+    const mediaType = mediaObject.mediaType;
 
-    let eventIds = dmGetEventIdsForMediaState(bsdm, { id : mediaState.id });
-    if (eventIds.length !== 1) {
-      debugger;
+    let resourceIdentifier = '';
+    if (this.props.platform === 'desktop') {
+      resourceIdentifier = "file://" + assetId;
     }
-
-    let event = dmGetEventById(bsdm, { id : eventIds[0] });
-    if (!event) {
-      debugger;
+    else {
+      resourceIdentifier = "pool/" + path.basename(assetId);
     }
 
     const eventName = EventTypeName(event.type);
@@ -91,79 +82,103 @@ export default class MediaZone extends Component {
       }
     }
 
-    const mediaStateContentItem = mediaState.contentItem;
-    const mediaStateContentItemType = mediaStateContentItem.type;
-    const contentItemType = ContentItemTypeName(mediaStateContentItemType).toLowerCase();
-    switch (contentItemType) {
-      case 'media': {
-        const mediaObject = mediaStateContentItem.media;
-        assetId = mediaObject.assetId;
-        mediaType = mediaObject.mediaType;
-
-        let resourceIdentifier = '';
-        if (platform === 'desktop') {
-          resourceIdentifier = "file://" + assetId;
-        }
-        else {
-          resourceIdentifier = "pool/" + path.basename(assetId);
-        }
-
-        switch (mediaType) {
-          case MediaType.Image: {
-            return (
-              <Image
-                resourceIdentifier={resourceIdentifier}
-                width={this.props.width}
-                height={this.props.height}
-                duration={duration * 1000}
-                onTimeout={self.nextAsset.bind(this)}
-              />
-            );
-          }
-          case MediaType.Video: {
-            return (
-              <Video
-                resourceIdentifier={resourceIdentifier}
-                width={this.props.width}
-                height={this.props.height}
-                onVideoEnd={self.nextAsset.bind(this)}
-              />
-            );
-          }
-          default: {
-            debugger;
-          }
-        }
-        break;
-      }
-      case 'html': {
-
-        // displayCursor = mediaStateContentItem.displayCursor;
-        // enableExternalData = mediaStateContentItem.enableExternalData;
-        // enableMouseEvents = mediaStateContentItem.enableMouseEvents;
-        // hwzOn = mediaStateContentItem.hwzOn;
-
-        const htmlSiteId = mediaStateContentItem.siteId;
-        const site = dmGetHtmlSiteById(bsdm, {id: htmlSiteId});
-
-        // HACK
-        let url = '';
-        if (platform === 'brightsign') {
-          url = 'pool/test.html';
-        }
-        else {
-          url = site.url;
-        }
-
-        this.setHtmlTimeout();
-
+    switch (mediaType) {
+      case MediaType.Image: {
         return (
-          <iframe
+          <Image
+            resourceIdentifier={resourceIdentifier}
             width={this.props.width}
             height={this.props.height}
-            src={url}
+            duration={duration * 1000}
+            onTimeout={self.nextAsset.bind(this)}
           />
         );
+      }
+      case MediaType.Video: {
+        return (
+          <Video
+            resourceIdentifier={resourceIdentifier}
+            width={this.props.width}
+            height={this.props.height}
+            onVideoEnd={self.nextAsset.bind(this)}
+          />
+        );
+      }
+      default: {
+        debugger;
+      }
+    }
+  }
+
+  renderHtmlItem(htmlContentItem : Object) {
+
+    // displayCursor = mediaStateContentItem.displayCursor;
+    // enableExternalData = mediaStateContentItem.enableExternalData;
+    // enableMouseEvents = mediaStateContentItem.enableMouseEvents;
+    // hwzOn = mediaStateContentItem.hwzOn;
+
+    const htmlSiteId = htmlContentItem.siteId;
+    const site = dmGetHtmlSiteById(this.props.bsdm, {id: htmlSiteId});
+
+    // HACK
+    let url = '';
+    if (this.props.platform === 'brightsign') {
+      url = 'pool/test.html';
+    }
+    else {
+      url = site.url;
+    }
+
+    this.setHtmlTimeout();
+
+    return (
+      <iframe
+        width={this.props.width}
+        height={this.props.height}
+        src={url}
+      />
+    );
+  }
+
+  getEvent( bsdm : Object, mediaStateId: string ) {
+
+    let eventIds = dmGetEventIdsForMediaState(bsdm, { id : mediaStateId });
+    if (eventIds.length !== 1) {
+      debugger;
+    }
+
+    let event = dmGetEventById(bsdm, { id : eventIds[0] });
+    if (!event) {
+      debugger;
+    }
+
+    return event;
+  }
+
+
+  render() {
+
+    let mediaStateIds : Array<string> = [];
+    let mediaState : Object = {};
+
+    const bsdm : Object = this.props.bsdm;
+    const zone = this.props.zone;
+
+    mediaStateIds = dmGetZoneSimplePlaylist(bsdm, { id: zone.id });
+    mediaState = dmGetMediaStateById(bsdm, { id : mediaStateIds[this.state.stateIndex]});
+    this.numStates = mediaStateIds.length;
+
+    const event = this.getEvent(bsdm, mediaState.id);
+
+    const mediaStateContentItem = mediaState.contentItem;
+    const contentItemType = ContentItemTypeName(mediaStateContentItem.type).toLowerCase();
+
+    switch (contentItemType) {
+      case 'media': {
+        return this.renderMediaItem(mediaStateContentItem, event);
+      }
+      case 'html': {
+        return this.renderHtmlItem(mediaStateContentItem);
       }
       default: {
         break;
