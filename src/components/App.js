@@ -4,9 +4,10 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 
-import path from 'path';
+// import path from 'path';
+import { initStateMachine } from '../store/stateMachine';
 
-import { openPresentationFile } from '../store/presentations';
+// import { openPresentationFile } from '../store/presentations';
 
 import Sign from './sign';
 
@@ -37,10 +38,12 @@ class App extends Component {
       dataPath = "/storage/sd";
     }
 
-    const presentationFile: string = "VideoPlusImage-v3.bpf";
-    const autoplayPath: string = path.join(dataPath, presentationFile);
+    // const presentationFile: string = "VideoPlusImage-v3.bpf";
+    // const autoplayPath: string = path.join(dataPath, presentationFile);
+    //
+    // this.props.openPresentationFile(autoplayPath);
 
-    this.props.openPresentationFile(autoplayPath);
+    this.props.initStateMachine(dataPath);
   }
 
   render() {
@@ -69,12 +72,14 @@ const mapStateToProps = (state) => ({
 
 const mapDispatchToProps = (dispatch) => {
   return bindActionCreators({
-    openPresentationFile,
+    // openPresentationFile,
+    initStateMachine,
   }, dispatch);
 };
 
 App.propTypes = {
-  openPresentationFile: React.PropTypes.func.isRequired,
+  // openPresentationFile: React.PropTypes.func.isRequired,
+  initStateMachine: React.PropTypes.func.isRequired,
   bsdm: React.PropTypes.object.isRequired,
 };
 
