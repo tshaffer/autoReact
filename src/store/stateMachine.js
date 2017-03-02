@@ -9,10 +9,18 @@ const decoder = new StringDecoder('utf8');
 // ------------------------------------
 // Constants
 // ------------------------------------
+export const SET_SYNC_SPEC = 'SET_SYNC_SPEC';
 
 // ------------------------------------
 // Actions
 // ------------------------------------
+export function setSyncSpec(syncSpec : Object){
+
+  return {
+    type: SET_SYNC_SPEC,
+    payload: syncSpec
+  };
+}
 
 // ------------------------------------
 // Action Creators
@@ -21,12 +29,9 @@ export function initStateMachine(rootPath : string) {
   return (dispatch : Function, getState : Function) => {
 
     const state : Object = getState();
-    console.log(state);
-    console.log(rootPath);
-    console.log(dispatch);
 
     openSyncSpec(path.join(rootPath, 'local-sync.json')).then( (syncSpec) => {
-      debugger;
+      dispatch(setSyncSpec(syncSpec));
     }).catch( (err) => {
       console.log(err);
       debugger;
@@ -39,17 +44,24 @@ export function initStateMachine(rootPath : string) {
 // Reducer
 // ------------------------------------
 const initialState = {
+  syncSpec : {},
 };
 
-export default function(state : Object = initialState, action : string) {
+export default function(state : Object = initialState, action : Object) {
 
-  // switch (action.type) {
-  //
-  // }
+  switch (action.type) {
 
-  console.log('stateMachine reducer: ', state);
-  console.log(action);
+    case SET_SYNC_SPEC: {
 
+      let newState = {
+        ...state,
+        syncSpec: action.payload
+      };
+
+      console.log(newState);
+      return newState;
+    }
+  }
 
   return state;
 }
@@ -72,9 +84,6 @@ function openSyncSpec(filePath : string = '') {
     });
   });
 }
-
-
-
 
 // ------------------------------------
 // Selectors
