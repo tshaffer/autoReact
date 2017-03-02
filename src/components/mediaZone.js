@@ -6,6 +6,7 @@ import path from 'path';
 
 import Image from './image';
 import Video from './video';
+import Html from './html';
 
 import {
   ContentItemTypeName,
@@ -37,18 +38,6 @@ export default class MediaZone extends Component {
 
     this.setState( { stateIndex });
   }
-
-  setHtmlTimeout() {
-
-    let self = this;
-
-    setTimeout(
-      () => {
-        self.nextAsset();
-      },
-      4 * 1000);
-  }
-
 
   renderMediaItem(mediaStateContentItem: Object, event : Object) {
 
@@ -120,22 +109,21 @@ export default class MediaZone extends Component {
     const htmlSiteId = htmlContentItem.siteId;
     const site = dmGetHtmlSiteById(this.props.bsdm, {id: htmlSiteId});
 
-    // HACK
     let url = '';
     if (this.props.platform === 'brightsign') {
+      // HACK
       url = 'pool/test.html';
     }
     else {
       url = site.url;
     }
 
-    this.setHtmlTimeout();
-
     return (
-      <iframe
+      <Html
         width={this.props.width}
         height={this.props.height}
-        src={url}
+        url={url}
+        onTimeout={this.nextAsset.bind(this)}
       />
     );
   }
