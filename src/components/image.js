@@ -1,5 +1,7 @@
 // @flow
 
+import path from 'path';
+
 import React, { Component } from 'react';
 
 export default class Image extends Component {
@@ -33,9 +35,12 @@ export default class Image extends Component {
     }
       ,this.props.duration);
 
+    // TODO - do this elsewhere?
+    const src = path.join('file://', this.props.poolFilePath);
+
     return (
       <img
-        src={this.props.resourceIdentifier}
+        src={src}
         width={this.props.width.toString()}
         height={this.props.height.toString()}
       />
@@ -49,4 +54,5 @@ Image.propTypes = {
   duration: React.PropTypes.number.isRequired,
   onTimeout: React.PropTypes.func.isRequired,
   resourceIdentifier: React.PropTypes.string.isRequired,
+  poolFilePath: React.PropTypes.string.isRequired,
 };

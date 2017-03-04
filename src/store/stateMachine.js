@@ -132,7 +132,7 @@ function getFile(syncSpec : Object, fileName : string) : ?Object {
   return file;
 }
 
-function getPoolFilePath(sha1: string) {
+function buildPoolFilePath(sha1: string) {
 
   let relativeFilePath = '';
 
@@ -168,7 +168,7 @@ function getSyncSpecFile(fileName : string, syncSpec : Object, rootPath : string
     const fileSize = syncSpecFile.size;
     // const link = syncSpecFile.link;
 
-    const relativePath = getPoolFilePath(hashValue);
+    const relativePath = buildPoolFilePath(hashValue);
     const filePath = path.join(rootPath, 'pool', relativePath, 'sha1-' + hashValue.toString());
 
     fs.readFile(filePath, (err, dataBuffer) => {
@@ -214,7 +214,7 @@ function buildPoolAssetFiles(syncSpec : Object, rootPath : string) : Object {
 
     const hashValue = syncSpecFile.hash["#"];
 
-    const relativePath = getPoolFilePath(hashValue);
+    const relativePath = buildPoolFilePath(hashValue);
     const filePath = path.join(rootPath, 'pool', relativePath, 'sha1-' + hashValue.toString());
 
     poolAssetFiles[syncSpecFile.name] = filePath;
@@ -241,4 +241,10 @@ function getBml(autoSchedule : Object, syncSpec : Object, rootPath : string) {
 // ------------------------------------
 // Selectors
 // ------------------------------------
+export function getPoolFilePath(state : Object, resourceIdentifier : string) {
 
+  const stateMachine = state.stateMachine;
+  const filePath =  stateMachine.poolAssetFiles[resourceIdentifier];
+  console.log(resourceIdentifier, filePath);
+  return filePath;
+}

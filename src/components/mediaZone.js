@@ -4,7 +4,7 @@ import React, { Component } from 'react';
 
 import path from 'path';
 
-import Image from './image';
+import ImageContainer from '../containers/imageContainer';
 import Video from './video';
 import Html from './html';
 
@@ -46,12 +46,19 @@ export default class MediaZone extends Component {
     let self = this;
 
     const mediaObject = mediaStateContentItem.media;
-    const assetId = mediaObject.assetId;
+
+    // TODO - HACK? HACK?
+    // const assetId = mediaObject.assetId;
+    const assetId = mediaObject.path;
+
+    // TODO - HACK - need FileName!!
+
     const mediaType = mediaObject.mediaType;
 
     let resourceIdentifier = '';
     if (this.props.platform === 'desktop') {
-      resourceIdentifier = "file://" + assetId;
+      // resourceIdentifier = "file://" + assetId;
+      resourceIdentifier = path.basename(assetId);
     }
     else {
       resourceIdentifier = "pool/" + path.basename(assetId);
@@ -74,7 +81,7 @@ export default class MediaZone extends Component {
     switch (mediaType) {
       case MediaType.Image: {
         return (
-          <Image
+          <ImageContainer
             resourceIdentifier={resourceIdentifier}
             width={this.props.width}
             height={this.props.height}
