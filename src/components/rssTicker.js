@@ -59,6 +59,8 @@ export default class RSSTicker extends Component {
 
     if (this.props.platform === 'brightsign') {
       // TODO - get location, dimensions from a prop
+
+// $FlowBrightSignExternalObject
       const bsTicker = new BSTicker(0, 880, 1920, 200, 0);
       bsTicker.SetPixelsPerSecond(200);
 
