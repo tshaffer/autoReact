@@ -1,5 +1,7 @@
 // @flow
 
+import path from 'path';
+
 import React, { Component } from 'react';
 
 export default class Video extends Component {
@@ -7,9 +9,13 @@ export default class Video extends Component {
   render () {
 
     let self = this;
+
+    // TODO - do this elsewhere?
+    const src = path.join('file://', this.props.poolFilePath);
+
     return (
       <video
-        src={this.props.resourceIdentifier}
+        src={src}
         autoPlay={true}
         width={this.props.width.toString()}
         height={this.props.height.toString()}
@@ -27,4 +33,5 @@ Video.propTypes = {
   height: React.PropTypes.number.isRequired,
   onVideoEnd: React.PropTypes.func.isRequired,
   resourceIdentifier: React.PropTypes.string.isRequired,
+  poolFilePath: React.PropTypes.string.isRequired,
 };

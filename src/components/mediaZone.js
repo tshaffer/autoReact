@@ -5,7 +5,7 @@ import React, { Component } from 'react';
 import path from 'path';
 
 import ImageContainer from '../containers/imageContainer';
-import Video from './video';
+import VideoContainer from '../containers/videoContainer';
 import Html from './html';
 
 import {
@@ -92,7 +92,7 @@ export default class MediaZone extends Component {
       }
       case MediaType.Video: {
         return (
-          <Video
+          <VideoContainer
             resourceIdentifier={resourceIdentifier}
             width={this.props.width}
             height={this.props.height}
