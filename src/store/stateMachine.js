@@ -6,6 +6,11 @@ import path from 'path';
 const StringDecoder = require('string_decoder').StringDecoder;
 const decoder = new StringDecoder('utf8');
 
+import {
+  dmOpenSign,
+} from '@brightsign/bsdatamodel';
+
+
 // ------------------------------------
 // Constants
 // ------------------------------------
@@ -26,7 +31,7 @@ export function setSyncSpec(syncSpec : Object){
 // Action Creators
 // ------------------------------------
 export function initStateMachine(rootPath : string) {
-  return (dispatch : Function) => {
+  return (dispatch : Function, getState : Function) => {
 
     let syncSpec : Object = {};
 
@@ -45,7 +50,9 @@ export function initStateMachine(rootPath : string) {
     }).then( (autoPlay) => {
 
       console.log(autoPlay);
-      debugger;
+      dispatch(dmOpenSign(autoPlay));
+      const state = getState();
+      console.log(state);
 
     }).catch( (err) => {
       console.log(err);
