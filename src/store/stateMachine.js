@@ -15,6 +15,7 @@ import {
 // Constants
 // ------------------------------------
 export const SET_SYNC_SPEC = 'SET_SYNC_SPEC';
+export const SET_POOL_ASSET_FILES = 'SET_POOL_ASSET_FILES';
 
 // ------------------------------------
 // Actions
@@ -24,6 +25,14 @@ export function setSyncSpec(syncSpec : Object){
   return {
     type: SET_SYNC_SPEC,
     payload: syncSpec
+  };
+}
+
+export function setPoolAssetFiles(poolAssetFiles : Object) {
+
+  return {
+    type: SET_POOL_ASSET_FILES,
+    payload: poolAssetFiles
   };
 }
 
@@ -40,6 +49,10 @@ export function initStateMachine(rootPath : string) {
       dispatch(setSyncSpec(cardSyncSpec));
 
       syncSpec = cardSyncSpec;
+
+      const poolAssetFiles = buildPoolAssetFiles(syncSpec, rootPath);
+      dispatch(setPoolAssetFiles(poolAssetFiles));
+
       return getAutoschedule(syncSpec, rootPath);
 
     }).then( (autoSchedule) => {
@@ -67,6 +80,7 @@ export function initStateMachine(rootPath : string) {
 // ------------------------------------
 const initialState = {
   syncSpec : {},
+  poolAssetFiles : {},
 };
 
 export default function(state : Object = initialState, action : Object) {
@@ -83,6 +97,17 @@ export default function(state : Object = initialState, action : Object) {
       console.log(newState);
       return newState;
     }
+
+    case SET_POOL_ASSET_FILES: {
+
+      let newState = {
+        ...state,
+        poolAssetFiles: action.payload
+      };
+
+      console.log(newState);
+      return newState;
+    }
   }
 
   return state;
@@ -92,29 +117,50 @@ export default function(state : Object = initialState, action : Object) {
 // ------------------------------------
 // Utilities
 // ------------------------------------
-function openSyncSpec(filePath : string = '') {
-  return new Promise( (resolve, reject) => {
-    fs.readFile(filePath, (err, dataBuffer) => {
 
-      if (err) {
-        reject(err);
-      } else {
-        const syncSpecStr : string = decoder.write(dataBuffer);
-        const syncSpec : Object = JSON.parse(syncSpecStr);
-        resolve(syncSpec);
-      }
-    });
+function getFile(syncSpec : Object, fileName : string) : ?Object {
+
+  let file = null;
+
+  syncSpec.files.forEach( (syncSpecFile) => {
+    if (syncSpecFile.name === fileName) {
+      file = syncSpecFile;
+      return;
+    }
   });
+
+  return file;
+}
+
+function getPoolFilePath(sha1: string) {
+
+  let relativeFilePath = '';
+
+  if (sha1.length >= 2) {
+
+    let folders = [];
+    folders.push(sha1.substring(sha1.length - 2, sha1.length - 2 + 1));
+    folders.push(sha1.substring(sha1.length - 1, sha1.length - 1 + 1));
+
+    relativeFilePath = path.join(folders[0], folders[1]);
+  }
+  else {
+    // not sure if this case can occur
+    debugger;
+  }
+
+  return relativeFilePath;
 }
 
 
-function getSyncSpecFile(fileName : string, syncSpec : Object, rootFolder : string) {
+function getSyncSpecFile(fileName : string, syncSpec : Object, rootPath : string) {
 
   return new Promise( (resolve, reject) => {
 
-    const syncSpecFile = getFile(syncSpec, fileName);
-    if (!syncSpecFile) {
+    let syncSpecFile = getFile(syncSpec, fileName);
+    if (syncSpecFile == null) {
       debugger;
+      syncSpecFile = {};    // required to eliminate flow warnings
     }
 
     const hashValue = syncSpecFile.hash["#"];
@@ -123,7 +169,7 @@ function getSyncSpecFile(fileName : string, syncSpec : Object, rootFolder : stri
     // const link = syncSpecFile.link;
 
     const relativePath = getPoolFilePath(hashValue);
-    const filePath = path.join(rootFolder, 'pool', relativePath, 'sha1-' + hashValue.toString());
+    const filePath = path.join(rootPath, 'pool', relativePath, 'sha1-' + hashValue.toString());
 
     fs.readFile(filePath, (err, dataBuffer) => {
       if (err) {
@@ -141,57 +187,56 @@ function getSyncSpecFile(fileName : string, syncSpec : Object, rootFolder : stri
   });
 }
 
-function getAutoschedule(syncSpec : Object, rootFolder : string) {
-  return getSyncSpecFile('autoschedule.json', syncSpec, rootFolder);
+// ------------------------------------
+// App support functions
+// ------------------------------------
+
+function openSyncSpec(filePath : string = '') {
+  return new Promise( (resolve, reject) => {
+    fs.readFile(filePath, (err, dataBuffer) => {
+
+      if (err) {
+        reject(err);
+      } else {
+        const syncSpecStr : string = decoder.write(dataBuffer);
+        const syncSpec : Object = JSON.parse(syncSpecStr);
+        resolve(syncSpec);
+      }
+    });
+  });
 }
 
+function buildPoolAssetFiles(syncSpec : Object, rootPath : string) : Object {
 
-function getBml(autoSchedule : Object, syncSpec : Object, rootFolder : string) {
+  let poolAssetFiles = {};
+  
+  syncSpec.files.forEach( (syncSpecFile) => {
+
+    const hashValue = syncSpecFile.hash["#"];
+
+    const relativePath = getPoolFilePath(hashValue);
+    const filePath = path.join(rootPath, 'pool', relativePath, 'sha1-' + hashValue.toString());
+
+    poolAssetFiles[syncSpecFile.name] = filePath;
+    
+  });
+
+  return poolAssetFiles;
+}
+
+function getAutoschedule(syncSpec : Object, rootPath : string) {
+  return getSyncSpecFile('autoschedule.json', syncSpec, rootPath);
+}
+
+function getBml(autoSchedule : Object, syncSpec : Object, rootPath : string) {
 
   const scheduledPresentation = autoSchedule.scheduledPresentation;
   const presentationToSchedule = scheduledPresentation.presentationToSchedule;
   const presentationName = presentationToSchedule.name;
   const bmlFileName = presentationName + '.bml';
 
-  return getSyncSpecFile(bmlFileName, syncSpec, rootFolder);
+  return getSyncSpecFile(bmlFileName, syncSpec, rootPath);
 }
-
-function getFile(syncSpec : Object, fileName : string) : ?Object {
-
-  let file = null;
-
-  syncSpec.files.forEach( (syncSpecFile) => {
-    if (syncSpecFile.name === fileName) {
-      file = syncSpecFile;
-      return;
-    }
-  });
-
-  return file;
-}
-
-
-function getPoolFilePath(sha1: string) {
-
-  let relativeFilePath = '';
-
-  if (sha1.length >= 2) {
-
-    let folders = [];
-    folders.push(sha1.substring(sha1.length - 2, sha1.length - 2 + 1));
-    folders.push(sha1.substring(sha1.length - 1, sha1.length - 1 + 1));
-
-    relativeFilePath = path.join(folders[0], folders[1]);
-
-  }
-  else {
-    // not sure if this case can occur
-    debugger;
-  }
-
-  return relativeFilePath;
-}
-
 
 // ------------------------------------
 // Selectors
