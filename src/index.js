@@ -185,11 +185,76 @@ app.post('/UploadFile', uploadLarge.single('nameParam1'), function (req, res) {
 
   const filePath = path.join(dataPath, destinationFilePath);
   const fileContents = req.body['nameParam1'];
-  fs.writeFileSync(filePath, fileContents);
 
+  fs.writeFileSync(filePath, fileContents);
   res.send('ok');
+
+//   if (fileName === 'IMG_7093.JPG') {
+//
+// /*
+//
+//  https://developer.mozilla.org/en-US/docs/Web/API/FileReader#readAsArrayBuffer()
+//
+//  */
+//     // debugger;
+//     //
+//     // let bytes = new Uint8Array(fileContents.length);
+//     // for (let i=0; i<fileContents.length; i++) {
+//     //   bytes[i] = fileContents.charCodeAt(i);
+//     // }
+//     //
+//     // debugger;
+//     // let reader = new FileReader();
+//     // reader.addEventListener('loadend', function () {
+//     //   const buf = toBuffer(reader.result);
+//     //   debugger;
+//     // });
+//     // reader.readAsArrayBuffer(fileContents);
+//     //
+//     // return;
+//
+//     // let wstream = fs.createWriteStream(filePath);
+//     // wstream.on('finish', function () {
+//     //   console.log('file has been written');
+//     //   res.send('ok');
+//     //
+//     //
+//     //
+//     // });
+//     // wstream.write(fileContents);
+//     // wstream.end();
+//     //
+//     // const buf = toBuffer(fileContents);
+//     // console.log(buf);
+//     // console.log(typeof buf);
+//
+//
+//
+//
+//   }
+//   else if (fileName === 'IMG_7094.JPG') {
+//     console.log('skip other jpeg file');
+//     res.send('ok');
+//   }
+//   else if (fileName.toLowerCase() === '0arc.mp4') {
+//     console.log('skip other jpeg file');
+//     res.send('ok');
+//   }
+//   else {
+//     fs.writeFileSync(filePath, fileContents);
+//     res.send('ok');
+//   }
+
 });
 
+function toBuffer(ab) {
+  let buf = new Buffer(ab.byteLength);
+  let view = new Uint8Array(ab);
+  for (let i = 0; i < buf.length; ++i) {
+    buf[i] = view[i];
+  }
+  return buf;
+}
 
 function parseFileToPublish(filesToPublishXML : string) {
 
