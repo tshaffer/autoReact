@@ -2,6 +2,9 @@
 
 'use strict';
 
+const path = require('path');
+const fs = require('fs');
+
 import thunkMiddleware from 'redux-thunk';
 
 import React from 'react';
@@ -54,11 +57,6 @@ app.use(bodyParser.urlencoded({ extended: false }));
 // });
 app.get('/getPizza', (_, res) => {
   console.log('getPizza invoked');
-  res.send('ok');
-});
-
-app.post('/UploadFile', (_, res) => {
-  console.log('uploadFile invoked');
   res.send('ok');
 });
 
@@ -159,6 +157,28 @@ app.post('/PrepareForTransfer', upload.single('nameParam1'), function (req, res)
   });
 });
 
+app.post('/UploadFile', upload.single('nameParam1'), function (req, res) {
+
+  console.log(req.headers);
+
+  const destinationFilePath = req.headers['destination-filename'];
+  const fileName = req.headers['friendly-filename'];
+
+  console.log('save file: ', fileName, ' to: ', destinationFilePath);
+
+  const dataPath = '/Users/tedshaffer/Desktop/baconLWSTest';
+
+  // TODO - convert destinationFilePath to proper target path.
+  // TODO - see FilePosted in autoxml.brs
+  
+  const filePath = path.join(dataPath, destinationFilePath);
+  const fileContents = req.body['nameParam1'];
+  fs.writeFileSync(filePath, fileContents);
+
+  res.send('ok');
+});
+
+
 function parseFileToPublish(filesToPublishXML : string) {
 
   return new Promise( (resolve, reject) => {
@@ -180,3 +200,4 @@ function parseFileToPublish(filesToPublishXML : string) {
     }
   });
 }
+
