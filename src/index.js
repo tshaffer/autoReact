@@ -157,7 +157,19 @@ app.post('/PrepareForTransfer', upload.single('nameParam1'), function (req, res)
   });
 });
 
-app.post('/UploadFile', upload.single('nameParam1'), function (req, res) {
+/*
+https://www.npmjs.com/package/multer
+multer
+limits
+fieldSize	Max field value size	1MB
+
+https://github.com/mscdex/busboy#busboy-methods
+  limits - object - Various limits on incoming data. Valid properties are:
+  fieldSize - integer - Max field value size (in bytes) (Default: 1MB).
+*/
+// TODO - uploads limited to 50 MBytes
+const uploadLarge = multer({ dest: 'uploads/', limits: { fieldSize : 50000000 } });
+app.post('/UploadFile', uploadLarge.single('nameParam1'), function (req, res) {
 
   console.log(req.headers);
 
@@ -170,7 +182,7 @@ app.post('/UploadFile', upload.single('nameParam1'), function (req, res) {
 
   // TODO - convert destinationFilePath to proper target path.
   // TODO - see FilePosted in autoxml.brs
-  
+
   const filePath = path.join(dataPath, destinationFilePath);
   const fileContents = req.body['nameParam1'];
   fs.writeFileSync(filePath, fileContents);
