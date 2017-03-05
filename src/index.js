@@ -72,15 +72,6 @@ app.get('/SpecifyCardSizeLimits', (req, res) => {
 //   res.send('ok');
 // });
 
-app.post('/UploadSyncSpec', (_, res) => {
-  debugger;
-  console.log('UploadSyncSpec invoked');
-  res.send('ok');
-});
-
-const port = process.env.PORT || 8080;
-app.listen(port);
-
 
 //     console.log(req.body); //form fields
 //     /* example output:
@@ -113,16 +104,9 @@ app.listen(port);
 const upload = multer({ dest: 'uploads/' });
 
 app.post('/PrepareForTransfer', upload.single('nameParam1'), function (req, res) {
-  // req.file is the `avatar` file
-  // req.body will hold the text fields, if there were any
+
   console.log(req.body);
   console.log(req.files);
-  // if(err) {
-  //   return res.end("Error uploading file.");
-  // }
-  // res.end("File is uploaded");
-
-  // data is in req.body['nameParam1']
 
   parseFileToPublish(req.body['nameParam1']).then( (filesToPublish) => {
 
@@ -236,6 +220,33 @@ app.post('/UploadFile', uploadLarge.single('nameParam1'), function (req, res) {
 //   }
 
 });
+
+app.post('/UploadSyncSpec', upload.single('syncSpecPosted'), (req, res) => {
+
+  const dataPath = '/Users/tedshaffer/Desktop/baconLWSTest';
+
+  console.log(req.body);
+  console.log(req.files);
+
+  // retrieve sync spec from request body
+  const newSyncSpec : string = req.body['nameParam1'];
+
+  // convert to xml
+  const newSyncSpecXml = js2xmlparser('sync', newSyncSpec);
+
+  // get targetPath
+  // TODO - where / how to save this. autoxml.brs saves in tmp
+  const fileName = 'new-local-sync.xml';
+  let filePath = path.join(dataPath, fileName);
+
+  fs.writeFileSync(filePath, newSyncSpecXml);
+
+  res.send('ok');
+});
+
+const port = process.env.PORT || 8080;
+app.listen(port);
+
 
 // function toBuffer(ab) {
 //   let buf = new Buffer(ab.byteLength);
