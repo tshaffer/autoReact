@@ -157,38 +157,28 @@ app.post('/PrepareForTransfer', upload.single('nameParam1'), function (req, res)
   });
 });
 
-/*
-https://www.npmjs.com/package/multer
-multer
-limits
-fieldSize	Max field value size	1MB
-
-https://github.com/mscdex/busboy#busboy-methods
-  limits - object - Various limits on incoming data. Valid properties are:
-  fieldSize - integer - Max field value size (in bytes) (Default: 1MB).
-*/
 // TODO - uploads limited to 50 MBytes
 const uploadLarge = multer({ dest: 'uploads/', limits: { fieldSize : 50000000 } });
 app.post('/UploadFile', uploadLarge.single('nameParam1'), function (req, res) {
 
   console.log(req.headers);
 
-  const destinationFilePath = req.headers['destination-filename'];
-  const fileName = req.headers['friendly-filename'];
-
-  console.log('save file: ', fileName, ' to: ', destinationFilePath);
-
   const dataPath = '/Users/tedshaffer/Desktop/baconLWSTest';
 
-  // TODO - convert destinationFilePath to proper target path.
-  // TODO - see FilePosted in autoxml.brs
+  const destinationFilePath = req.headers['destination-filename'];
+  const targetFilePath = getTargetPathFromDestinationFilePath(destinationFilePath, dataPath);
+  const fileName = req.headers['friendly-filename'];
 
-  const filePath = path.join(dataPath, destinationFilePath);
+  console.log('save file: ', fileName, ' to: ', targetFilePath);
+
+  const filePath = path.join(dataPath, targetFilePath);
   const fileContents = req.body['nameParam1'];
 
   fs.writeFileSync(filePath, fileContents);
   res.send('ok');
 
+// BACon
+// firmwareService.js::getFWManifestData, but it retrieves the data as a blob using fetch
 //   if (fileName === 'IMG_7093.JPG') {
 //
 // /*
@@ -247,14 +237,14 @@ app.post('/UploadFile', uploadLarge.single('nameParam1'), function (req, res) {
 
 });
 
-function toBuffer(ab) {
-  let buf = new Buffer(ab.byteLength);
-  let view = new Uint8Array(ab);
-  for (let i = 0; i < buf.length; ++i) {
-    buf[i] = view[i];
-  }
-  return buf;
-}
+// function toBuffer(ab) {
+//   let buf = new Buffer(ab.byteLength);
+//   let view = new Uint8Array(ab);
+//   for (let i = 0; i < buf.length; ++i) {
+//     buf[i] = view[i];
+//   }
+//   return buf;
+// }
 
 function parseFileToPublish(filesToPublishXML : string) {
 
@@ -278,3 +268,29 @@ function parseFileToPublish(filesToPublishXML : string) {
   });
 }
 
+function getTargetPathFromDestinationFilePath(destinationFileName : string, rootDir : string) {
+
+  const dir0 = destinationFileName.charAt(destinationFileName.length - 2);
+  const dir1 = destinationFileName.charAt(destinationFileName.length - 1);
+
+  const parts = destinationFileName.split("/");
+
+  // create directories if they do not exist
+  // TODO - don't use synchronous calls
+  let dirName = path.join(rootDir, parts[0]);
+  createDir(dirName);
+  dirName = path.join(dirName, dir0);
+  createDir(dirName);
+  dirName = path.join(dirName, dir1);
+  createDir(dirName);
+
+  const fileName = parts[1];
+
+  return path.join('pool/', dir0, dir1, fileName);
+}
+
+function createDir(dir : string) {
+  if (!fs.existsSync(dir)){
+    fs.mkdirSync(dir);
+  }
+}
