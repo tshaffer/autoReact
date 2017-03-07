@@ -4,6 +4,7 @@
 
 const path = require('path');
 const fs = require('fs');
+const readDir = require('recursive-readdir');
 
 import thunkMiddleware from 'redux-thunk';
 
@@ -48,17 +49,12 @@ ReactDOM.render(
   </Provider>
   , document.getElementById('content'));
 
-app.use(bodyParser.urlencoded({ extended: false }));
 
-// app.get('/getEncoders', function(req, res) {
-//   console.log("getEncoders invoked");
-//   res.set('Access-Control-Allow-Origin', '*');
-//   res.send(brightSignEncoders);
-// });
-app.get('/getPizza', (_, res) => {
-  console.log('getPizza invoked');
-  res.send('ok');
-});
+
+// LWS handlers
+
+const targetFolder = '/Users/tedshaffer/Desktop/baconLWSTest';
+app.use(bodyParser.urlencoded({ extended: false }));
 
 app.get('/SpecifyCardSizeLimits', (req, res) => {
   const limitStorageSpace = req.query.limitStorageSpace;
@@ -66,47 +62,52 @@ app.get('/SpecifyCardSizeLimits', (req, res) => {
   res.send('SpecifyCardSizeLimits');
 });
 
-// app.post('/PrepareForTransfer', (_, res) => {
-//   debugger;
-//   console.log('PrepareForTransfer invoked');
-//   res.send('ok');
-// });
-
-
-//     console.log(req.body); //form fields
-//     /* example output:
-//      { title: 'abc' }
-//      */
-//     console.log(req.file); //form files
-//     /* example output:
-//      { fieldname: 'upl',
-//      originalname: 'grumpy.png',
-//      encoding: '7bit',
-//      mimetype: 'image/png',
-//      destination: './uploads/',
-//      filename: '436ec561793aa4dc475a88e84776b1b9',
-//      path: 'uploads/436ec561793aa4dc475a88e84776b1b9',
-//      size: 277056 }
-//      */
-//     res.status(204).end();
-
-// app.post('/PrepareForTransfer',function(req,res){
-//   upload(req,res,function(err) {
-//     console.log(req.body);
-//     console.log(req.files);
-//     if(err) {
-//       return res.end("Error uploading file.");
-//     }
-//     res.end("File is uploaded");
-//   });
-// });
-// const upload = multer({ dest: 'uploads/' }).single('nameParam1');
 const upload = multer({ dest: 'uploads/' });
 
-app.post('/PrepareForTransfer', upload.single('nameParam1'), function (req, res) {
+app.post('/PrepareForTransfer', upload.array('files', 50), function (req, res) {
+
+  debugger;
 
   console.log(req.body);
   console.log(req.files);
+
+  // parseFileToPublish(req.body['nameParam1']).then( (filesToPublish : Array<Object>) => {
+  //
+  //   // let filesToCopy = freeSpaceOnDrive(filesToPublish);
+  //   freeSpaceOnDrive(filesToPublish).then( (filesToCopy) => {
+  //
+  //     debugger;
+  //     // let filesToCopy = {};
+  //     filesToCopy.file = [];
+  //
+  //     filesToPublish.forEach( (fileToPublish) => {
+  //       let fileToCopy = {};
+  //       const filePath = fileToPublish.filePath[0];
+  //       const fileName = fileToPublish.fileName[0];
+  //       const hashValue = fileToPublish.hashValue[0];
+  //       const fileSize = fileToPublish.fileSize[0];
+  //
+  //       fileToCopy = {
+  //         filePath,
+  //         fileName,
+  //         hashValue,
+  //         fileSize
+  //       };
+  //       filesToCopy.file.push(fileToCopy);
+  //     });
+  //
+  //
+  //     // convert to xml
+  //     const filesToPublishXml = js2xmlparser('filesToCopy', filesToCopy);
+  //
+  //     res.send(filesToPublishXml);
+  //     res.end("File is uploaded");
+  //
+  //   }).catch( (err) => {
+  //     console.log(err);
+  //     debugger;
+  //   });
+  // });
 
   parseFileToPublish(req.body['nameParam1']).then( (filesToPublish) => {
 
@@ -141,25 +142,162 @@ app.post('/PrepareForTransfer', upload.single('nameParam1'), function (req, res)
   });
 });
 
+
+// function getFiles(dir: string) : Array<string> {
+//
+//   return new Promise( (resolve, reject) => {
+//
+//     readDir(dir, (err, files) => {
+//
+//       if (err) {
+//         reject(err);
+//         return;
+//       }
+//
+//       resolve(files);
+//     });
+//   });
+// }
+
+
+// function freeSpaceOnDrive(filesToPublish : Array<Object>) {
+//
+//   return new Promise( (resolve, reject) => {
+//
+//     // files that need to be copied by BrightAuthor
+//     let filesToCopy = {};
+//
+//     // files that can be deleted to make room for more content
+//     let deletionCandidates = {}
+//
+//   // ******** CHECK WHAT'S ACTUALLY GOING ON WITH A CURRENT AUTORUN
+//     // create list of files already on the card in the pool folder
+//     const poolPath = path.join(targetFolder, 'pool');
+//     getFiles(poolPath).then( (listOfPoolFiles : Array<string>) => {
+//
+//       listOfPoolFiles.forEach( (file) => {
+//         deletionCandidates[file] = file;  // TODO - maybe should be fileName (property), filePath (value)
+//       });
+//
+//
+//
+//       // create the list of files that need to be copied.
+//       // this is the list of files in filesToPublish that are not in listOfPoolFiles
+//
+// /*
+//        ' determine total space required
+//        totalSpaceRequired! = 0
+//        for each fileXML in filesToPublish.file
+//        fullFileName$ = fileXML.fullFileName.GetText()
+//        o = deletionCandidates.Lookup(fullFileName$)
+//        if not IsString(o) then		' file is not already on the card
+//
+//          fileItem = CreateObject("roAssociativeArray")
+//          fileItem.fileName$ = fileXML.fileName.GetText()
+//          fileItem.filePath$ = fileXML.filePath.GetText()
+//          fileItem.hashValue$ = fileXML.hashValue.GetText()
+//          fileItem.fileSize$ = fileXML.fileSize.GetText()
+//
+//          filesToCopy.AddReplace(fullFileName$, fileItem)		' files that need to be copied to the card
+//
+//          fileSize% = val(fileItem.fileSize$)
+//          totalSpaceRequired! = totalSpaceRequired! + fileSize%
+//
+//        endif
+//        next
+//  */
+//       let totalSpaceRequired = 0;
+//       filesToPublish.forEach( (fileToPublish : Object) => {
+//         // get full file name - what does that mean?
+//         // see if this file is in deletionCandidates
+//         // if not
+//         //    create fileItem
+//         //    add to filesToCopy
+//         //    get fileSize and add to totalSpaceRequired.
+//       });
+//
+//       debugger;
+//
+//     }).catch ( (err) => {
+//       console.log(err);
+//       debugger;
+//     });
+//   });
+// }
+
+
+
+
+
+
+
+
 // TODO - uploads limited to 50 MBytes
 const uploadLarge = multer({ dest: 'uploads/', limits: { fieldSize : 50000000 } });
 app.post('/UploadFile', uploadLarge.single('nameParam1'), function (req, res) {
 
-  console.log(req.headers);
-
-  const dataPath = '/Users/tedshaffer/Desktop/baconLWSTest';
+  // console.log(req.headers);
 
   const destinationFilePath = req.headers['destination-filename'];
-  const targetFilePath = getTargetPathFromDestinationFilePath(destinationFilePath, dataPath);
+  const targetFilePath = getTargetPathFromDestinationFilePath(destinationFilePath, targetFolder);
   const fileName = req.headers['friendly-filename'];
 
-  console.log('save file: ', fileName, ' to: ', targetFilePath);
+  // console.log('save file: ', fileName, ' to: ', targetFilePath);
 
-  const filePath = path.join(dataPath, targetFilePath);
+  const filePath = path.join(targetFolder, targetFilePath);
   const fileContents = req.body['nameParam1'];
 
-  fs.writeFileSync(filePath, fileContents);
+  console.log('receive file: ', fileName);
+  console.log('received bytes: ', fileContents.length);
+
+  // if (fileName === 'IMG_7093.JPG') {
+  //
+  //   console.log('fileContents length: ', fileContents.length);
+  //
+  //   let bytes = new Uint8Array(fileContents.length);
+  //   for (let i = 0; i < fileContents.length; i++) {
+  //     const binaryValue = fileContents.charCodeAt(i);
+  //     bytes[i] = binaryValue;
+  //   }
+  //
+  //   console.log('first 16 bytes of bytes (Uint8Array): ');
+  //   for (let i = 0; i < 16; i = i + 1) {
+  //     console.log(bytes[i]);
+  //   }
+  //
+  //   let ab = str2ab(fileContents);
+  //   console.log('array buffer length: ', ab.byteLength);
+  //
+  //   const buf = toBuffer(ab);
+  //
+  //   writeFile(filePath, buf).then( () => {
+  //     console.log('write complete');
+  //     debugger;
+  //   }).catch( (err) => {
+  //     console.log(err);
+  //     debugger;
+  //   });
+  //
+  //   // const blobData = new Blob([fileContents], {type : "image/jpeg"});
+  //   //
+  //   // let reader = new FileReader();
+  //   // reader.addEventListener('loadend', function() {
+  //   //   const buf = toBuffer(reader.result);
+  //   //   writeFile(filePath, buf).then( () => {
+  //   //     debugger;
+  //   //   }).catch( (err) => {
+  //   //     console.log(err);
+  //   //     debugger;
+  //   //   });
+  //   // });
+  //   // reader.readAsArrayBuffer(blobData);
+  //
+  // }
+  // else {
+  //   fs.writeFileSync(filePath, fileContents);
+  // }
   res.send('ok');
+  // res.send(fileContents.length.toString());
 
 // BACon
 // firmwareService.js::getFWManifestData, but it retrieves the data as a blob using fetch
@@ -221,10 +359,31 @@ app.post('/UploadFile', uploadLarge.single('nameParam1'), function (req, res) {
 
 });
 
+function str2ab(str) {
+  console.log('create arrayBuffer with size: ', str.length);
+  var buf = new ArrayBuffer(str.length);
+  var bufView = new Uint8Array(buf);
+  for (var i=0, strLen=str.length; i<strLen; i++) {
+    bufView[i] = str.charCodeAt(i);
+  }
+  return buf;
+}
+
+export function writeFile(filePath: string, data: string) {
+  return new Promise( (resolve, reject) => {
+    fs.writeFile( filePath, data, (err) => {
+      if (err) {
+        reject(err);
+      }
+      else {
+        resolve();
+      }
+    });
+  });
+}
+
 app.post('/UploadSyncSpec', upload.single('syncSpecPosted'), (req, res) => {
-
-  const dataPath = '/Users/tedshaffer/Desktop/baconLWSTest';
-
+  
   console.log(req.body);
   console.log(req.files);
 
@@ -237,7 +396,7 @@ app.post('/UploadSyncSpec', upload.single('syncSpecPosted'), (req, res) => {
   // get targetPath
   // TODO - where / how to save this. autoxml.brs saves in tmp
   const fileName = 'new-local-sync.xml';
-  let filePath = path.join(dataPath, fileName);
+  let filePath = path.join(targetFolder, fileName);
 
   fs.writeFileSync(filePath, newSyncSpecXml);
 
@@ -248,14 +407,14 @@ const port = process.env.PORT || 8080;
 app.listen(port);
 
 
-// function toBuffer(ab) {
-//   let buf = new Buffer(ab.byteLength);
-//   let view = new Uint8Array(ab);
-//   for (let i = 0; i < buf.length; ++i) {
-//     buf[i] = view[i];
-//   }
-//   return buf;
-// }
+function toBuffer(ab) {
+  let buf = new Buffer(ab.byteLength);
+  let view = new Uint8Array(ab);
+  for (let i = 0; i < buf.length; ++i) {
+    buf[i] = view[i];
+  }
+  return buf;
+}
 
 function parseFileToPublish(filesToPublishXML : string) {
 
