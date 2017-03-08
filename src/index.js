@@ -71,7 +71,8 @@ app.post('/PrepareForTransfer', upload.array('files', 1), function (req, res) {
 
   const file = req.files[0];
 
-  let { destination, encoding, fieldname, filename, mimetype, originalname, path, size } = file;
+  // let { destination, encoding, fieldname, filename, mimetype, originalname, path, size } = file;
+  let path = file.path;
 
   // read xml file
   const filesToPublishXML = fs.readFileSync(path);
@@ -242,139 +243,36 @@ app.post('/PrepareForTransfer', upload.array('files', 1), function (req, res) {
 const uploadLarge = multer({ dest: 'uploads/', limits: { fieldSize : 50000000 } });
 app.post('/UploadFile', uploadLarge.array('files', 1), function (req, res) {
 
-
   console.log(req.body);
   console.log(req.files);
 
   const file = req.files[0];
 
-  let { destination, encoding, fieldname, filename, mimetype, originalname, path, size } = file;
-
-  // get additional info out of req.headers as below
-
-
-
-  // console.log(req.headers);
+  // fields available in req.files from multer
+  // let { destination, encoding, fieldname, filename, mimetype, originalname, path, size } = file;
+  const uploadedFilePath = file.path;
 
   const destinationFilePath = req.headers['destination-filename'];
   const targetFilePath = getTargetPathFromDestinationFilePath(destinationFilePath, targetFolder);
   const fileName = req.headers['friendly-filename'];
-
-  // console.log('save file: ', fileName, ' to: ', targetFilePath);
-
   const filePath = path.join(targetFolder, targetFilePath);
-  const fileContents = req.body['nameParam1'];
 
-  console.log('receive file: ', fileName);
-  console.log('received bytes: ', fileContents.length);
+  // move file from path to filePath
+  var source = fs.createReadStream(uploadedFilePath);
+  var dest = fs.createWriteStream(filePath);
 
-  // if (fileName === 'IMG_7093.JPG') {
-  //
-  //   console.log('fileContents length: ', fileContents.length);
-  //
-  //   let bytes = new Uint8Array(fileContents.length);
-  //   for (let i = 0; i < fileContents.length; i++) {
-  //     const binaryValue = fileContents.charCodeAt(i);
-  //     bytes[i] = binaryValue;
-  //   }
-  //
-  //   console.log('first 16 bytes of bytes (Uint8Array): ');
-  //   for (let i = 0; i < 16; i = i + 1) {
-  //     console.log(bytes[i]);
-  //   }
-  //
-  //   let ab = str2ab(fileContents);
-  //   console.log('array buffer length: ', ab.byteLength);
-  //
-  //   const buf = toBuffer(ab);
-  //
-  //   writeFile(filePath, buf).then( () => {
-  //     console.log('write complete');
-  //     debugger;
-  //   }).catch( (err) => {
-  //     console.log(err);
-  //     debugger;
-  //   });
-  //
-  //   // const blobData = new Blob([fileContents], {type : "image/jpeg"});
-  //   //
-  //   // let reader = new FileReader();
-  //   // reader.addEventListener('loadend', function() {
-  //   //   const buf = toBuffer(reader.result);
-  //   //   writeFile(filePath, buf).then( () => {
-  //   //     debugger;
-  //   //   }).catch( (err) => {
-  //   //     console.log(err);
-  //   //     debugger;
-  //   //   });
-  //   // });
-  //   // reader.readAsArrayBuffer(blobData);
-  //
-  // }
-  // else {
-  //   fs.writeFileSync(filePath, fileContents);
-  // }
+  console.log('copying file from: ', uploadedFilePath, ' to: ', filePath);
+  source.pipe(dest);
+  source.on('end', () => {
+    console.log('copy complete');
+    // TODO - delete source?
+  });
+
+  source.on('error', function(err) {
+    console.log('copy failed: ', err);
+  });
+
   res.send('ok');
-  // res.send(fileContents.length.toString());
-
-// BACon
-// firmwareService.js::getFWManifestData, but it retrieves the data as a blob using fetch
-//   if (fileName === 'IMG_7093.JPG') {
-//
-// /*
-//
-//  https://developer.mozilla.org/en-US/docs/Web/API/FileReader#readAsArrayBuffer()
-//
-//  */
-//     // debugger;
-//     //
-//     // let bytes = new Uint8Array(fileContents.length);
-//     // for (let i=0; i<fileContents.length; i++) {
-//     //   bytes[i] = fileContents.charCodeAt(i);
-//     // }
-//     //
-//     // debugger;
-//     // let reader = new FileReader();
-//     // reader.addEventListener('loadend', function () {
-//     //   const buf = toBuffer(reader.result);
-//     //   debugger;
-//     // });
-//     // reader.readAsArrayBuffer(fileContents);
-//     //
-//     // return;
-//
-//     // let wstream = fs.createWriteStream(filePath);
-//     // wstream.on('finish', function () {
-//     //   console.log('file has been written');
-//     //   res.send('ok');
-//     //
-//     //
-//     //
-//     // });
-//     // wstream.write(fileContents);
-//     // wstream.end();
-//     //
-//     // const buf = toBuffer(fileContents);
-//     // console.log(buf);
-//     // console.log(typeof buf);
-//
-//
-//
-//
-//   }
-//   else if (fileName === 'IMG_7094.JPG') {
-//     console.log('skip other jpeg file');
-//     res.send('ok');
-//   }
-//   else if (fileName.toLowerCase() === '0arc.mp4') {
-//     console.log('skip other jpeg file');
-//     res.send('ok');
-//   }
-//   else {
-//     fs.writeFileSync(filePath, fileContents);
-//     res.send('ok');
-//   }
-
 });
 
 function str2ab(str) {
@@ -400,13 +298,16 @@ export function writeFile(filePath: string, data: string) {
   });
 }
 
-app.post('/UploadSyncSpec', upload.single('syncSpecPosted'), (req, res) => {
+app.post('/UploadSyncSpec', upload.array('files', 1), function (req, res) {
   
   console.log(req.body);
   console.log(req.files);
 
-  // retrieve sync spec from request body
-  const newSyncSpec : string = req.body['nameParam1'];
+  const file = req.files[0];
+
+  // let { destination, encoding, fieldname, filename, mimetype, originalname, path, size } = file;
+
+  const newSyncSpec = fs.readFileSync(file.path);
 
   // convert to xml
   const newSyncSpecXml = js2xmlparser('sync', newSyncSpec);
