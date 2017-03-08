@@ -64,12 +64,17 @@ app.get('/SpecifyCardSizeLimits', (req, res) => {
 
 const upload = multer({ dest: 'uploads/' });
 
-app.post('/PrepareForTransfer', upload.array('files', 50), function (req, res) {
-
-  debugger;
+app.post('/PrepareForTransfer', upload.array('files', 1), function (req, res) {
 
   console.log(req.body);
   console.log(req.files);
+
+  const file = req.files[0];
+
+  let { destination, encoding, fieldname, filename, mimetype, originalname, path, size } = file;
+
+  // read xml file
+  const filesToPublishXML = fs.readFileSync(path);
 
   // parseFileToPublish(req.body['nameParam1']).then( (filesToPublish : Array<Object>) => {
   //
@@ -109,7 +114,8 @@ app.post('/PrepareForTransfer', upload.array('files', 50), function (req, res) {
   //   });
   // });
 
-  parseFileToPublish(req.body['nameParam1']).then( (filesToPublish) => {
+  // parseFileToPublish(req.body['nameParam1']).then( (filesToPublish) => {
+  parseFileToPublish(filesToPublishXML).then( (filesToPublish) => {
 
     let filesToCopy = {};
     filesToCopy.file = [];
@@ -234,7 +240,19 @@ app.post('/PrepareForTransfer', upload.array('files', 50), function (req, res) {
 
 // TODO - uploads limited to 50 MBytes
 const uploadLarge = multer({ dest: 'uploads/', limits: { fieldSize : 50000000 } });
-app.post('/UploadFile', uploadLarge.single('nameParam1'), function (req, res) {
+app.post('/UploadFile', uploadLarge.array('files', 1), function (req, res) {
+
+
+  console.log(req.body);
+  console.log(req.files);
+
+  const file = req.files[0];
+
+  let { destination, encoding, fieldname, filename, mimetype, originalname, path, size } = file;
+
+  // get additional info out of req.headers as below
+
+
 
   // console.log(req.headers);
 
