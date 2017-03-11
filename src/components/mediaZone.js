@@ -61,7 +61,8 @@ export default class MediaZone extends Component {
       resourceIdentifier = path.basename(assetId);
     }
     else {
-      resourceIdentifier = "pool/" + path.basename(assetId);
+      // resourceIdentifier = "pool/" + path.basename(assetId);
+      resourceIdentifier = path.basename(assetId);
     }
 
     const eventName = EventTypeName(event.type);

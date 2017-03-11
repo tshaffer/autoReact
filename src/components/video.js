@@ -10,8 +10,10 @@ export default class Video extends Component {
 
     let self = this;
 
-    // TODO - do this elsewhere?
-    const src = path.join('file://', this.props.poolFilePath);
+    // old code (desktop)
+    //     const src = path.join('file://', this.props.poolFilePath);
+    const src = this.props.poolFilePath.substr(12);
+    console.log('video.js::render, video src: ' + src);
 
     return (
       <video

@@ -35,8 +35,10 @@ export default class Image extends Component {
     }
       ,this.props.duration);
 
-    // TODO - do this elsewhere?
-    const src = path.join('file://', this.props.poolFilePath);
+    // old code (desktop)
+    //     const src = path.join('file://', this.props.poolFilePath);
+    const src = this.props.poolFilePath.substr(12);
+    console.log('image.js::render, image src: ' + src);
 
     return (
       <img

@@ -42,6 +42,8 @@ export function setPoolAssetFiles(poolAssetFiles : Object) {
 export function initStateMachine(rootPath : string) {
   return (dispatch : Function, getState : Function) => {
 
+    debugger;
+
     let syncSpec : Object = {};
 
     openSyncSpec(path.join(rootPath, 'local-sync.json')).then( (cardSyncSpec) => {
@@ -245,6 +247,6 @@ export function getPoolFilePath(state : Object, resourceIdentifier : string) {
 
   const stateMachine = state.stateMachine;
   const filePath =  stateMachine.poolAssetFiles[resourceIdentifier];
-  console.log(resourceIdentifier, filePath);
+  console.log('resourceIdentifier: ' + resourceIdentifier + ', filePath: ' +  filePath);
   return filePath;
 }
