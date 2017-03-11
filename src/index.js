@@ -225,6 +225,35 @@ app.post('/UploadFile', uploadLarge.array('files', 1), function (req, res) {
   var source = fs.createReadStream(uploadedFilePath);
   var dest = fs.createWriteStream(filePath);
 
+  console.log('targetFilePath: ', targetFilePath);
+  console.log('file[filename]: ', file.filename);
+  console.log('file[originalname]: ', file.originalname);
+
+  const parts = targetFilePath.split('/');
+  if (parts.length === 4 && parts[0] === 'pool' && parts[3].startsWith('sha1')) {
+
+    let dirName = '';
+
+    dirName = 'storage/sd/pool/' + parts[1];
+    console.log('create pool directory: ' + dirName);
+
+    try {
+      fs.mkdirSync(dirName);
+    }
+    catch (e) {
+      console.log(e);
+    }
+
+    dirName = dirName + '/' + parts[2];
+    console.log('create pool directory: ' + dirName);
+    try {
+      fs.mkdirSync(dirName);
+    }
+    catch (e) {
+      console.log(e);
+    }
+  }
+
   console.log('copying file from: ', uploadedFilePath, ' to: ', filePath);
   source.pipe(dest);
   source.on('end', () => {
@@ -263,8 +292,6 @@ export function writeFile(filePath: string, data: string) {
 }
 
 app.post('/UploadSyncSpec', upload.array('files', 1), function (req, res) {
-
-  debugger;
 
   console.log(req.body);
   console.log(req.files);
