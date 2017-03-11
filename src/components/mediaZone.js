@@ -88,6 +88,7 @@ export default class MediaZone extends Component {
             height={this.props.height}
             duration={duration * 1000}
             onTimeout={self.nextAsset.bind(this)}
+            platform={this.props.platform}
           />
         );
       }
@@ -98,6 +99,7 @@ export default class MediaZone extends Component {
             width={this.props.width}
             height={this.props.height}
             onVideoEnd={self.nextAsset.bind(this)}
+            platform={this.props.platform}
           />
         );
       }
