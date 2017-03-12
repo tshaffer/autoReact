@@ -3,7 +3,7 @@
 'use strict';
 
 const path = require('path');
-const fs = require('fs');
+const fs = require('fs-extra');
 const readDir = require('recursive-readdir');
 
 import thunkMiddleware from 'redux-thunk';
@@ -201,6 +201,24 @@ function freeSpaceOnDrive(filesToPublish : Array<Object>) {
   });
 }
 
+function mkdirSync(path) {
+  console.log('mkdirSync entry: ' + path);
+  return new Promise((resolve, reject) => {
+    try {
+      fs.mkdirSync(path);
+    } catch(e) {
+      if ( e.code !== 'EEXIST' ) {
+        reject(e);
+      }
+      else {
+        console.log(path + ' already exists');
+      }
+    }
+    console.log('mkdirSync exit: ', path);
+    resolve();
+  });
+}
+
 // TODO - uploads limited to 50 MBytes
 // FIXME - platform
 // const uploadLarge = multer({ dest: 'uploads/', limits: { fieldSize : 50000000 } });
@@ -221,10 +239,6 @@ app.post('/UploadFile', uploadLarge.array('files', 1), function (req, res) {
   // const fileName = req.headers['friendly-filename'];
   const filePath = path.join(targetFolder, targetFilePath);
 
-  // move file from path to filePath
-  var source = fs.createReadStream(uploadedFilePath);
-  var dest = fs.createWriteStream(filePath);
-
   console.log('targetFilePath: ', targetFilePath);
   console.log('file[filename]: ', file.filename);
   console.log('file[originalname]: ', file.originalname);
@@ -232,40 +246,97 @@ app.post('/UploadFile', uploadLarge.array('files', 1), function (req, res) {
   const parts = targetFilePath.split('/');
   if (parts.length === 4 && parts[0] === 'pool' && parts[3].startsWith('sha1')) {
 
+    // const fullTargetDirectory = 'storage/sd/pool/' + parts[1] + '/' + parts[2];
+
     let dirName = '';
 
     dirName = 'storage/sd/pool/' + parts[1];
-    console.log('create pool directory: ' + dirName);
+    mkdirSync(dirName).then( () => {
+      console.log('directory creation complete: ', dirName);
+      dirName = dirName + '/' + parts[2];
+      return mkdirSync(dirName);
+    }).then( () => {
 
-    try {
-      fs.mkdirSync(dirName);
-    }
-    catch (e) {
-      console.log(e);
-    }
+      console.log('directory creation complete: ', dirName);
 
-    dirName = dirName + '/' + parts[2];
-    console.log('create pool directory: ' + dirName);
-    try {
-      fs.mkdirSync(dirName);
-    }
-    catch (e) {
-      console.log(e);
-    }
+      console.log('copying file from: ', uploadedFilePath, ' to: ', filePath);
+
+      // move file from path to filePath
+      var source = fs.createReadStream(uploadedFilePath);
+      var dest = fs.createWriteStream(filePath);
+
+      source.pipe(dest);
+      source.on('end', () => {
+        console.log('copy complete');
+        // TODO - delete source?
+      });
+
+      source.on('error', function(err) {
+        console.log('copy failed: ', err);
+      });
+
+      res.send('ok');
+
+    }).catch( (err) => {
+      console.log(err);
+      debugger;
+    });
+
+    // console.log('create directory: ', fullTargetDirectory);
+    // fs.ensureDir(fullTargetDirectory, err => {
+    //
+    //   if (err) {
+    //     console.log(err);
+    //   }
+    //
+    //   console.log('copying file from: ', uploadedFilePath, ' to: ', filePath);
+    //   source.pipe(dest);
+    //   source.on('end', () => {
+    //     console.log('copy complete');
+    //     // TODO - delete source?
+    //   });
+    //
+    //   source.on('error', function(err) {
+    //     console.log('copy failed: ', err);
+    //   });
+    //
+    //   res.send('ok');
+    // });
+
+    // let dirName = '';
+    //
+    // dirName = 'storage/sd/pool/' + parts[1];
+    // console.log('create pool directory: ' + dirName);
+    //
+    // try {
+    //   fs.mkdirSync(dirName);
+    // }
+    // catch (e) {
+    //   console.log(e);
+    // }
+    //
+    // dirName = dirName + '/' + parts[2];
+    // console.log('create pool directory: ' + dirName);
+    // try {
+    //   fs.mkdirSync(dirName);
+    // }
+    // catch (e) {
+    //   console.log(e);
+    // }
   }
 
-  console.log('copying file from: ', uploadedFilePath, ' to: ', filePath);
-  source.pipe(dest);
-  source.on('end', () => {
-    console.log('copy complete');
-    // TODO - delete source?
-  });
-
-  source.on('error', function(err) {
-    console.log('copy failed: ', err);
-  });
-
-  res.send('ok');
+  // console.log('copying file from: ', uploadedFilePath, ' to: ', filePath);
+  // source.pipe(dest);
+  // source.on('end', () => {
+  //   console.log('copy complete');
+  //   // TODO - delete source?
+  // });
+  //
+  // source.on('error', function(err) {
+  //   console.log('copy failed: ', err);
+  // });
+  //
+  // res.send('ok');
 });
 
 // function str2ab(str) {
