@@ -235,119 +235,33 @@ app.post('/UploadFile', uploadLarge.array('files', 1), function (req, res) {
   const uploadedFilePath = file.path;
 
   const destinationFilePath = req.headers['destination-filename'];
-  const targetFilePath = getTargetPathFromDestinationFilePath(destinationFilePath, targetFolder);
-  // const fileName = req.headers['friendly-filename'];
-  const filePath = path.join(targetFolder, targetFilePath);
 
-  console.log('targetFilePath: ', targetFilePath);
-  console.log('file[filename]: ', file.filename);
-  console.log('file[originalname]: ', file.originalname);
+  getTargetPathFromDestinationFilePath(destinationFilePath, targetFolder).then( (targetFilePath) => {
 
-  const parts = targetFilePath.split('/');
-  if (parts.length === 4 && parts[0] === 'pool' && parts[3].startsWith('sha1')) {
+    const filePath = path.join(targetFolder, targetFilePath);
 
-    // const fullTargetDirectory = 'storage/sd/pool/' + parts[1] + '/' + parts[2];
+    console.log('copying file from: ', uploadedFilePath, ' to: ', filePath);
 
-    let dirName = '';
-
-    dirName = 'storage/sd/pool/' + parts[1];
-    mkdirSync(dirName).then( () => {
-      console.log('directory creation complete: ', dirName);
-      dirName = dirName + '/' + parts[2];
-      return mkdirSync(dirName);
-    }).then( () => {
-
-      console.log('directory creation complete: ', dirName);
-
-      console.log('copying file from: ', uploadedFilePath, ' to: ', filePath);
-
-      // move file from path to filePath
-      var source = fs.createReadStream(uploadedFilePath);
-      var dest = fs.createWriteStream(filePath);
-
-      source.pipe(dest);
-      source.on('end', () => {
-        console.log('copy complete');
-        // TODO - delete source?
-      });
-
-      source.on('error', function(err) {
-        console.log('copy failed: ', err);
-      });
-
-      res.send('ok');
-
-    }).catch( (err) => {
-      console.log(err);
-      debugger;
+    // move file from path to filePath
+    let source = fs.createReadStream(uploadedFilePath);
+    let dest = fs.createWriteStream(filePath);
+    source.pipe(dest);
+    source.on('end', () => {
+      console.log('copy complete');
+      // TODO - delete source?
     });
 
-    // console.log('create directory: ', fullTargetDirectory);
-    // fs.ensureDir(fullTargetDirectory, err => {
-    //
-    //   if (err) {
-    //     console.log(err);
-    //   }
-    //
-    //   console.log('copying file from: ', uploadedFilePath, ' to: ', filePath);
-    //   source.pipe(dest);
-    //   source.on('end', () => {
-    //     console.log('copy complete');
-    //     // TODO - delete source?
-    //   });
-    //
-    //   source.on('error', function(err) {
-    //     console.log('copy failed: ', err);
-    //   });
-    //
-    //   res.send('ok');
-    // });
+    source.on('error', function(err) {
+      console.log('copy failed: ', err);
+    });
 
-    // let dirName = '';
-    //
-    // dirName = 'storage/sd/pool/' + parts[1];
-    // console.log('create pool directory: ' + dirName);
-    //
-    // try {
-    //   fs.mkdirSync(dirName);
-    // }
-    // catch (e) {
-    //   console.log(e);
-    // }
-    //
-    // dirName = dirName + '/' + parts[2];
-    // console.log('create pool directory: ' + dirName);
-    // try {
-    //   fs.mkdirSync(dirName);
-    // }
-    // catch (e) {
-    //   console.log(e);
-    // }
-  }
+    res.send('ok');
 
-  // console.log('copying file from: ', uploadedFilePath, ' to: ', filePath);
-  // source.pipe(dest);
-  // source.on('end', () => {
-  //   console.log('copy complete');
-  //   // TODO - delete source?
-  // });
-  //
-  // source.on('error', function(err) {
-  //   console.log('copy failed: ', err);
-  // });
-  //
-  // res.send('ok');
+  }).catch( (err) => {
+    console.log(err);
+    debugger;
+  });
 });
-
-// function str2ab(str) {
-//   console.log('create arrayBuffer with size: ', str.length);
-//   var buf = new ArrayBuffer(str.length);
-//   var bufView = new Uint8Array(buf);
-//   for (var i=0, strLen=str.length; i<strLen; i++) {
-//     bufView[i] = str.charCodeAt(i);
-//   }
-//   return buf;
-// }
 
 export function writeFile(filePath: string, data: string) {
   return new Promise( (resolve, reject) => {
@@ -423,23 +337,30 @@ function parseFileToPublish(filesToPublishXML : string) {
 
 function getTargetPathFromDestinationFilePath(destinationFileName : string, rootDir : string) {
 
-  const dir0 = destinationFileName.charAt(destinationFileName.length - 2);
-  const dir1 = destinationFileName.charAt(destinationFileName.length - 1);
+  return new Promise( (resolve, reject) => {
 
-  const parts = destinationFileName.split("/");
+    const dir0 = destinationFileName.charAt(destinationFileName.length - 2);
+    const dir1 = destinationFileName.charAt(destinationFileName.length - 1);
 
-  // create directories if they do not exist
-  // TODO - don't use synchronous calls
-  let dirName = path.join(rootDir, parts[0]);
-  createDir(dirName);
-  dirName = path.join(dirName, dir0);
-  createDir(dirName);
-  dirName = path.join(dirName, dir1);
-  createDir(dirName);
+    const parts = destinationFileName.split("/");
 
-  const fileName = parts[1];
-
-  return path.join('pool/', dir0, dir1, fileName);
+    let dirName = path.join(rootDir, parts[0]);
+    mkdirSync(dirName).then(() => {
+      console.log('directory creation complete: ', dirName);
+      dirName = path.join(dirName, dir0);
+      return mkdirSync(dirName);
+    }).then(() => {
+      console.log('directory creation complete: ', dirName);
+      dirName = path.join(dirName, dir1);
+      return mkdirSync(dirName);
+    }).then(() => {
+      console.log('directory creation complete: ', dirName);
+      const fileName = parts[1];
+      resolve(path.join('pool/', dir0, dir1, fileName));
+    }).catch((err) => {
+      reject(err);
+    });
+  });
 }
 
 function createDir(dir : string) {
