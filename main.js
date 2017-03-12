@@ -97,10 +97,14 @@ appServer.get('/SpecifyCardSizeLimits', (_, res) => {
 
 appServer.post('/PrepareForTransfer', upload.array('files', 1), function (req, res) {
 
+
   console.log(req.body);
   console.log(req.files);
 
   const file = req.files[0];
+
+  console.log('send ipc prepareForTransfer');
+  win.webContents.send('prepareForTransfer', file.path);
 
   // let { destination, encoding, fieldname, filename, mimetype, originalname, path, size } = file;
   let path = file.path;
@@ -320,6 +324,10 @@ appServer.post('/UploadSyncSpec', upload.array('files', 1), function (req, res) 
   let filePath = path.join(targetFolder, fileName);
 
   fs.writeFileSync(filePath, newSyncSpecXml);
+
+  console.log('send ipc restartPresentation');
+  win.webContents.send('restartPresentation');
+
 
   res.send('ok');
 });

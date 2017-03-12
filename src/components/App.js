@@ -1,5 +1,8 @@
 // @flow
 
+// const { ipcRenderer } = require('electron');
+import { ipcRenderer } from 'electron';
+
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
@@ -17,9 +20,18 @@ class App extends Component {
     super(props);
 
     this.state = {
-      platform: 'brightsign'
-      // platform: 'desktop'
+      // platform: 'brightsign'
+      platform: 'desktop'
     };
+
+    ipcRenderer.on('prepareForTransfer', (event, arg) => {
+      console.log('ipcRender - event: ' + event);
+      console.log('ipcRender - arg: ' + arg);
+    });
+
+    ipcRenderer.on('restartPresentation', (event, arg) => {
+      console.log('ipcRender - restartPresentation received: ' + event);
+    });
   }
 
   state: Object;
