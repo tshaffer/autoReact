@@ -77,8 +77,14 @@ app.on('activate', () => {
 // LWS handlers
 
 // FIXME - platform
-// const targetFolder = '/Users/tedshaffer/Desktop/baconLWSTest';
-const targetFolder = 'storage/sd';
+// const targetFolder = 'storage/sd';
+// const upload = multer({ dest: 'storage/sd/uploads/' });
+// const uploadLarge = multer({ dest: 'storage/sd/uploads/', limits: { fieldSize : 50000000 } });
+const targetFolder = '/Users/tedshaffer/Desktop/baconLWSTest';
+const upload = multer({ dest: 'uploads/' });
+const uploadLarge = multer({ dest: 'uploads/', limits: { fieldSize : 50000000 } });
+
+
 appServer.use(bodyParser.urlencoded({ extended: false }));
 
 appServer.get('/SpecifyCardSizeLimits', (_, res) => {
@@ -87,9 +93,6 @@ appServer.get('/SpecifyCardSizeLimits', (_, res) => {
   res.send('SpecifyCardSizeLimits');
 });
 
-// FIXME - platform
-const upload = multer({ dest: 'storage/sd/uploads/' });
-// const upload = multer({ dest: 'uploads/' });
 
 appServer.post('/PrepareForTransfer', upload.array('files', 1), function (req, res) {
 
@@ -104,9 +107,9 @@ appServer.post('/PrepareForTransfer', upload.array('files', 1), function (req, r
   // read xml file
   const filesToPublishXML = fs.readFileSync(path);
 
-  parseFileToPublish(filesToPublishXML).then( (filesToPublish : Array<Object>) => {
+  parseFileToPublish(filesToPublishXML).then( (filesToPublish) => {
 
-    freeSpaceOnDrive(filesToPublish).then( (missingFiles : Object) => {
+    freeSpaceOnDrive(filesToPublish).then( (missingFiles) => {
 
       let requiredFiles = {};
       requiredFiles.file = [];
@@ -139,7 +142,7 @@ appServer.post('/PrepareForTransfer', upload.array('files', 1), function (req, r
 });
 
 
-function getFiles(dir: string) {
+function getFiles(dir) {
 
   return new Promise( (resolve, reject) => {
 
@@ -156,7 +159,7 @@ function getFiles(dir: string) {
 }
 
 
-function freeSpaceOnDrive(filesToPublish : Array<Object>) {
+function freeSpaceOnDrive(filesToPublish) {
 
   return new Promise( (resolve, reject) => {
 
@@ -168,7 +171,7 @@ function freeSpaceOnDrive(filesToPublish : Array<Object>) {
 
     // create list of files already on the card in the pool folder
     const poolPath = path.join(targetFolder, 'pool');
-    getFiles(poolPath).then( (arrayOfPoolFiles : Array<string>) => {
+    getFiles(poolPath).then( (arrayOfPoolFiles) => {
 
       let listOfPoolFiles = {};
       arrayOfPoolFiles.forEach( (filePath) => {
@@ -180,7 +183,7 @@ function freeSpaceOnDrive(filesToPublish : Array<Object>) {
       // create the list of files that need to be copied.
       // this is the list of files in filesToPublish that are not in listOfPoolFiles
       let totalSpaceRequired = 0;
-      filesToPublish.forEach( (fileToPublish : Object) => {
+      filesToPublish.forEach( (fileToPublish) => {
         const fullFileName = fileToPublish.fullFileName;
         if (!deletionCandidates[fullFileName]) {
           let fileItem = {};
@@ -243,9 +246,6 @@ function mkdirSync(path) {
 }
 
 // TODO - uploads limited to 50 MBytes
-// FIXME - platform
-// const uploadLarge = multer({ dest: 'uploads/', limits: { fieldSize : 50000000 } });
-const uploadLarge = multer({ dest: 'storage/sd/uploads/', limits: { fieldSize : 50000000 } });
 appServer.post('/UploadFile', uploadLarge.array('files', 1), function (req, res) {
 
   console.log(req.body);
@@ -286,7 +286,7 @@ appServer.post('/UploadFile', uploadLarge.array('files', 1), function (req, res)
   });
 });
 
-export function writeFile(filePath: string, data: string) {
+function writeFile(filePath, data) {
   return new Promise( (resolve, reject) => {
     fs.writeFile( filePath, data, (err) => {
       if (err) {
@@ -324,7 +324,7 @@ appServer.post('/UploadSyncSpec', upload.array('files', 1), function (req, res) 
 });
 
 
-function parseFileToPublish(filesToPublishXML : string) {
+function parseFileToPublish(filesToPublishXML) {
 
   return new Promise( (resolve, reject) => {
 
@@ -346,7 +346,7 @@ function parseFileToPublish(filesToPublishXML : string) {
   });
 }
 
-function getTargetPathFromDestinationFilePath(destinationFileName : string, rootDir : string) {
+function getTargetPathFromDestinationFilePath(destinationFileName, rootDir) {
 
   return new Promise( (resolve, reject) => {
 
