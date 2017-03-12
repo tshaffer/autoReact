@@ -1,5 +1,5 @@
 const path = require('path');
-const fs = require('fs-extra');
+const fs = require('fs');
 const readDir = require('recursive-readdir');
 
 const xml2js = require('xml2js');
@@ -75,7 +75,7 @@ app.on('activate', () => {
 }
 });
 
-// LWS handlers
+// LWS code
 
 // FIXME - platform
 // const targetFolder = 'storage/sd';
@@ -85,18 +85,16 @@ const targetFolder = '/Users/tedshaffer/Desktop/baconLWSTest';
 const upload = multer({ dest: 'uploads/' });
 const uploadLarge = multer({ dest: 'uploads/', limits: { fieldSize : 50000000 } });
 
-
 appServer.use(bodyParser.urlencoded({ extended: false }));
 
+// LWS HANDLERS
 appServer.get('/SpecifyCardSizeLimits', (_, res) => {
   // const limitStorageSpace = req.query.limitStorageSpace;
   console.log('SpecifyCardSizeLimits invoked');
   res.send('SpecifyCardSizeLimits');
 });
 
-
 appServer.post('/PrepareForTransfer', upload.array('files', 1), function (req, res) {
-
 
   console.log(req.body);
   console.log(req.files);
@@ -146,7 +144,75 @@ appServer.post('/PrepareForTransfer', upload.array('files', 1), function (req, r
   });
 });
 
+appServer.post('/UploadFile', uploadLarge.array('files', 1), function (req, res) {
 
+  console.log(req.body);
+  console.log(req.files);
+
+  const file = req.files[0];
+
+  // fields available in req.files from multer
+  // let { destination, encoding, fieldname, filename, mimetype, originalname, path, size } = file;
+  const uploadedFilePath = file.path;
+
+  const destinationFilePath = req.headers['destination-filename'];
+
+  getTargetPathFromDestinationFilePath(destinationFilePath, targetFolder).then( (targetFilePath) => {
+
+    const filePath = path.join(targetFolder, targetFilePath);
+
+    console.log('copying file from: ', uploadedFilePath, ' to: ', filePath);
+
+    // move file from path to filePath
+    let source = fs.createReadStream(uploadedFilePath);
+    let dest = fs.createWriteStream(filePath);
+    source.pipe(dest);
+    source.on('end', () => {
+      console.log('copy complete');
+      // TODO - delete source?
+    });
+
+    source.on('error', function(err) {
+      console.log('copy failed: ', err);
+    });
+
+    res.send('ok');
+
+  }).catch( (err) => {
+    console.log(err);
+    debugger;
+  });
+});
+
+appServer.post('/UploadSyncSpec', upload.array('files', 1), function (req, res) {
+
+  console.log(req.body);
+  console.log(req.files);
+
+  const file = req.files[0];
+
+  // let { destination, encoding, fieldname, filename, mimetype, originalname, path, size } = file;
+
+  const newSyncSpec = fs.readFileSync(file.path);
+
+  // convert to xml
+  const newSyncSpecXml = js2xmlparser('sync', newSyncSpec);
+
+  // get targetPath
+  // TODO - where / how to save this. autoxml.brs saves in tmp
+  const fileName = 'new-sync.xml';
+  let filePath = path.join(targetFolder, fileName);
+
+  fs.writeFileSync(filePath, newSyncSpecXml);
+
+  console.log('send ipc restartPresentation');
+  win.webContents.send('restartPresentation');
+
+
+  res.send('ok');
+});
+
+// UTILITIES
 function getFiles(dir) {
 
   return new Promise( (resolve, reject) => {
@@ -162,7 +228,6 @@ function getFiles(dir) {
     });
   });
 }
-
 
 function freeSpaceOnDrive(filesToPublish) {
 
@@ -251,46 +316,6 @@ function mkdirSync(path) {
 }
 
 // TODO - uploads limited to 50 MBytes
-appServer.post('/UploadFile', uploadLarge.array('files', 1), function (req, res) {
-
-  console.log(req.body);
-  console.log(req.files);
-
-  const file = req.files[0];
-
-  // fields available in req.files from multer
-  // let { destination, encoding, fieldname, filename, mimetype, originalname, path, size } = file;
-  const uploadedFilePath = file.path;
-
-  const destinationFilePath = req.headers['destination-filename'];
-
-  getTargetPathFromDestinationFilePath(destinationFilePath, targetFolder).then( (targetFilePath) => {
-
-    const filePath = path.join(targetFolder, targetFilePath);
-
-    console.log('copying file from: ', uploadedFilePath, ' to: ', filePath);
-
-    // move file from path to filePath
-    let source = fs.createReadStream(uploadedFilePath);
-    let dest = fs.createWriteStream(filePath);
-    source.pipe(dest);
-    source.on('end', () => {
-      console.log('copy complete');
-      // TODO - delete source?
-    });
-
-    source.on('error', function(err) {
-      console.log('copy failed: ', err);
-    });
-
-    res.send('ok');
-
-  }).catch( (err) => {
-    console.log(err);
-    debugger;
-  });
-});
-
 function writeFile(filePath, data) {
   return new Promise( (resolve, reject) => {
     fs.writeFile( filePath, data, (err) => {
@@ -303,35 +328,6 @@ function writeFile(filePath, data) {
     });
   });
 }
-
-appServer.post('/UploadSyncSpec', upload.array('files', 1), function (req, res) {
-
-  console.log(req.body);
-  console.log(req.files);
-
-  const file = req.files[0];
-
-  // let { destination, encoding, fieldname, filename, mimetype, originalname, path, size } = file;
-
-  const newSyncSpec = fs.readFileSync(file.path);
-
-  // convert to xml
-  const newSyncSpecXml = js2xmlparser('sync', newSyncSpec);
-
-  // get targetPath
-  // TODO - where / how to save this. autoxml.brs saves in tmp
-  const fileName = 'new-sync.xml';
-  let filePath = path.join(targetFolder, fileName);
-
-  fs.writeFileSync(filePath, newSyncSpecXml);
-
-  console.log('send ipc restartPresentation');
-  win.webContents.send('restartPresentation');
-
-
-  res.send('ok');
-});
-
 
 function parseFileToPublish(filesToPublishXML) {
 
