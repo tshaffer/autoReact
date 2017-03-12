@@ -2,6 +2,9 @@ const path = require('path');
 const fs = require('fs');
 const readDir = require('recursive-readdir');
 
+const StringDecoder = require('string_decoder').StringDecoder;
+const decoder = new StringDecoder('utf8');
+
 const xml2js = require('xml2js');
 const js2xmlparser = require('js2xmlparser2');
 
@@ -193,21 +196,56 @@ appServer.post('/UploadSyncSpec', upload.array('files', 1), function (req, res) 
 
   // let { destination, encoding, fieldname, filename, mimetype, originalname, path, size } = file;
 
-  const newSyncSpec = fs.readFileSync(file.path);
+  const newSyncSpecBuffer = fs.readFileSync(file.path);
+  const newSyncSpecXML = decoder.write(newSyncSpecBuffer);
 
-  // convert to xml
-  const newSyncSpecXml = js2xmlparser('sync', newSyncSpec);
+  const localSyncFilePath = path.join(targetFolder, 'local-sync.json');
+  const localSyncSpecBuffer = fs.readFileSync(localSyncFilePath);
+  const localSyncSpecStr = decoder.write(localSyncSpecBuffer);
+  const localSyncSpec = JSON.parse(localSyncSpecStr);
 
-  // get targetPath
-  // TODO - where / how to save this. autoxml.brs saves in tmp
-  const fileName = 'new-sync.xml';
-  let filePath = path.join(targetFolder, fileName);
+  let parser = new xml2js.Parser();
+  try {
+    parser.parseString(newSyncSpecXML, (err, newSyncSpec) => {
+      if (err) {
+        console.log(err);
+        debugger;
+      }
 
-  fs.writeFileSync(filePath, newSyncSpecXml);
+      let scriptFilesByName = {};
+
+      localSyncSpec.files.forEach( (downloadFile) => {
+        if (downloadFile.group && downloadFile.group === 'script') {
+          scriptFilesByName[downloadFile.name] = downloadFile;
+        }
+      });
+
+      newSyncSpec.sync.files[0].download.forEach( (downloadFile) => {
+        if (downloadFile.group && downloadFile.group[0] === 'script') {
+          const fileName = downloadFile.name[0];
+          if (scriptFilesByName[fileName]) {
+            const localSyncScriptFile = scriptFilesByName[fileName];
+            // see if downloadFile is the same as localSyncScriptFile
+            let { link, name } = localSyncScriptFile;
+            if (downloadFile.link != link) {
+              console.log('copy file to root folder: ', name);
+            }
+          }
+        }
+      });
+      
+    });
+  }
+  catch (e) {
+    console.log(e);
+    reject();
+  }
+
+  let filePath = path.join(targetFolder, 'new-sync.json');
+  fs.writeFileSync(filePath, JSON.stringify(newSyncSpec, null, 2));
 
   console.log('send ipc restartPresentation');
   win.webContents.send('restartPresentation');
-
 
   res.send('ok');
 });
