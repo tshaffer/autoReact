@@ -233,16 +233,16 @@ appServer.post('/UploadSyncSpec', upload.array('files', 1), function (req, res) 
           }
         }
       });
-      
+
+      // as a final step, overwrite the current sync spec with the new sync spec
+      fs.writeFileSync(localSyncFilePath, JSON.stringify(newSyncSpec, null, 2));
+
     });
   }
   catch (e) {
     console.log(e);
     reject();
   }
-
-  let filePath = path.join(targetFolder, 'new-sync.json');
-  fs.writeFileSync(filePath, JSON.stringify(newSyncSpec, null, 2));
 
   console.log('send ipc restartPresentation');
   win.webContents.send('restartPresentation');
