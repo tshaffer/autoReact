@@ -1,5 +1,6 @@
 const path = require('path');
 const fs = require('fs-extra');
+const readDir = require('recursive-readdir');
 
 const xml2js = require('xml2js');
 const js2xmlparser = require('js2xmlparser2');
