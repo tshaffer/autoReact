@@ -1,23 +1,25 @@
 // @flow
 
-// const { ipcRenderer } = require('electron');
 import { ipcRenderer } from 'electron';
 
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 
-// import path from 'path';
 import { initStateMachine } from '../store/stateMachine';
-
-// import { openPresentationFile } from '../store/presentations';
+import { restartPresentation } from '../store/stateMachine';
 
 import Sign from './sign';
+
+// HACK
+let myApp = null;
 
 class App extends Component {
 
   constructor(props: Object) {
     super(props);
+
+    myApp = this;
 
     this.state = {
       // platform: 'brightsign'
@@ -30,7 +32,18 @@ class App extends Component {
     });
 
     ipcRenderer.on('restartPresentation', (event, arg) => {
-      console.log('ipcRender - restartPresentation received: ' + event);
+
+      console.log('ipcRender - restartPresentation received');
+
+      let dataPath: string = '';
+      if (myApp.state.platform === 'desktop') {
+        dataPath = '/Users/tedshaffer/Desktop/baconTestCard';
+      }
+      else {
+        dataPath = "/storage/sd";
+      }
+
+      myApp.props.restartPresentation(dataPath);
     });
   }
 
@@ -44,17 +57,11 @@ class App extends Component {
 
     let dataPath: string = '';
     if (this.state.platform === 'desktop') {
-      // dataPath = "/Users/tedshaffer/Documents/Projects/autoReact/data/";
-      dataPath = '/Users/tedshaffer/Desktop/baconSD';
+      dataPath = '/Users/tedshaffer/Desktop/baconTestCard';
     }
     else {
       dataPath = "/storage/sd";
     }
-
-    // const presentationFile: string = "VideoPlusImage-v3.bpf";
-    // const autoplayPath: string = path.join(dataPath, presentationFile);
-    //
-    // this.props.openPresentationFile(autoplayPath);
 
     this.props.initStateMachine(dataPath);
   }
@@ -85,14 +92,14 @@ const mapStateToProps = (state) => ({
 
 const mapDispatchToProps = (dispatch) => {
   return bindActionCreators({
-    // openPresentationFile,
     initStateMachine,
+    restartPresentation,
   }, dispatch);
 };
 
 App.propTypes = {
-  // openPresentationFile: React.PropTypes.func.isRequired,
   initStateMachine: React.PropTypes.func.isRequired,
+  restartPresentation: React.PropTypes.func.isRequired,
   bsdm: React.PropTypes.object.isRequired,
 };
 

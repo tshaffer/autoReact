@@ -84,7 +84,7 @@ app.on('activate', () => {
 // const targetFolder = 'storage/sd';
 // const upload = multer({ dest: 'storage/sd/uploads/' });
 // const uploadLarge = multer({ dest: 'storage/sd/uploads/', limits: { fieldSize : 50000000 } });
-const targetFolder = '/Users/tedshaffer/Desktop/baconLWSTest';
+const targetFolder = '/Users/tedshaffer/Desktop/baconTestCard';
 const upload = multer({ dest: 'uploads/' });
 const uploadLarge = multer({ dest: 'uploads/', limits: { fieldSize : 50000000 } });
 
@@ -283,12 +283,7 @@ appServer.post('/UploadSyncSpec', upload.array('files', 1), function (req, res) 
       });
 
       // as a final step, overwrite the current sync spec with the new sync spec
-      // fs.writeFileSync(localSyncFilePath, JSON.stringify(newSyncSpec, null, 2));
-      // test
-      const newSyncFilePath = path.join(targetFolder, 'new-sync.json');
-      fs.writeFileSync(newSyncFilePath, JSON.stringify(newSyncSpec, null, 2));
-
-
+      fs.writeFileSync(localSyncFilePath, JSON.stringify(newSyncSpec, null, 2));
     });
   }
   catch (e) {

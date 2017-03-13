@@ -41,36 +41,13 @@ export function setPoolAssetFiles(poolAssetFiles : Object) {
 // ------------------------------------
 export function initStateMachine(rootPath : string) {
   return (dispatch : Function, getState : Function) => {
+    launchPresentationPlayback(rootPath, dispatch, getState);
+  };
+}
 
-    let syncSpec : Object = {};
-
-    openSyncSpec(path.join(rootPath, 'local-sync.json')).then( (cardSyncSpec) => {
-
-      dispatch(setSyncSpec(cardSyncSpec));
-
-      syncSpec = cardSyncSpec;
-
-      const poolAssetFiles = buildPoolAssetFiles(syncSpec, rootPath);
-      dispatch(setPoolAssetFiles(poolAssetFiles));
-
-      return getAutoschedule(syncSpec, rootPath);
-
-    }).then( (autoSchedule) => {
-
-      console.log(autoSchedule);
-      return getBml(autoSchedule, syncSpec, rootPath);
-
-    }).then( (autoPlay) => {
-
-      console.log(autoPlay);
-      dispatch(dmOpenSign(autoPlay));
-      const state = getState();
-      console.log(state);
-
-    }).catch( (err) => {
-      console.log(err);
-      debugger;
-    });
+export function restartPresentation(rootPath : string) {
+  return (dispatch : Function, getState : Function) => {
+    launchPresentationPlayback(rootPath, dispatch, getState);
   };
 }
 
@@ -117,6 +94,37 @@ export default function(state : Object = initialState, action : Object) {
 // ------------------------------------
 // Utilities
 // ------------------------------------
+function launchPresentationPlayback(rootPath : string, dispatch : Function, getState : Function) {
+  let syncSpec : Object = {};
+
+  openSyncSpec(path.join(rootPath, 'local-sync.json')).then( (cardSyncSpec) => {
+
+    dispatch(setSyncSpec(cardSyncSpec));
+
+    syncSpec = cardSyncSpec;
+
+    const poolAssetFiles = buildPoolAssetFiles(syncSpec, rootPath);
+    dispatch(setPoolAssetFiles(poolAssetFiles));
+
+    return getAutoschedule(syncSpec, rootPath);
+
+  }).then( (autoSchedule) => {
+
+    console.log(autoSchedule);
+    return getBml(autoSchedule, syncSpec, rootPath);
+
+  }).then( (autoPlay) => {
+
+    console.log(autoPlay);
+    dispatch(dmOpenSign(autoPlay));
+    const state = getState();
+    console.log(state);
+
+  }).catch( (err) => {
+    console.log(err);
+    debugger;
+  });
+}
 
 function getFile(syncSpec : Object, fileName : string) : ?Object {
 
