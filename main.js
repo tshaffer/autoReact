@@ -206,11 +206,59 @@ appServer.post('/UploadSyncSpec', upload.array('files', 1), function (req, res) 
 
   let parser = new xml2js.Parser();
   try {
-    parser.parseString(newSyncSpecXML, (err, newSyncSpec) => {
+    // parser.parseString(newSyncSpecXML, (err, bogusFormatNewSyncSpec) => {
+    parser.parseString(newSyncSpecXML, (err, syncSpec) => {
       if (err) {
         console.log(err);
         debugger;
       }
+
+      let newSyncSpec = {};
+
+      newSyncSpec.meta = {};
+      newSyncSpec.meta.client = {};
+
+      let client = newSyncSpec.meta.client;
+      let bogusClient = syncSpec.sync.meta[0].client[0];
+
+      client.diagnosticLoggingEnabled = bogusClient.diagnosticLoggingEnabled[0];
+      client.enableSerialDebugging = bogusClient.enableSerialDebugging[0];
+      client.enableSystemDebugging = bogusClient.enableSystemDebugging[0];
+      client.eventLoggingEnabled = bogusClient.eventLoggingEnabled[0];
+      client.limitStorageSpace = bogusClient.limitStorageSpace[0];
+      client.playbackLoggingEnabled = bogusClient.playbackLoggingEnabled[0];
+      client.stateLoggingEnabled = bogusClient.stateLoggingEnabled[0];
+      client.uploadLogFilesAtBoot = bogusClient.uploadLogFilesAtBoot[0];
+      client.uploadLogFilesAtSpecificTime = bogusClient.uploadLogFilesAtSpecificTime[0];
+      client.uploadLogFilesTime = bogusClient.uploadLogFilesTime[0];
+      client.variableLoggingEnabled = bogusClient.variableLoggingEnabled[0];
+
+      newSyncSpec.files = [];
+      let bogusFiles = syncSpec.sync.files[0];
+
+      let bogusDelete = bogusFiles.delete;
+      let bogusDownload = bogusFiles.download;
+      let bogusIgnore = bogusFiles.ignore;
+
+      // TODO - newSyncSpec.delete
+      // TODO - newSyncSpec.ignore
+
+      bogusDownload.forEach( (download) => {
+
+        let hash = {};
+        hash['#'] =  download.hash[0]._;
+        hash['@'] = {};
+        hash['@'].method = download.hash[0].$.method;
+
+        newSyncSpec.files.push( {
+          group : download.group,
+          hash,
+          link : download.link[0],
+          name : download.name[0],
+          size : Number(download.size[0])
+        });
+      });
+
 
       let scriptFilesByName = {};
 
@@ -220,9 +268,9 @@ appServer.post('/UploadSyncSpec', upload.array('files', 1), function (req, res) 
         }
       });
 
-      newSyncSpec.sync.files[0].download.forEach( (downloadFile) => {
-        if (downloadFile.group && downloadFile.group[0] === 'script') {
-          const fileName = downloadFile.name[0];
+      newSyncSpec.files.forEach( (downloadFile) => {
+        if (downloadFile.group && downloadFile.group === 'script') {
+          const fileName = downloadFile.name;
           if (scriptFilesByName[fileName]) {
             const localSyncScriptFile = scriptFilesByName[fileName];
             // see if downloadFile is the same as localSyncScriptFile
@@ -235,13 +283,17 @@ appServer.post('/UploadSyncSpec', upload.array('files', 1), function (req, res) 
       });
 
       // as a final step, overwrite the current sync spec with the new sync spec
-      fs.writeFileSync(localSyncFilePath, JSON.stringify(newSyncSpec, null, 2));
+      // fs.writeFileSync(localSyncFilePath, JSON.stringify(newSyncSpec, null, 2));
+      // test
+      const newSyncFilePath = path.join(targetFolder, 'new-sync.json');
+      fs.writeFileSync(newSyncFilePath, JSON.stringify(newSyncSpec, null, 2));
+
 
     });
   }
   catch (e) {
     console.log(e);
-    reject();
+    debugger;
   }
 
   console.log('send ipc restartPresentation');
