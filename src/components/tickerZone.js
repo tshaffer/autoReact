@@ -24,10 +24,10 @@ export default class TickerZone extends Component {
     const dataFeed = dmGetDataFeedById(bsdm, {id: dataFeedId});
     const feedUrl = dmGetSimpleStringFromParameterizedString(dataFeed.url);
 
-    if (this.props.platform === 'brightsign') {
+// $PlatformGlobal
+    if (__PLATFORM__ === 'brightsign') {
       return (
         <RSSTicker
-          platform={this.props.platform}
           width={this.props.width}
           height={this.props.height}
           feedUrl={feedUrl}
@@ -43,7 +43,6 @@ export default class TickerZone extends Component {
 }
 
 TickerZone.propTypes = {
-  platform: React.PropTypes.string.isRequired,
   bsdm: React.PropTypes.object.isRequired,
   zone: React.PropTypes.object.isRequired,
   width: React.PropTypes.number.isRequired,

@@ -36,7 +36,8 @@ export default class Image extends Component {
       ,this.props.duration);
 
     let src = '';
-    if (this.props.platform === 'desktop') {
+// $PlatformGlobal
+    if (__PLATFORM__ === 'desktop') {
       src = path.join('file://', this.props.poolFilePath);
     }
     else {
@@ -55,7 +56,6 @@ export default class Image extends Component {
 }
 
 Image.propTypes = {
-  platform: React.PropTypes.string.isRequired,
   width: React.PropTypes.number.isRequired,
   height: React.PropTypes.number.isRequired,
   duration: React.PropTypes.number.isRequired,

@@ -17,7 +17,7 @@
     }
   },
   "globals": {
-    "__DEV__": true,
+    "__PLATFORM__": true,
     "BSTicker": true
   },
   "plugins": [

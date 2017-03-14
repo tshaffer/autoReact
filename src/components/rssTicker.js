@@ -57,7 +57,8 @@ export default class RSSTicker extends Component {
 
   populateTicker(rssItems : Array<Object>) {
 
-    if (this.props.platform === 'brightsign') {
+// $PlatformGlobal
+    if (__PLATFORM__ === 'brightsign') {
       // TODO - get location, dimensions from a prop
 
 // $FlowBrightSignExternalObject
@@ -79,7 +80,6 @@ export default class RSSTicker extends Component {
 }
 
 RSSTicker.propTypes = {
-  platform: React.PropTypes.string.isRequired,
   width: React.PropTypes.number.isRequired,
   height: React.PropTypes.number.isRequired,
   feedUrl: React.PropTypes.string.isRequired

@@ -1,5 +1,8 @@
 var FlowBabelWebpackPlugin = require('flow-babel-webpack-plugin');
 
+var webpack = require('webpack');
+var environment = require ('./environment');
+
 module.exports = {
 
   entry: './src/index.js',
@@ -39,5 +42,6 @@ module.exports = {
   },
   plugins: [
     new FlowBabelWebpackPlugin(),
+    new webpack.DefinePlugin(environment.globals)
   ],
 }

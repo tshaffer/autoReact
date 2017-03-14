@@ -27,7 +27,6 @@ export default class Sign extends Component {
         }}
       >
         <MediaZone
-          platform={this.props.platform}
           bsdm={bsdm}
           zone={zone}
           width={Number(zone.absolutePosition.width)}
@@ -51,7 +50,6 @@ export default class Sign extends Component {
         }}
       >
         <TickerZone
-          platform={this.props.platform}
           bsdm={bsdm}
           zone={zone}
           width={Number(zone.absolutePosition.width)}
@@ -99,5 +97,4 @@ export default class Sign extends Component {
 
 Sign.propTypes = {
   bsdm: React.PropTypes.object.isRequired,
-  platform: React.PropTypes.string.isRequired,
 };

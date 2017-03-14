@@ -8,6 +8,7 @@
   "scripts": {
     "build": "webpack --config ./webpack.config.js --watch",
     "run": "electron .",
+    "run_brightsign": "electron -- --PLATFORM=brightsign .",
     "flow_check": "flow check || exit 0"
   },
   "devDependencies": {
@@ -30,6 +31,7 @@
     "express": "^4.15.0",
     "js2xmlparser2": "^0.2.0",
     "json-loader": "^0.5.4",
+    "lodash": "^4.17.4",
     "material-ui": "^0.16.4",
     "multer": "^1.3.0",
     "react": "^15.4.2",

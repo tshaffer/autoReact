@@ -11,7 +11,8 @@ export default class Video extends Component {
     let self = this;
 
     let src = '';
-    if (this.props.platform === 'desktop') {
+// $PlatformGlobal
+    if (__PLATFORM__ === 'desktop') {
       src = path.join('file://', this.props.poolFilePath);
     }
     else {
@@ -35,7 +36,6 @@ export default class Video extends Component {
 }
 
 Video.propTypes = {
-  platform: React.PropTypes.string.isRequired,
   width: React.PropTypes.number.isRequired,
   height: React.PropTypes.number.isRequired,
   onVideoEnd: React.PropTypes.func.isRequired,

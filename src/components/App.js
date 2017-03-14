@@ -1,5 +1,5 @@
 // @flow
-
+// $ElectronRef
 import { ipcRenderer } from 'electron';
 
 import React, { Component } from 'react';
@@ -12,7 +12,7 @@ import { restartPresentation } from '../store/stateMachine';
 import Sign from './sign';
 
 // HACK
-let myApp = null;
+let myApp = {};
 
 class App extends Component {
 
@@ -21,22 +21,18 @@ class App extends Component {
 
     myApp = this;
 
-    this.state = {
-      // platform: 'brightsign'
-      platform: 'desktop'
-    };
-
     ipcRenderer.on('prepareForTransfer', (event, arg) => {
       console.log('ipcRender - event: ' + event);
       console.log('ipcRender - arg: ' + arg);
     });
 
-    ipcRenderer.on('restartPresentation', (event, arg) => {
+    ipcRenderer.on('restartPresentation', () => {
 
       console.log('ipcRender - restartPresentation received');
 
       let dataPath: string = '';
-      if (myApp.state.platform === 'desktop') {
+// $PlatformGlobal
+      if (__PLATFORM__ === 'desktop') {
         dataPath = '/Users/tedshaffer/Desktop/baconTestCard';
       }
       else {
@@ -53,10 +49,13 @@ class App extends Component {
 
     console.log("app.js::componentDidMount invoked");
 
+// $PlatformGlobal
+    console.log(__PLATFORM__);
+
     console.log('__dirname = ' + __dirname);
 
     let dataPath: string = '';
-    if (this.state.platform === 'desktop') {
+    if (__PLATFORM__ === 'desktop') {
       dataPath = '/Users/tedshaffer/Desktop/baconTestCard';
     }
     else {
@@ -78,7 +77,6 @@ class App extends Component {
 
     return (
       <Sign
-        platform={this.state.platform}
         bsdm={this.props.bsdm}
       />
     );

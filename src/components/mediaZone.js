@@ -56,7 +56,8 @@ export default class MediaZone extends Component {
     const mediaType = mediaObject.mediaType;
 
     let resourceIdentifier = '';
-    if (this.props.platform === 'desktop') {
+// $PlatformGlobal
+    if (__PLATFORM__ === 'desktop') {
       // resourceIdentifier = "file://" + assetId;
       resourceIdentifier = path.basename(assetId);
     }
@@ -88,7 +89,6 @@ export default class MediaZone extends Component {
             height={this.props.height}
             duration={duration * 1000}
             onTimeout={self.nextAsset.bind(this)}
-            platform={this.props.platform}
           />
         );
       }
@@ -99,7 +99,6 @@ export default class MediaZone extends Component {
             width={this.props.width}
             height={this.props.height}
             onVideoEnd={self.nextAsset.bind(this)}
-            platform={this.props.platform}
           />
         );
       }
@@ -120,7 +119,8 @@ export default class MediaZone extends Component {
     const site = dmGetHtmlSiteById(this.props.bsdm, {id: htmlSiteId});
 
     let url = '';
-    if (this.props.platform === 'brightsign') {
+// $PlatformGlobal
+    if (__PLATFORM__ === 'brightsign') {
       // HACK
       url = 'pool/test.html';
     }
@@ -186,7 +186,6 @@ export default class MediaZone extends Component {
 }
 
 MediaZone.propTypes = {
-  platform: React.PropTypes.string.isRequired,
   bsdm: React.PropTypes.object.isRequired,
   zone: React.PropTypes.object.isRequired,
   width: React.PropTypes.number.isRequired,

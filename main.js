@@ -1,3 +1,5 @@
+const __PLATFORM__ = 'desktop';
+
 const path = require('path');
 const fs = require('fs');
 const readDir = require('recursive-readdir');
@@ -80,13 +82,22 @@ app.on('activate', () => {
 
 // LWS code
 
-// FIXME - platform
-// const targetFolder = 'storage/sd';
-// const upload = multer({ dest: 'storage/sd/uploads/' });
-// const uploadLarge = multer({ dest: 'storage/sd/uploads/', limits: { fieldSize : 50000000 } });
-const targetFolder = '/Users/tedshaffer/Desktop/baconTestCard';
-const upload = multer({ dest: 'uploads/' });
-const uploadLarge = multer({ dest: 'uploads/', limits: { fieldSize : 50000000 } });
+console.log('Platform is: ', __PLATFORM__);
+
+let targetFolder = '';
+let upload;
+let uploadLarge;
+
+if (__PLATFORM__ == 'brightsign') {
+  targetFolder = 'storage/sd';
+  upload = multer({ dest: 'storage/sd/uploads/' });
+  uploadLarge = multer({ dest: 'storage/sd/uploads/', limits: { fieldSize : 50000000 } });
+}
+else {
+  targetFolder = '/Users/tedshaffer/Desktop/baconTestCard';
+  upload = multer({ dest: 'uploads/' });
+  uploadLarge = multer({ dest: 'uploads/', limits: { fieldSize : 50000000 } });
+}
 
 appServer.use(bodyParser.urlencoded({ extended: false }));
 
