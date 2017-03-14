@@ -78,6 +78,7 @@ class App extends Component {
     return (
       <Sign
         bsdm={this.props.bsdm}
+        playbackState={this.props.playbackState}
       />
     );
   }
@@ -85,6 +86,7 @@ class App extends Component {
 
 const mapStateToProps = (state) => ({
   bsdm: state.bsdm,
+  playbackState: state.stateMachine.playbackState,
 });
 
 
@@ -96,6 +98,7 @@ const mapDispatchToProps = (dispatch) => {
 };
 
 App.propTypes = {
+  playbackState: React.PropTypes.string.isRequired,
   initStateMachine: React.PropTypes.func.isRequired,
   restartPresentation: React.PropTypes.func.isRequired,
   bsdm: React.PropTypes.object.isRequired,

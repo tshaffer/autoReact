@@ -28,6 +28,7 @@ export default class TickerZone extends Component {
     if (__PLATFORM__ === 'brightsign') {
       return (
         <RSSTicker
+          playbackState={this.props.playbackState}
           width={this.props.width}
           height={this.props.height}
           feedUrl={feedUrl}
@@ -43,6 +44,7 @@ export default class TickerZone extends Component {
 }
 
 TickerZone.propTypes = {
+  playbackState: React.PropTypes.string.isRequired,
   bsdm: React.PropTypes.object.isRequired,
   zone: React.PropTypes.object.isRequired,
   width: React.PropTypes.number.isRequired,

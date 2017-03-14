@@ -27,6 +27,7 @@ export default class Sign extends Component {
         }}
       >
         <MediaZone
+          playbackState={this.props.playbackState}
           bsdm={bsdm}
           zone={zone}
           width={Number(zone.absolutePosition.width)}
@@ -50,6 +51,7 @@ export default class Sign extends Component {
         }}
       >
         <TickerZone
+          playbackState={this.props.playbackState}
           bsdm={bsdm}
           zone={zone}
           width={Number(zone.absolutePosition.width)}
@@ -97,4 +99,5 @@ export default class Sign extends Component {
 
 Sign.propTypes = {
   bsdm: React.PropTypes.object.isRequired,
+  playbackState: React.PropTypes.string.isRequired,
 };

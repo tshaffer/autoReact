@@ -186,6 +186,7 @@ export default class MediaZone extends Component {
 }
 
 MediaZone.propTypes = {
+  playbackState: React.PropTypes.string.isRequired,
   bsdm: React.PropTypes.object.isRequired,
   zone: React.PropTypes.object.isRequired,
   width: React.PropTypes.number.isRequired,
