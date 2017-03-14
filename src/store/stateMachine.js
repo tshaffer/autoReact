@@ -16,6 +16,7 @@ import {
 // ------------------------------------
 export const SET_SYNC_SPEC = 'SET_SYNC_SPEC';
 export const SET_POOL_ASSET_FILES = 'SET_POOL_ASSET_FILES';
+export const SET_PLAYBACK_STATE = 'SET_PLAYBACK_STATE';
 
 // ------------------------------------
 // Actions
@@ -35,6 +36,15 @@ export function setPoolAssetFiles(poolAssetFiles : Object) {
     payload: poolAssetFiles
   };
 }
+
+export function setPlaybackState(playbackState : string){
+
+  return {
+    type: SET_PLAYBACK_STATE,
+    payload: playbackState
+  };
+}
+
 
 // ------------------------------------
 // Action Creators
@@ -58,6 +68,7 @@ export function restartPresentation(rootPath : string) {
 const initialState = {
   syncSpec : {},
   poolAssetFiles : {},
+  playbackState: 'inactive'
 };
 
 export default function(state : Object = initialState, action : Object) {
@@ -80,6 +91,17 @@ export default function(state : Object = initialState, action : Object) {
       let newState = {
         ...state,
         poolAssetFiles: action.payload
+      };
+
+      console.log(newState);
+      return newState;
+    }
+
+    case SET_PLAYBACK_STATE: {
+
+      let newState = {
+        ...state,
+        playbackState: action.payload
       };
 
       console.log(newState);
