@@ -25,7 +25,7 @@
     "webpack": "^1.14.0"
   },
   "dependencies": {
-    "@brightsign/bsdatamodel": "0.2.20",
+    "@brightsign/bsdatamodel": "0.2.23",
     "body-parser": "^1.17.0",
     "deepcopy": "^0.6.3",
     "express": "^4.15.0",

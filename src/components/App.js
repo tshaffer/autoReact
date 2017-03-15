@@ -8,6 +8,7 @@ import { bindActionCreators } from 'redux';
 
 import { initStateMachine } from '../store/stateMachine';
 import { restartPresentation } from '../store/stateMachine';
+import { setPlaybackState } from '../store/stateMachine';
 
 import Sign from './sign';
 
@@ -29,6 +30,8 @@ class App extends Component {
     ipcRenderer.on('restartPresentation', () => {
 
       console.log('ipcRender - restartPresentation received');
+
+      this.props.setPlaybackState('inactive');
 
       let dataPath: string = '';
 // $PlatformGlobal
@@ -62,6 +65,8 @@ class App extends Component {
       dataPath = "/storage/sd";
     }
 
+    // this.props.setPlaybackState('active');
+
     this.props.initStateMachine(dataPath);
   }
 
@@ -94,12 +99,14 @@ const mapDispatchToProps = (dispatch) => {
   return bindActionCreators({
     initStateMachine,
     restartPresentation,
+    setPlaybackState,
   }, dispatch);
 };
 
 App.propTypes = {
   playbackState: React.PropTypes.string.isRequired,
   initStateMachine: React.PropTypes.func.isRequired,
+  setPlaybackState: React.PropTypes.func.isRequired,
   restartPresentation: React.PropTypes.func.isRequired,
   bsdm: React.PropTypes.object.isRequired,
 };

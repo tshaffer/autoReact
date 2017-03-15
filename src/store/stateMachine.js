@@ -3,6 +3,8 @@
 import fs from 'fs';
 import path from 'path';
 
+const xml2js = require('xml2js');
+
 const StringDecoder = require('string_decoder').StringDecoder;
 const decoder = new StringDecoder('utf8');
 
@@ -68,7 +70,7 @@ export function restartPresentation(rootPath : string) {
 const initialState = {
   syncSpec : {},
   poolAssetFiles : {},
-  playbackState: 'inactive'
+  playbackState: 'active'
 };
 
 export default function(state : Object = initialState, action : Object) {
@@ -116,11 +118,90 @@ export default function(state : Object = initialState, action : Object) {
 // ------------------------------------
 // Utilities
 // ------------------------------------
+function convertSyncSpec(syncSpec : Object) : Object {
+
+  let newSyncSpec = {};
+
+  newSyncSpec.meta = {};
+  newSyncSpec.meta.client = {};
+
+  let client = newSyncSpec.meta.client;
+  let bogusClient = syncSpec.sync.meta[0].client[0];
+
+  client.diagnosticLoggingEnabled = bogusClient.diagnosticLoggingEnabled[0];
+  client.enableSerialDebugging = bogusClient.enableSerialDebugging[0];
+  client.enableSystemDebugging = bogusClient.enableSystemLogDebugging[0];
+  client.eventLoggingEnabled = bogusClient.eventLoggingEnabled[0];
+  client.limitStorageSpace = bogusClient.limitStorageSpace[0];
+  client.playbackLoggingEnabled = bogusClient.playbackLoggingEnabled[0];
+  client.stateLoggingEnabled = bogusClient.stateLoggingEnabled[0];
+  client.uploadLogFilesAtBoot = bogusClient.uploadLogFilesAtBoot[0];
+  client.uploadLogFilesAtSpecificTime = bogusClient.uploadLogFilesAtSpecificTime[0];
+  client.uploadLogFilesTime = bogusClient.uploadLogFilesTime[0];
+  client.variableLoggingEnabled = bogusClient.variableLoggingEnabled[0];
+
+  newSyncSpec.files = [];
+  let bogusFiles = syncSpec.sync.files[0];
+
+  // let bogusDelete = bogusFiles.delete;
+  let bogusDownload = bogusFiles.download;
+  // let bogusIgnore = bogusFiles.ignore;
+
+  // TODO - newSyncSpec.delete
+  // TODO - newSyncSpec.ignore
+
+  bogusDownload.forEach( (download) => {
+
+    let hash = {};
+    hash['#'] =  download.hash[0]._;
+    hash['@'] = {};
+    hash['@'].method = download.hash[0].$.method;
+
+    newSyncSpec.files.push( {
+      group : download.group,
+      hash,
+      link : download.link[0],
+      name : download.name[0],
+      size : Number(download.size[0])
+    });
+  });
+
+  return newSyncSpec;
+}
+
+function getGoodSyncSpec(rootPath : string) {
+  return new Promise( (resolve, reject) => {
+    fs.readFile(path.join(rootPath, 'local-sync.xml'), (err, dataBuffer) => {
+      if (err) {
+        reject(err);
+      } else {
+        const syncSpecStr : string = decoder.write(dataBuffer);
+        let parser = new xml2js.Parser();
+        try {
+          parser.parseString(syncSpecStr, (err, bogusSyncSpec) => {
+            if (err) {
+              console.log(err);
+              debugger;
+            }
+            console.log(bogusSyncSpec);
+            let syncSpec = convertSyncSpec(bogusSyncSpec);
+            console.log(syncSpec);
+            resolve(syncSpec);
+          });
+        }
+        catch (e) {
+          console.log(e);
+          debugger;
+        }
+      }
+    });
+  });
+}
+
 function launchPresentationPlayback(rootPath : string, dispatch : Function, getState : Function) {
-  let syncSpec : Object = {};
+  let syncSpec: Object = {};
 
-  openSyncSpec(path.join(rootPath, 'local-sync.json')).then( (cardSyncSpec) => {
-
+  getGoodSyncSpec(rootPath).then((cardSyncSpec) => {
     dispatch(setSyncSpec(cardSyncSpec));
 
     syncSpec = cardSyncSpec;
@@ -130,23 +211,51 @@ function launchPresentationPlayback(rootPath : string, dispatch : Function, getS
 
     return getAutoschedule(syncSpec, rootPath);
 
-  }).then( (autoSchedule) => {
+  }).then((autoSchedule) => {
 
     console.log(autoSchedule);
     return getBml(autoSchedule, syncSpec, rootPath);
 
-  }).then( (autoPlay) => {
+  }).then((autoPlay) => {
 
     console.log(autoPlay);
     dispatch(dmOpenSign(autoPlay));
     const state = getState();
     console.log(state);
 
-  }).catch( (err) => {
+  }).catch((err) => {
     console.log(err);
     debugger;
   });
 }
+
+  // openSyncSpec(path.join(rootPath, 'local-sync.json')).then( (cardSyncSpec) => {
+  //
+  //   dispatch(setSyncSpec(cardSyncSpec));
+  //
+  //   syncSpec = cardSyncSpec;
+  //
+  //   const poolAssetFiles = buildPoolAssetFiles(syncSpec, rootPath);
+  //   dispatch(setPoolAssetFiles(poolAssetFiles));
+  //
+  //   return getAutoschedule(syncSpec, rootPath);
+  //
+  // }).then( (autoSchedule) => {
+  //
+  //   console.log(autoSchedule);
+  //   return getBml(autoSchedule, syncSpec, rootPath);
+  //
+  // }).then( (autoPlay) => {
+  //
+  //   console.log(autoPlay);
+  //   dispatch(dmOpenSign(autoPlay));
+  //   const state = getState();
+  //   console.log(state);
+  //
+  // }).catch( (err) => {
+  //   console.log(err);
+  //   debugger;
+  // });
 
 function getFile(syncSpec : Object, fileName : string) : ?Object {
 

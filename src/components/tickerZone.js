@@ -18,9 +18,9 @@ export default class TickerZone extends Component {
     const mediaStateId = this.props.zone.initialMediaStateId;
 
     const mediaState = dmGetMediaStateById(bsdm, { id : mediaStateId });
-    const mediaStateContentItem = mediaState.contentItem;
+    const dataFeedContentItem = mediaState.contentItem;
 
-    const dataFeedId = mediaStateContentItem.dataFeedId;
+    const dataFeedId = dataFeedContentItem.dataFeedId;
     const dataFeed = dmGetDataFeedById(bsdm, {id: dataFeedId});
     const feedUrl = dmGetSimpleStringFromParameterizedString(dataFeed.url);
 

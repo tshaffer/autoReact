@@ -9,7 +9,7 @@ import VideoContainer from '../containers/videoContainer';
 import Html from './html';
 
 import {
-  ContentItemTypeName,
+  ContentItemType,
   dmGetHtmlSiteById,
   dmGetMediaStateById,
   dmGetZoneSimplePlaylist,
@@ -31,6 +31,9 @@ export default class MediaZone extends Component {
   numStates : number;
 
   nextAsset() {
+
+    if (this.props.playbackState !== 'active') return;
+
     let stateIndex = this.state.stateIndex + 1;
     if (stateIndex >= this.numStates) {
       stateIndex = 0;
@@ -39,21 +42,16 @@ export default class MediaZone extends Component {
     this.setState( { stateIndex });
   }
 
-  renderMediaItem(mediaStateContentItem: Object, event : Object) {
+  renderMediaItem(mediaContentItem: Object, event : Object) {
 
     let duration : number = 10;
 
     let self = this;
 
-    const mediaObject = mediaStateContentItem.media;
-
-    // TODO - HACK? HACK?
-    // const assetId = mediaObject.assetId;
-    const assetId = mediaObject.path;
-
+    const assetId = mediaContentItem.assetId;
     // TODO - HACK - need FileName!!
+    const mediaType = mediaContentItem.type;
 
-    const mediaType = mediaObject.mediaType;
 
     let resourceIdentifier = '';
 // $PlatformGlobal
@@ -168,15 +166,15 @@ export default class MediaZone extends Component {
 
     const event = this.getEvent(bsdm, mediaState.id);
 
-    const mediaStateContentItem = mediaState.contentItem;
-    const contentItemType = ContentItemTypeName(mediaStateContentItem.type).toLowerCase();
+    const mediaContentItem = mediaState.contentItem;
 
-    switch (contentItemType) {
-      case 'media': {
-        return this.renderMediaItem(mediaStateContentItem, event);
+    switch(mediaContentItem.type) {
+      case ContentItemType.Video:
+      case ContentItemType.Image: {
+        return this.renderMediaItem(mediaContentItem, event);
       }
-      case 'html': {
-        return this.renderHtmlItem(mediaStateContentItem);
+      case ContentItemType.Html: {
+        return this.renderHtmlItem(mediaContentItem);
       }
       default: {
         break;
