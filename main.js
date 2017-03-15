@@ -198,6 +198,86 @@ appServer.post('/UploadFile', uploadLarge.array('files', 1), function (req, res)
   });
 });
 
+function convertSyncSpec(xmlSyncSpec) {
+
+  let jsonSyncSpec = {};
+
+  jsonSyncSpec.meta = {};
+  jsonSyncSpec.meta.client = {};
+
+  let client = jsonSyncSpec.meta.client;
+  let bogusClient = xmlSyncSpec.sync.meta[0].client[0];
+
+  client.diagnosticLoggingEnabled = bogusClient.diagnosticLoggingEnabled[0];
+  client.enableSerialDebugging = bogusClient.enableSerialDebugging[0];
+  client.enableSystemDebugging = bogusClient.enableSystemLogDebugging[0];
+  client.eventLoggingEnabled = bogusClient.eventLoggingEnabled[0];
+  client.limitStorageSpace = bogusClient.limitStorageSpace[0];
+  client.playbackLoggingEnabled = bogusClient.playbackLoggingEnabled[0];
+  client.stateLoggingEnabled = bogusClient.stateLoggingEnabled[0];
+  client.uploadLogFilesAtBoot = bogusClient.uploadLogFilesAtBoot[0];
+  client.uploadLogFilesAtSpecificTime = bogusClient.uploadLogFilesAtSpecificTime[0];
+  client.uploadLogFilesTime = bogusClient.uploadLogFilesTime[0];
+  client.variableLoggingEnabled = bogusClient.variableLoggingEnabled[0];
+
+  jsonSyncSpec.files = [];
+  let xmlFiles = xmlSyncSpec.sync.files[0];
+
+  // let bogusDelete = bogusFiles.delete;
+  let xmlDownload = xmlFiles.download;
+  // let bogusIgnore = bogusFiles.ignore;
+
+  // TODO - newSyncSpec.delete
+  // TODO - newSyncSpec.ignore
+
+  xmlDownload.forEach( (download) => {
+
+    let hash = {};
+    hash['#'] =  download.hash[0]._;
+    hash['@'] = {};
+    hash['@'].method = download.hash[0].$.method;
+
+    jsonSyncSpec.files.push( {
+      group : download.group,
+      hash,
+      link : download.link[0],
+      name : download.name[0],
+      size : Number(download.size[0])
+    });
+  });
+
+  return jsonSyncSpec;
+}
+
+function getJsonSyncSpec(rootPath) {
+  return new Promise( (resolve, reject) => {
+    fs.readFile(path.join(rootPath, 'local-sync.xml'), (err, xmlBuffer) => {
+      if (err) {
+        reject(err);
+      } else {
+        const xmlSyncSpecStr = decoder.write(xmlBuffer);
+        let parser = new xml2js.Parser();
+        try {
+          parser.parseString(xmlSyncSpecStr, (err, xmlSyncSpec) => {
+            if (err) {
+              console.log(err);
+              debugger;
+            }
+            console.log(xmlSyncSpec);
+            let jsonSyncSpec = convertSyncSpec(xmlSyncSpec);
+            console.log(jsonSyncSpec);
+            resolve(jsonSyncSpec);
+          });
+        }
+        catch (e) {
+          console.log(e);
+          debugger;
+        }
+      }
+    });
+  });
+}
+
 appServer.post('/UploadSyncSpec', upload.array('files', 1), function (req, res) {
 
   console.log(req.body);
@@ -210,102 +290,106 @@ appServer.post('/UploadSyncSpec', upload.array('files', 1), function (req, res) 
   const newSyncSpecBuffer = fs.readFileSync(file.path);
   const newSyncSpecXML = decoder.write(newSyncSpecBuffer);
 
-  const localSyncFilePath = path.join(targetFolder, 'local-sync.json');
-  const localSyncSpecBuffer = fs.readFileSync(localSyncFilePath);
-  const localSyncSpecStr = decoder.write(localSyncSpecBuffer);
-  const localSyncSpec = JSON.parse(localSyncSpecStr);
+  // const localSyncFilePath = path.join(targetFolder, 'local-sync.json');
+  // const localSyncSpecBuffer = fs.readFileSync(localSyncFilePath);
+  // const localSyncSpecStr = decoder.write(localSyncSpecBuffer);
+  // const localSyncSpec = JSON.parse(localSyncSpecStr);
 
-  let parser = new xml2js.Parser();
-  try {
-    // parser.parseString(newSyncSpecXML, (err, bogusFormatNewSyncSpec) => {
-    parser.parseString(newSyncSpecXML, (err, syncSpec) => {
-      if (err) {
-        console.log(err);
-        debugger;
-      }
+  // getJsonSyncSpec(targetFolder).then((localSyncSpec) => {
 
-      let newSyncSpec = {};
-
-      newSyncSpec.meta = {};
-      newSyncSpec.meta.client = {};
-
-      let client = newSyncSpec.meta.client;
-      let bogusClient = syncSpec.sync.meta[0].client[0];
-
-      client.diagnosticLoggingEnabled = bogusClient.diagnosticLoggingEnabled[0];
-      client.enableSerialDebugging = bogusClient.enableSerialDebugging[0];
-      client.enableSystemDebugging = bogusClient.enableSystemDebugging[0];
-      client.eventLoggingEnabled = bogusClient.eventLoggingEnabled[0];
-      client.limitStorageSpace = bogusClient.limitStorageSpace[0];
-      client.playbackLoggingEnabled = bogusClient.playbackLoggingEnabled[0];
-      client.stateLoggingEnabled = bogusClient.stateLoggingEnabled[0];
-      client.uploadLogFilesAtBoot = bogusClient.uploadLogFilesAtBoot[0];
-      client.uploadLogFilesAtSpecificTime = bogusClient.uploadLogFilesAtSpecificTime[0];
-      client.uploadLogFilesTime = bogusClient.uploadLogFilesTime[0];
-      client.variableLoggingEnabled = bogusClient.variableLoggingEnabled[0];
-
-      newSyncSpec.files = [];
-      let bogusFiles = syncSpec.sync.files[0];
-
-      let bogusDelete = bogusFiles.delete;
-      let bogusDownload = bogusFiles.download;
-      let bogusIgnore = bogusFiles.ignore;
-
-      // TODO - newSyncSpec.delete
-      // TODO - newSyncSpec.ignore
-
-      bogusDownload.forEach( (download) => {
-
-        let hash = {};
-        hash['#'] =  download.hash[0]._;
-        hash['@'] = {};
-        hash['@'].method = download.hash[0].$.method;
-
-        newSyncSpec.files.push( {
-          group : download.group,
-          hash,
-          link : download.link[0],
-          name : download.name[0],
-          size : Number(download.size[0])
-        });
-      });
-
-
-      let scriptFilesByName = {};
-
-      localSyncSpec.files.forEach( (downloadFile) => {
-        if (downloadFile.group && downloadFile.group === 'script') {
-          scriptFilesByName[downloadFile.name] = downloadFile;
+    let parser = new xml2js.Parser();
+    try {
+      // parser.parseString(newSyncSpecXML, (err, bogusFormatNewSyncSpec) => {
+      parser.parseString(newSyncSpecXML, (err, syncSpec) => {
+        if (err) {
+          console.log(err);
+          debugger;
         }
-      });
 
-      newSyncSpec.files.forEach( (downloadFile) => {
-        if (downloadFile.group && downloadFile.group === 'script') {
-          const fileName = downloadFile.name;
-          if (scriptFilesByName[fileName]) {
-            const localSyncScriptFile = scriptFilesByName[fileName];
-            // see if downloadFile is the same as localSyncScriptFile
-            let { link, name } = localSyncScriptFile;
-            if (downloadFile.link != link) {
-              console.log('copy file to root folder: ', name);
+        let newSyncSpec = {};
+
+        newSyncSpec.meta = {};
+        newSyncSpec.meta.client = {};
+
+        let client = newSyncSpec.meta.client;
+        let bogusClient = syncSpec.sync.meta[0].client[0];
+
+        client.diagnosticLoggingEnabled = bogusClient.diagnosticLoggingEnabled[0];
+        client.enableSerialDebugging = bogusClient.enableSerialDebugging[0];
+        client.enableSystemDebugging = bogusClient.enableSystemDebugging[0];
+        client.eventLoggingEnabled = bogusClient.eventLoggingEnabled[0];
+        client.limitStorageSpace = bogusClient.limitStorageSpace[0];
+        client.playbackLoggingEnabled = bogusClient.playbackLoggingEnabled[0];
+        client.stateLoggingEnabled = bogusClient.stateLoggingEnabled[0];
+        client.uploadLogFilesAtBoot = bogusClient.uploadLogFilesAtBoot[0];
+        client.uploadLogFilesAtSpecificTime = bogusClient.uploadLogFilesAtSpecificTime[0];
+        client.uploadLogFilesTime = bogusClient.uploadLogFilesTime[0];
+        client.variableLoggingEnabled = bogusClient.variableLoggingEnabled[0];
+
+        newSyncSpec.files = [];
+        let bogusFiles = syncSpec.sync.files[0];
+
+        let bogusDelete = bogusFiles.delete;
+        let bogusDownload = bogusFiles.download;
+        let bogusIgnore = bogusFiles.ignore;
+
+        // TODO - newSyncSpec.delete
+        // TODO - newSyncSpec.ignore
+
+        bogusDownload.forEach((download) => {
+
+          let hash = {};
+          hash['#'] = download.hash[0]._;
+          hash['@'] = {};
+          hash['@'].method = download.hash[0].$.method;
+
+          newSyncSpec.files.push({
+            group: download.group,
+            hash,
+            link: download.link[0],
+            name: download.name[0],
+            size: Number(download.size[0])
+          });
+        });
+
+
+        let scriptFilesByName = {};
+
+        localSyncSpec.files.forEach((downloadFile) => {
+          if (downloadFile.group && downloadFile.group === 'script') {
+            scriptFilesByName[downloadFile.name] = downloadFile;
+          }
+        });
+
+        newSyncSpec.files.forEach((downloadFile) => {
+          if (downloadFile.group && downloadFile.group === 'script') {
+            const fileName = downloadFile.name;
+            if (scriptFilesByName[fileName]) {
+              const localSyncScriptFile = scriptFilesByName[fileName];
+              // see if downloadFile is the same as localSyncScriptFile
+              let {link, name} = localSyncScriptFile;
+              if (downloadFile.link != link) {
+                console.log('copy file to root folder: ', name);
+              }
             }
           }
-        }
+        });
+
+        // as a final step, overwrite the current sync spec with the new sync spec
+        fs.writeFileSync(localSyncFilePath, JSON.stringify(newSyncSpec, null, 2));
       });
+    }
+    catch (e) {
+      console.log(e);
+      debugger;
+    }
 
-      // as a final step, overwrite the current sync spec with the new sync spec
-      fs.writeFileSync(localSyncFilePath, JSON.stringify(newSyncSpec, null, 2));
-    });
-  }
-  catch (e) {
-    console.log(e);
-    debugger;
-  }
+    console.log('send ipc restartPresentation');
+    win.webContents.send('restartPresentation');
 
-  console.log('send ipc restartPresentation');
-  win.webContents.send('restartPresentation');
+    res.send('ok');
+  // });
 
-  res.send('ok');
 });
 
 // UTILITIES
