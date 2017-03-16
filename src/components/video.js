@@ -40,5 +40,7 @@ Video.propTypes = {
   height: React.PropTypes.number.isRequired,
   onVideoEnd: React.PropTypes.func.isRequired,
   resourceIdentifier: React.PropTypes.string.isRequired,
-  poolFilePath: React.PropTypes.string.isRequired,
+  poolFilePath: React.PropTypes.string,
 };
+
+//  poolFilePath: React.PropTypes.string.isRequired,

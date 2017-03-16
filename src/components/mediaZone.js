@@ -32,7 +32,11 @@ export default class MediaZone extends Component {
 
   nextAsset() {
 
-    if (this.props.playbackState !== 'active') return;
+    console.log('nextAsset invoked');
+    if (this.props.playbackState !== 'active') {
+      console.log('nextAsset: exit prematurely');
+      return;
+    }
 
     let stateIndex = this.state.stateIndex + 1;
     if (stateIndex >= this.numStates) {

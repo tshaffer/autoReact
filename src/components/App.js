@@ -33,6 +33,11 @@ class App extends Component {
 
       this.props.setPlaybackState('inactive');
 
+      console.log('start restartPresentation timeout');
+      setTimeout( () => {
+        console.log('timeout occurred');
+      }, 5000);
+
       let dataPath: string = '';
 // $PlatformGlobal
       if (__PLATFORM__ === 'desktop') {
