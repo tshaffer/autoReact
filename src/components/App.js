@@ -36,6 +36,7 @@ class App extends Component {
       console.log('start restartPresentation timeout');
       setTimeout( () => {
         console.log('timeout occurred');
+        this.props.setPlaybackState('active');
       }, 5000);
 
       let dataPath: string = '';

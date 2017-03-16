@@ -61,6 +61,7 @@ Image.propTypes = {
   duration: React.PropTypes.number.isRequired,
   onTimeout: React.PropTypes.func.isRequired,
   resourceIdentifier: React.PropTypes.string,
+  poolFilePath: React.PropTypes.string,
 };
 
 //   poolFilePath: React.PropTypes.string.isRequired,

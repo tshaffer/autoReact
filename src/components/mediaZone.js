@@ -32,13 +32,17 @@ export default class MediaZone extends Component {
 
   nextAsset() {
 
+    let stateIndex = 0;
+
     console.log('nextAsset invoked');
     if (this.props.playbackState !== 'active') {
+      stateIndex = 0;
+      this.setState( { stateIndex });
       console.log('nextAsset: exit prematurely');
       return;
     }
 
-    let stateIndex = this.state.stateIndex + 1;
+    stateIndex = this.state.stateIndex + 1;
     if (stateIndex >= this.numStates) {
       stateIndex = 0;
     }
@@ -157,6 +161,14 @@ export default class MediaZone extends Component {
 
 
   render() {
+
+    console.log('mediaZone.js::render invoked');
+
+    if (this.props.playbackState !== 'active') {
+      return (
+        <div>Playback state inactive</div>
+      );
+    }
 
     let mediaStateIds : Array<string> = [];
     let mediaState : Object = {};
