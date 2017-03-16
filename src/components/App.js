@@ -37,7 +37,7 @@ class App extends Component {
       setTimeout( () => {
         console.log('timeout occurred');
         this.props.setPlaybackState('active');
-      }, 500);
+      }, 100);
 
       let dataPath: string = '';
 // $PlatformGlobal
