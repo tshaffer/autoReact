@@ -1,5 +1,4 @@
 // @flow
-// $ElectronRef
 import { ipcRenderer } from 'electron';
 
 import React, { Component } from 'react';
@@ -19,6 +18,8 @@ class App extends Component {
 
   constructor(props: Object) {
     super(props);
+
+    console.log('platform: ', __PLATFORM__);
 
     myApp = this;
 

@@ -1,4 +1,5 @@
 const __PLATFORM__ = 'desktop';
+// const __PLATFORM__ = 'brightsign';
 
 const path = require('path');
 const fs = require('fs');
