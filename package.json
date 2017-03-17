@@ -28,7 +28,6 @@
     "@brightsign/bsdatamodel": "0.2.23",
     "body-parser": "^1.17.0",
     "deepcopy": "^0.6.3",
-    "electron": "^1.6.2",
     "express": "^4.15.0",
     "js2xmlparser2": "^0.2.0",
     "json-loader": "^0.5.4",
