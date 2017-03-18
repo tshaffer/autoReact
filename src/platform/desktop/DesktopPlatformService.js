@@ -12,6 +12,10 @@ class DesktopPlatformService extends APlatformService {
     return '/Users/tedshaffer/Desktop/baconTestCard';
   }
 
+  static getPathToPool() {
+    return '/Users/tedshaffer/Desktop/baconTestCard';
+  }
+
   static getUploadDirectory() {
     return 'uploads/';
   }

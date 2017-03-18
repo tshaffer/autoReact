@@ -49,15 +49,15 @@ export function setPlaybackState(playbackState : string){
 // ------------------------------------
 // Action Creators
 // ------------------------------------
-export function initStateMachine(rootPath : string) {
+export function initStateMachine(rootPath : string, pathToPool : string) {
   return (dispatch : Function, getState : Function) => {
-    launchPresentationPlayback(rootPath, dispatch, getState);
+    launchPresentationPlayback(rootPath, pathToPool, dispatch, getState);
   };
 }
 
-export function restartPresentation(rootPath : string) {
+export function restartPresentation(rootPath : string, pathToPool : string) {
   return (dispatch : Function, getState : Function) => {
-    launchPresentationPlayback(rootPath, dispatch, getState);
+    launchPresentationPlayback(rootPath, pathToPool, dispatch, getState);
   };
 }
 
@@ -116,7 +116,7 @@ export default function(state : Object = initialState, action : Object) {
 // ------------------------------------
 // Utilities
 // ------------------------------------
-function launchPresentationPlayback(rootPath : string, dispatch : Function, getState : Function) {
+function launchPresentationPlayback(rootPath : string, pathToPool : string, dispatch : Function, getState : Function) {
   let syncSpec: Object = {};
 
   openSyncSpec(path.join(rootPath, 'local-sync.json')).then((cardSyncSpec) => {
@@ -125,7 +125,7 @@ function launchPresentationPlayback(rootPath : string, dispatch : Function, getS
 
     syncSpec = cardSyncSpec;
 
-    const poolAssetFiles = buildPoolAssetFiles(syncSpec, rootPath);
+    const poolAssetFiles = buildPoolAssetFiles(syncSpec, pathToPool);
     dispatch(setPoolAssetFiles(poolAssetFiles));
 
     return getAutoschedule(syncSpec, rootPath);
@@ -236,7 +236,7 @@ function openSyncSpec(filePath : string = '') {
   });
 }
 
-function buildPoolAssetFiles(syncSpec : Object, rootPath : string) : Object {
+function buildPoolAssetFiles(syncSpec : Object, pathToPool : string) : Object {
 
   let poolAssetFiles = {};
   
@@ -245,12 +245,12 @@ function buildPoolAssetFiles(syncSpec : Object, rootPath : string) : Object {
     const hashValue = syncSpecFile.hash["#"];
 
     const relativePath = buildPoolFilePath(hashValue);
-    const filePath = path.join(rootPath, 'pool', relativePath, 'sha1-' + hashValue.toString());
+    const filePath = path.join(pathToPool, 'pool', relativePath, 'sha1-' + hashValue.toString());
 
     poolAssetFiles[syncSpecFile.name] = filePath;
     
   });
-
+  
   return poolAssetFiles;
 }
 

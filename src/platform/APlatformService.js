@@ -8,6 +8,10 @@ export default class APlatformService {
     return '';
   }
 
+  static getPathToPool() {
+    return '';
+  }
+
   static getUploadDirectory() {
     return '';
   }
