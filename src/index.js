@@ -15,6 +15,7 @@ import injectTapEventPlugin from 'react-tap-event-plugin';
 import reducers from './store/reducers';
 
 import App from './components/App';
+import { myApp } from './components/App';
 
 const store = createStore(
   reducers,
@@ -84,6 +85,7 @@ appServer.get('/SpecifyCardSizeLimits', (_, res) => {
 
 appServer.post('/PrepareForTransfer', upload.array('files', 1), function (req, res) {
 
+  console.log('PrepareForTransfer endpoint invoked');
   console.log(req.body);
   console.log(req.files);
 
@@ -134,6 +136,7 @@ appServer.post('/PrepareForTransfer', upload.array('files', 1), function (req, r
 
 appServer.post('/UploadFile', uploadLarge.array('files', 1), function (req, res) {
 
+  console.log('UploadFile endpoint invoked');
   console.log(req.body);
   console.log(req.files);
 
@@ -174,6 +177,7 @@ appServer.post('/UploadFile', uploadLarge.array('files', 1), function (req, res)
 
 appServer.post('/UploadSyncSpec', upload.array('files', 1), function (req, res) {
 
+  console.log('UploadSyncSpec endpoint invoked');
   console.log(req.body);
   console.log(req.files);
 
@@ -215,6 +219,9 @@ appServer.post('/UploadSyncSpec', upload.array('files', 1), function (req, res) 
 
   // as a final step, overwrite the current sync spec with the new sync spec
   fs.writeFileSync(localSyncFilePath, JSON.stringify(newSyncSpec, null, 2));
+
+  console.log(myApp);
+  myApp.restartPresentation();
 
   // console.log('send ipc restartPresentation');
   // win.webContents.send('restartPresentation');

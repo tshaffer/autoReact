@@ -10,7 +10,7 @@ import { setPlaybackState } from '../store/stateMachine';
 import Sign from './sign';
 
 // HACK
-// let myApp = {};
+export let myApp = {};
 
 class App extends Component {
 
@@ -18,9 +18,9 @@ class App extends Component {
     super(props);
 
 // $PlatformGlobal
-   console.log('platform: ', __PLATFORM__);
+    console.log('platform: ', __PLATFORM__);
 
-    // myApp = this;
+    myApp = this;
 
     // ipcRenderer.on('prepareForTransfer', (event, arg) => {
     //   console.log('ipcRender - event: ' + event);
@@ -74,6 +74,29 @@ class App extends Component {
     // this.props.setPlaybackState('active');
 
     this.props.initStateMachine(dataPath);
+  }
+
+  restartPresentation() {
+
+      console.log('ipcRender - restartPresentation received');
+
+      this.props.setPlaybackState('inactive');
+
+      console.log('start restartPresentation timeout');
+      setTimeout( () => {
+        console.log('timeout occurred');
+        this.props.setPlaybackState('active');
+      }, 100);
+
+      let dataPath: string = '';
+      if (__PLATFORM__ === 'desktop') {
+        dataPath = '/Users/tedshaffer/Desktop/baconTestCard';
+      }
+      else {
+        dataPath = "/storage/sd";
+      }
+
+      this.props.restartPresentation(dataPath);
   }
 
   render() {

@@ -9,8 +9,8 @@ let parsedPlatform = _.isString(argv.PLATFORM) && argv.PLATFORM.toLowerCase().in
   ? 'brightsign'
   : 'desktop';
 
-// parsedPlatform = 'brightsign';
-parsedPlatform = 'desktop';
+parsedPlatform = 'brightsign';
+// parsedPlatform = 'desktop';
 
 debug('Creating default configuration.');
 const config = {
