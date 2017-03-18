@@ -21,34 +21,6 @@ class App extends Component {
     console.log('platform: ', __PLATFORM__);
 
     myApp = this;
-
-    // ipcRenderer.on('prepareForTransfer', (event, arg) => {
-    //   console.log('ipcRender - event: ' + event);
-    //   console.log('ipcRender - arg: ' + arg);
-    // });
-
-//     ipcRenderer.on('restartPresentation', () => {
-//
-//       console.log('ipcRender - restartPresentation received');
-//
-//       this.props.setPlaybackState('inactive');
-//
-//       console.log('start restartPresentation timeout');
-//       setTimeout( () => {
-//         console.log('timeout occurred');
-//         this.props.setPlaybackState('active');
-//       }, 100);
-//
-//       let dataPath: string = '';
-//       if (__PLATFORM__ === 'desktop') {
-//         dataPath = '/Users/tedshaffer/Desktop/baconTestCard';
-//       }
-//       else {
-//         dataPath = "/storage/sd";
-//       }
-//
-//       myApp.props.restartPresentation(dataPath);
-//     });
   }
 
   state: Object;
@@ -78,25 +50,25 @@ class App extends Component {
 
   restartPresentation() {
 
-      console.log('ipcRender - restartPresentation received');
+    console.log('ipcRender - restartPresentation received');
 
-      this.props.setPlaybackState('inactive');
+    this.props.setPlaybackState('inactive');
 
-      console.log('start restartPresentation timeout');
-      setTimeout( () => {
-        console.log('timeout occurred');
-        this.props.setPlaybackState('active');
-      }, 100);
+    console.log('start restartPresentation timeout');
+    setTimeout( () => {
+      console.log('timeout occurred');
+      this.props.setPlaybackState('active');
+    }, 100);
 
-      let dataPath: string = '';
-      if (__PLATFORM__ === 'desktop') {
-        dataPath = '/Users/tedshaffer/Desktop/baconTestCard';
-      }
-      else {
-        dataPath = "/storage/sd";
-      }
+    let dataPath: string = '';
+    if (__PLATFORM__ === 'desktop') {
+      dataPath = '/Users/tedshaffer/Desktop/baconTestCard';
+    }
+    else {
+      dataPath = "/storage/sd";
+    }
 
-      this.props.restartPresentation(dataPath);
+    this.props.restartPresentation(dataPath);
   }
 
   render() {
