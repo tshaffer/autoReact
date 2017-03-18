@@ -4,6 +4,8 @@
 
 import React, { Component } from 'react';
 
+import PlatformService from '../platform';
+
 const xml2js = require('xml2js');
 
 export default class RSSTicker extends Component {
@@ -57,8 +59,7 @@ export default class RSSTicker extends Component {
 
   populateTicker(rssItems : Array<Object>) {
 
-// $PlatformGlobal
-    if (__PLATFORM__ === 'brightsign') {
+    if (PlatformService.default.isTickerSupported()) {
       // TODO - get location, dimensions from a prop
 
 // $FlowBrightSignExternalObject

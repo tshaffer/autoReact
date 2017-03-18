@@ -4,6 +4,8 @@ import React, { Component } from 'react';
 
 import path from 'path';
 
+import PlatformService from '../platform';
+
 import ImageContainer from '../containers/imageContainer';
 import VideoContainer from '../containers/videoContainer';
 import Html from './html';
@@ -60,17 +62,7 @@ export default class MediaZone extends Component {
     // TODO - HACK - need FileName!!
     const mediaType = mediaContentItem.type;
 
-
-    let resourceIdentifier = '';
-// $PlatformGlobal
-    if (__PLATFORM__ === 'desktop') {
-      // resourceIdentifier = "file://" + assetId;
-      resourceIdentifier = path.basename(assetId);
-    }
-    else {
-      // resourceIdentifier = "pool/" + path.basename(assetId);
-      resourceIdentifier = path.basename(assetId);
-    }
+    const resourceIdentifier = path.basename(assetId);
 
     const eventName = EventTypeName(event.type);
     switch(eventName) {
@@ -124,15 +116,7 @@ export default class MediaZone extends Component {
     const htmlSiteId = htmlContentItem.siteId;
     const site = dmGetHtmlSiteById(this.props.bsdm, {id: htmlSiteId});
 
-    let url = '';
-// $PlatformGlobal
-    if (__PLATFORM__ === 'brightsign') {
-      // HACK
-      url = 'pool/test.html';
-    }
-    else {
-      url = site.url;
-    }
+    const url = PlatformService.defaults.getHtmlSiteUrl(site);
 
     return (
       <Html

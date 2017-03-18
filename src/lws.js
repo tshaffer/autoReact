@@ -19,37 +19,18 @@ import PlatformService from './platform';
 
 import { myApp } from './components/App';
 
-// console.log(PlatformService);
-// console.log(PlatformService.default);
-// console.log(PlatformService.default.getRootDirectory());
 let appServer = express();
 appServer.use(bodyParser.json());
 
-// $PlatformGlobal
-console.log('Platform is: ', __PLATFORM__);
+const targetFolder = PlatformService.default.getRootDirectory();
+const uploadFolder = PlatformService.default.getUploadDirectory();
 
-let targetFolder = '';
-let upload;
-let uploadLarge;
-
-targetFolder = PlatformService.default.getRootDirectory();
-console.log(targetFolder);
-
-// $PlatformGlobal
-if (__PLATFORM__ === 'brightsign') {
-  // targetFolder = 'storage/sd';
-  upload = multer({ dest: 'storage/sd/uploads/' });
-  uploadLarge = multer({ dest: 'storage/sd/uploads/', limits: { fieldSize : 50000000 } });
-}
-else {
-  // targetFolder = '/Users/tedshaffer/Desktop/baconTestCard';
-  upload = multer({ dest: 'uploads/' });
-  uploadLarge = multer({ dest: 'uploads/', limits: { fieldSize : 50000000 } });
-}
+const upload = multer({ dest: uploadFolder });
+const uploadLarge = multer({ dest: uploadFolder, limits: { fieldSize : 50000000 } });
 
 appServer.use(bodyParser.urlencoded({ extended: false }));
 
-// LWS HANDLERS
+// LWS endpoints
 appServer.get('/SpecifyCardSizeLimits', (_, res) => {
   // const limitStorageSpace = req.query.limitStorageSpace;
   console.log('SpecifyCardSizeLimits invoked');
@@ -63,9 +44,6 @@ appServer.post('/PrepareForTransfer', upload.array('files', 1), function (req, r
   console.log(req.files);
 
   const file = req.files[0];
-
-  // console.log('send ipc prepareForTransfer');
-  // win.webContents.send('prepareForTransfer', file.path);
 
   // let { destination, encoding, fieldname, filename, mimetype, originalname, path, size } = file;
   let path = file.path;

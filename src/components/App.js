@@ -3,6 +3,8 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 
+import PlatformService from '../platform';
+
 import { initStateMachine } from '../store/stateMachine';
 import { restartPresentation } from '../store/stateMachine';
 import { setPlaybackState } from '../store/stateMachine';
@@ -17,9 +19,6 @@ class App extends Component {
   constructor(props: Object) {
     super(props);
 
-// $PlatformGlobal
-    console.log('platform: ', __PLATFORM__);
-
     myApp = this;
   }
 
@@ -29,19 +28,7 @@ class App extends Component {
 
     console.log("app.js::componentDidMount invoked");
 
-// $PlatformGlobal
-    console.log(__PLATFORM__);
-
-    console.log('__dirname = ' + __dirname);
-
-    let dataPath: string = '';
-// $PlatformGlobal
-    if (__PLATFORM__ === 'desktop') {
-      dataPath = '/Users/tedshaffer/Desktop/baconTestCard';
-    }
-    else {
-      dataPath = "/storage/sd";
-    }
+    const dataPath: string = PlatformService.default.getDataPath();
 
     // this.props.setPlaybackState('active');
 
@@ -60,13 +47,7 @@ class App extends Component {
       this.props.setPlaybackState('active');
     }, 100);
 
-    let dataPath: string = '';
-    if (__PLATFORM__ === 'desktop') {
-      dataPath = '/Users/tedshaffer/Desktop/baconTestCard';
-    }
-    else {
-      dataPath = "/storage/sd";
-    }
+    const dataPath: string = PlatformService.default.getDataPath();
 
     this.props.restartPresentation(dataPath);
   }

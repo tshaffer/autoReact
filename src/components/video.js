@@ -1,8 +1,8 @@
 // @flow
 
-import path from 'path';
-
 import React, { Component } from 'react';
+
+import PlatformService from '../platform';
 
 export default class Video extends Component {
 
@@ -10,14 +10,7 @@ export default class Video extends Component {
 
     let self = this;
 
-    let src = '';
-// $PlatformGlobal
-    if (__PLATFORM__ === 'desktop') {
-      src = path.join('file://', this.props.poolFilePath);
-    }
-    else {
-      src = this.props.poolFilePath.substr(12);
-    }
+    const src = PlatformService.default.getMediaSrc(this.props.poolFilePath);
     console.log('video.js::render, video src: ' + src);
 
     return (

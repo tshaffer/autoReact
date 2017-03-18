@@ -1,6 +1,6 @@
-const __POOFORM__ = 'desktop';
+const __PLATFORM__ = 'desktop';
 let loadedModule = null;
-if(__POOFORM__ === 'brightsign'){
+if(__PLATFORM__ === 'brightsign'){
   loadedModule = require('./brightsign/index.js');
 }else{
   loadedModule = require('./desktop/index.js');

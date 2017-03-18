@@ -2,6 +2,8 @@
 
 import React, { Component } from 'react';
 
+import PlatformService from '../platform';
+
 import RSSTicker from './rssTicker';
 
 import {
@@ -24,8 +26,7 @@ export default class TickerZone extends Component {
     const dataFeed = dmGetDataFeedById(bsdm, {id: dataFeedId});
     const feedUrl = dmGetSimpleStringFromParameterizedString(dataFeed.url);
 
-// $PlatformGlobal
-    if (__PLATFORM__ === 'brightsign') {
+    if (PlatformService.default.isTickerSupported()) {
       return (
         <RSSTicker
           playbackState={this.props.playbackState}
