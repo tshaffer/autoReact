@@ -3,11 +3,11 @@ import APlatformService from '../APlatformService';
 class BrightSignPlatformService extends APlatformService {
 
   static getRootDirectory() {
-    return 'storage/SD';
+    return 'storage/sd';
   }
 
   static getDataPath() {
-    return '/storage/SD';
+    return '/storage/sd';
   }
 
   static getUploadDirectory() {
