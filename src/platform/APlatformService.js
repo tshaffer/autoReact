@@ -16,10 +16,6 @@ export default class APlatformService {
     return '';
   }
 
-  static getMediaSrc(_) {   // poolFilePath
-    return ('');
-  }
-
   // TODO - FIXME
   getHtmlSiteUrl(_) {       // siteUrl
     return '';

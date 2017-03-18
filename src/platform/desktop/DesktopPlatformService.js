@@ -1,7 +1,5 @@
 import APlatformService from '../APlatformService';
 
-import path from 'path';
-
 class DesktopPlatformService extends APlatformService {
 
   static getRootDirectory() {
@@ -18,10 +16,6 @@ class DesktopPlatformService extends APlatformService {
 
   static getUploadDirectory() {
     return 'uploads/';
-  }
-
-  static getMediaSrc(poolFilePath) {
-    return path.join('file://', poolFilePath);
   }
 
   static isTickerSupported() {

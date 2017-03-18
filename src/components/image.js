@@ -2,7 +2,7 @@
 
 import React, { Component } from 'react';
 
-import PlatformService from '../platform';
+import path from 'path';
 
 export default class Image extends Component {
 
@@ -35,7 +35,7 @@ export default class Image extends Component {
     }
       ,this.props.duration);
 
-    const src = PlatformService.default.getMediaSrc(this.props.poolFilePath);
+    const src = path.join('file://', this.props.poolFilePath);
     console.log('image.js::render, image src: ' + src);
 
     return (

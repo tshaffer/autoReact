@@ -250,7 +250,7 @@ function buildPoolAssetFiles(syncSpec : Object, pathToPool : string) : Object {
     poolAssetFiles[syncSpecFile.name] = filePath;
     
   });
-  
+
   return poolAssetFiles;
 }
 

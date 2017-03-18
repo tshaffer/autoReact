@@ -2,7 +2,7 @@
 
 import React, { Component } from 'react';
 
-import PlatformService from '../platform';
+import path from 'path';
 
 export default class Video extends Component {
 
@@ -10,7 +10,7 @@ export default class Video extends Component {
 
     let self = this;
 
-    const src = PlatformService.default.getMediaSrc(this.props.poolFilePath);
+    const src = path.join('file://', this.props.poolFilePath);
     console.log('video.js::render, video src: ' + src);
 
     return (
