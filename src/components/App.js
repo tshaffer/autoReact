@@ -1,6 +1,4 @@
 // @flow
-import { ipcRenderer } from 'electron';
-
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
@@ -12,45 +10,45 @@ import { setPlaybackState } from '../store/stateMachine';
 import Sign from './sign';
 
 // HACK
-let myApp = {};
+// let myApp = {};
 
 class App extends Component {
 
   constructor(props: Object) {
     super(props);
 
-    console.log('platform: ', __PLATFORM__);
-
-    myApp = this;
-
-    ipcRenderer.on('prepareForTransfer', (event, arg) => {
-      console.log('ipcRender - event: ' + event);
-      console.log('ipcRender - arg: ' + arg);
-    });
-
-    ipcRenderer.on('restartPresentation', () => {
-
-      console.log('ipcRender - restartPresentation received');
-
-      this.props.setPlaybackState('inactive');
-
-      console.log('start restartPresentation timeout');
-      setTimeout( () => {
-        console.log('timeout occurred');
-        this.props.setPlaybackState('active');
-      }, 100);
-
-      let dataPath: string = '';
 // $PlatformGlobal
-      if (__PLATFORM__ === 'desktop') {
-        dataPath = '/Users/tedshaffer/Desktop/baconTestCard';
-      }
-      else {
-        dataPath = "/storage/sd";
-      }
+   console.log('platform: ', __PLATFORM__);
 
-      myApp.props.restartPresentation(dataPath);
-    });
+    // myApp = this;
+
+    // ipcRenderer.on('prepareForTransfer', (event, arg) => {
+    //   console.log('ipcRender - event: ' + event);
+    //   console.log('ipcRender - arg: ' + arg);
+    // });
+
+//     ipcRenderer.on('restartPresentation', () => {
+//
+//       console.log('ipcRender - restartPresentation received');
+//
+//       this.props.setPlaybackState('inactive');
+//
+//       console.log('start restartPresentation timeout');
+//       setTimeout( () => {
+//         console.log('timeout occurred');
+//         this.props.setPlaybackState('active');
+//       }, 100);
+//
+//       let dataPath: string = '';
+//       if (__PLATFORM__ === 'desktop') {
+//         dataPath = '/Users/tedshaffer/Desktop/baconTestCard';
+//       }
+//       else {
+//         dataPath = "/storage/sd";
+//       }
+//
+//       myApp.props.restartPresentation(dataPath);
+//     });
   }
 
   state: Object;
@@ -65,6 +63,7 @@ class App extends Component {
     console.log('__dirname = ' + __dirname);
 
     let dataPath: string = '';
+// $PlatformGlobal
     if (__PLATFORM__ === 'desktop') {
       dataPath = '/Users/tedshaffer/Desktop/baconTestCard';
     }

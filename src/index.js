@@ -54,13 +54,15 @@ const multer = require('multer');
 let appServer = express();
 appServer.use(bodyParser.json());
 
+// $PlatformGlobal
 console.log('Platform is: ', __PLATFORM__);
 
 let targetFolder = '';
 let upload;
 let uploadLarge;
 
-if (__PLATFORM__ == 'brightsign') {
+// $PlatformGlobal
+if (__PLATFORM__ === 'brightsign') {
   targetFolder = 'storage/sd';
   upload = multer({ dest: 'storage/sd/uploads/' });
   uploadLarge = multer({ dest: 'storage/sd/uploads/', limits: { fieldSize : 50000000 } });
@@ -87,8 +89,8 @@ appServer.post('/PrepareForTransfer', upload.array('files', 1), function (req, r
 
   const file = req.files[0];
 
-  console.log('send ipc prepareForTransfer');
-  win.webContents.send('prepareForTransfer', file.path);
+  // console.log('send ipc prepareForTransfer');
+  // win.webContents.send('prepareForTransfer', file.path);
 
   // let { destination, encoding, fieldname, filename, mimetype, originalname, path, size } = file;
   let path = file.path;
@@ -204,7 +206,7 @@ appServer.post('/UploadSyncSpec', upload.array('files', 1), function (req, res) 
         const localSyncScriptFile = scriptFilesByName[fileName];
         // see if downloadFile is the same as localSyncScriptFile
         let {link, name} = localSyncScriptFile;
-        if (downloadFile.link != link) {
+        if (downloadFile.link !== link) {
           console.log('copy file to root folder: ', name);
         }
       }
@@ -214,8 +216,8 @@ appServer.post('/UploadSyncSpec', upload.array('files', 1), function (req, res) 
   // as a final step, overwrite the current sync spec with the new sync spec
   fs.writeFileSync(localSyncFilePath, JSON.stringify(newSyncSpec, null, 2));
 
-  console.log('send ipc restartPresentation');
-  win.webContents.send('restartPresentation');
+  // console.log('send ipc restartPresentation');
+  // win.webContents.send('restartPresentation');
 
   res.send('ok');
 });
@@ -260,7 +262,7 @@ function freeSpaceOnDrive(filesToPublish) {
 
       // create the list of files that need to be copied.
       // this is the list of files in filesToPublish that are not in listOfPoolFiles
-      let totalSpaceRequired = 0;
+      // let totalSpaceRequired = 0;
       filesToPublish.forEach( (fileToPublish) => {
         const fullFileName = fileToPublish.fullFileName;
         if (!deletionCandidates[fullFileName]) {
@@ -272,7 +274,7 @@ function freeSpaceOnDrive(filesToPublish) {
 
           filesToCopy[fullFileName] = fileItem;
 
-          totalSpaceRequired += Number(fileItem.fileSize);
+          // totalSpaceRequired += Number(fileItem.fileSize);
         }
       });
 
