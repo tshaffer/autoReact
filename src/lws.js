@@ -15,8 +15,13 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const multer = require('multer');
 
+import PlatformService from './platform';
+
 import { myApp } from './components/App';
 
+// console.log(PlatformService);
+// console.log(PlatformService.default);
+// console.log(PlatformService.default.getRootDirectory());
 let appServer = express();
 appServer.use(bodyParser.json());
 
@@ -27,14 +32,17 @@ let targetFolder = '';
 let upload;
 let uploadLarge;
 
+targetFolder = PlatformService.default.getRootDirectory();
+console.log(targetFolder);
+
 // $PlatformGlobal
 if (__PLATFORM__ === 'brightsign') {
-  targetFolder = 'storage/sd';
+  // targetFolder = 'storage/sd';
   upload = multer({ dest: 'storage/sd/uploads/' });
   uploadLarge = multer({ dest: 'storage/sd/uploads/', limits: { fieldSize : 50000000 } });
 }
 else {
-  targetFolder = '/Users/tedshaffer/Desktop/baconTestCard';
+  // targetFolder = '/Users/tedshaffer/Desktop/baconTestCard';
   upload = multer({ dest: 'uploads/' });
   uploadLarge = multer({ dest: 'uploads/', limits: { fieldSize : 50000000 } });
 }
@@ -362,6 +370,7 @@ function getTargetPathFromDestinationFilePath(destinationFileName, rootDir) {
 }
 
 export function initializeLocalWebServer() {
+
   console.log('*************************************** LWS INIT **');
   const port = process.env.PORT || 8080;
   appServer.listen(port);
