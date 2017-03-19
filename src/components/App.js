@@ -26,9 +26,10 @@ class App extends Component {
 
   componentDidMount() {
 
-    console.log("app.js::componentDidMount invoked");
+    console.log("app.js::componentDidMount invoked, PlatformService: ");
+    console.log(PlatformService);
 
-    const rootPath: string = PlatformService.default.getRootPath();
+    const rootPath: string = PlatformService.default.getRootDirectory();
     const pathToPool: string = PlatformService.default.getPathToPool();
 
     // this.props.setPlaybackState('active');
@@ -48,7 +49,7 @@ class App extends Component {
       this.props.setPlaybackState('active');
     }, 100);
 
-    const rootPath: string = PlatformService.default.getRootPath();
+    const rootPath: string = PlatformService.default.getRootDirectory();
     const pathToPool: string = PlatformService.default.getPathToPool();
 
     this.props.restartPresentation(rootPath, pathToPool);
