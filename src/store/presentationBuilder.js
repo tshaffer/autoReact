@@ -54,10 +54,10 @@ import {
   // LiveVideoInputTypeName,
   // LiveVideoStandardTypeName,
   // ZoneTypeCompactName,
-  // dmGetParameterizedStringFromString,
-  // dmAddDataFeed,
-  // DataFeedUsageType,
-  // dmCreateDataFeedContentItem,
+  dmGetParameterizedStringFromString,
+  dmAddDataFeed,
+  DataFeedUsageType,
+  dmCreateDataFeedContentItem,
 } from '@brightsign/bsdatamodel';
 
 export function buildPresentation(filePath) {
@@ -71,14 +71,19 @@ export function buildPresentation(filePath) {
     dispatch(dmNewSign('TestSign', VideoMode.v1920x1080x60p, PlayerModel.XT1143));
     
     // create first zone
-    zoneRect = dmCreateAbsoluteRect(0,0,960,440);
+    zoneRect = dmCreateAbsoluteRect(0,0,1920,440);
     action = dispatch(dmAddZone('VideoOrImages1', ZoneType.Video_Or_Images, 'zone1', zoneRect));
     let zone1Container = dmGetZoneMediaStateContainer(action.payload.id);
 
     // create second zone
-    zoneRect = dmCreateAbsoluteRect(0,440,960,440);
+    zoneRect = dmCreateAbsoluteRect(0,440,1920,440);
     action = dispatch(dmAddZone('VideoOrImages2', ZoneType.Images, 'zone2', zoneRect));
     let zone2Container = dmGetZoneMediaStateContainer(action.payload.id);
+
+    // create ticker zone
+    zoneRect = dmCreateAbsoluteRect(0,880,1920,200);
+    action = dispatch(dmAddZone('Ticker', ZoneType.Ticker, 'ticker', zoneRect));
+    let tickerZoneContainer = dmGetZoneMediaStateContainer(action.payload.id);
 
     // add content to first zone
     contentItem = dmCreateMediaContentItem('image7093.jpg',
@@ -101,6 +106,14 @@ export function buildPresentation(filePath) {
         contentItem = dmCreateMediaContentItem('ManWithFeet.jpg',
           '/Users/tedshaffer/Pictures/MixedMedia/ManWithFeet.jpg', MediaType.Image);
         return dispatch(dmPlaylistAppendMediaState(zone2Container, contentItem));
+      }
+    ).then(
+      action => {
+        let psFeedUrl = dmGetParameterizedStringFromString('http://feeds.reuters.com/Reuters/domesticNews');
+        let innerAction = dispatch(dmAddDataFeed('UsNewsFeed', psFeedUrl, DataFeedUsageType.Text));
+        let dataFeedId = innerAction.payload.id;
+        contentItem = dmCreateDataFeedContentItem('NewsFeed', dataFeedId);
+        return dispatch(dmPlaylistAppendMediaState(tickerZoneContainer, contentItem));
       }
     ).then(
       action => {
