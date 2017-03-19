@@ -67,7 +67,8 @@ export default class Sign extends Component {
     const zone = dmGetZoneById(bsdm, { id: zoneId });
 
     switch (ZoneTypeCompactName(zone.type)) {
-      case 'VideoOrImages': {
+      case 'VideoOrImages':
+      case 'Images': {
         return this.getMediaZone(bsdm, zone, zoneIndex);
       }
       case 'Ticker': {
