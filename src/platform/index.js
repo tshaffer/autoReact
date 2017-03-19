@@ -1,7 +1,18 @@
-// const __PLATFORM__ = 'brightsign';
-const __PLATFORM__ = 'desktop';
+let platform;
+console.log('attempt to create BS javascript object.');
+try {
+  const deviceInfo = new BSDeviceInfo();
+  console.log('deviceInfo creation succeeded, running on a brightSign');
+  console.log(deviceInfo);
+  platform = 'brightsign';
+}
+catch (e) {
+  console.log('deviceInfo creation failed, not a brightSign');
+  platform = 'desktop';
+}
+
 let loadedModule = null;
-if(__PLATFORM__ === 'brightsign'){
+if(platform === 'brightsign'){
   loadedModule = require('./brightsign/index.js');
 }else{
   loadedModule = require('./desktop/index.js');
