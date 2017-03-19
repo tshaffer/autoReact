@@ -82,23 +82,35 @@ export function buildPresentation(filePath) {
     // add content to first zone
     contentItem = dmCreateMediaContentItem('image7093.jpg',
       '/Users/tedshaffer/Pictures/SanMateoCoast2013/IMG_7093.JPG', MediaType.Image);
-    dispatch(dmPlaylistAppendMediaState(zone1Container, contentItem));
 
-    contentItem = dmCreateMediaContentItem('BryceCanyonUtah.jpg',
-      '/Users/tedshaffer/Pictures/BangPhotos/BryceCanyonUtah.jpg', MediaType.Image);
-    dispatch(dmPlaylistAppendMediaState(zone1Container, contentItem));
+    dispatch(dmPlaylistAppendMediaState(zone1Container, contentItem)).then(
+      action => {
+        contentItem = dmCreateMediaContentItem('BryceCanyonUtah.jpg',
+          '/Users/tedshaffer/Pictures/BangPhotos/BryceCanyonUtah.jpg', MediaType.Image);
+        return dispatch(dmPlaylistAppendMediaState(zone1Container, contentItem));
+      }
+    ).then(
+      action => {
+        contentItem = dmCreateMediaContentItem('GrandTetonWyoming.jpg',
+          '/Users/tedshaffer/Pictures/BangPhotos/GrandTetonWyoming.jpg', MediaType.Image);
+        return dispatch(dmPlaylistAppendMediaState(zone2Container, contentItem));
+      }
+    ).then(
+      action => {
+        contentItem = dmCreateMediaContentItem('ManWithFeet.jpg',
+          '/Users/tedshaffer/Pictures/MixedMedia/ManWithFeet.jpg', MediaType.Image);
+        return dispatch(dmPlaylistAppendMediaState(zone2Container, contentItem));
+      }
+    ).then(
+      action => {
+        let state = getState();
+        debugger;
+      }
+    ).catch( (err) => {
+      console.log(err);
+      debugger;
+    });
 
-    // add content to second zone
-    contentItem = dmCreateMediaContentItem('GrandTetonWyoming.jpg',
-      '/Users/tedshaffer/Pictures/BangPhotos/GrandTetonWyoming.jpg', MediaType.Image);
-    dispatch(dmPlaylistAppendMediaState(zone2Container, contentItem));
-
-    contentItem = dmCreateMediaContentItem('ManWithFeet.jpg',
-      '/Users/tedshaffer/Pictures/MixedMedia/ManWithFeet.jpg', MediaType.Image);
-    dispatch(dmPlaylistAppendMediaState(zone2Container, contentItem));
-
-    let state = getState();
-    debugger;
 
   };
 }
