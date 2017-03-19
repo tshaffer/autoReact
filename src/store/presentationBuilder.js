@@ -1,6 +1,7 @@
-// import fs from 'fs';
+import fs from 'fs';
 
 import {
+  dmGetSignState,
   // StringParameterType,
   // DataFeedTypeName,
   // dmGetDataFeedById,
@@ -104,6 +105,7 @@ export function buildPresentation(filePath) {
     ).then(
       action => {
         let state = getState();
+        savePresentationAs(dmGetSignState(state.bsdm), filePath);
         debugger;
       }
     ).catch( (err) => {
@@ -113,4 +115,10 @@ export function buildPresentation(filePath) {
 
 
   };
+
+  function savePresentationAs(presentation, path) {
+
+    const bpfStr = JSON.stringify(presentation, null, '\t');
+    fs.writeFileSync(path, bpfStr);
+  }
 }
