@@ -8,9 +8,6 @@ const readDir = require('recursive-readdir');
 const StringDecoder = require('string_decoder').StringDecoder;
 const decoder = new StringDecoder('utf8');
 
-const xml2js = require('xml2js');
-const js2xmlparser = require('js2xmlparser2');
-
 const express = require('express');
 const bodyParser = require('body-parser');
 const multer = require('multer');
@@ -48,38 +45,35 @@ appServer.post('/PrepareForTransfer', upload.array('files', 1), function (req, r
   // let { destination, encoding, fieldname, filename, mimetype, originalname, path, size } = file;
   let path = file.path;
 
-  // read xml file
-  const filesToPublishXML = fs.readFileSync(path);
+  // read file
+  const filesToPublishJsonBuf = fs.readFileSync(path);
+  const fileStr: string = decoder.write(filesToPublishJsonBuf);
+  const filesToPublish: Object = JSON.parse(fileStr);
 
-  parseFileToPublish(filesToPublishXML).then( (filesToPublish) => {
+  freeSpaceOnDrive(filesToPublish.file).then((missingFiles) => {
 
-    freeSpaceOnDrive(filesToPublish).then( (missingFiles) => {
+    let requiredFiles = {};
+    requiredFiles.file = [];
 
-      let requiredFiles = {};
-      requiredFiles.file = [];
+    for (let fileProperty in missingFiles) {
 
-      for (let fileProperty in missingFiles) {
+      if (missingFiles.hasOwnProperty(fileProperty)) {
 
-        if (missingFiles.hasOwnProperty(fileProperty)) {
-
-          const missingFile = missingFiles[fileProperty];
-          let requiredFile = {
-            filePath: missingFile.filePath,
-            fileName: missingFile.fileName,
-            hashValue: missingFile.hashValue,
-            fileSize: missingFile.fileSize
-          };
-          requiredFiles.file.push(requiredFile);
-        }
+        const missingFile = missingFiles[fileProperty];
+        let requiredFile = {
+          filePath: missingFile.filePath,
+          fileName: missingFile.fileName,
+          hashValue: missingFile.hashValue,
+          fileSize: missingFile.fileSize
+        };
+        requiredFiles.file.push(requiredFile);
       }
+    }
 
-      // convert to xml
-      const filesToPublishXml = js2xmlparser('filesToCopy', requiredFiles);
+    res.send(requiredFiles);
 
-      res.send(filesToPublishXml);
-      res.end('File is uploaded');
-    });
-  }).catch( (err) => {
+    res.end('File is uploaded');
+  }).catch((err) => {
     console.log(err);
     debugger;
   });
@@ -225,10 +219,10 @@ function freeSpaceOnDrive(filesToPublish) {
         const fullFileName = fileToPublish.fullFileName;
         if (!deletionCandidates[fullFileName]) {
           let fileItem = {};
-          fileItem.fileName = fileToPublish.fileName[0];
-          fileItem.filePath = fileToPublish.filePath[0];
-          fileItem.hashValue = fileToPublish.hashValue[0];
-          fileItem.fileSize = fileToPublish.fileSize[0];
+          fileItem.fileName = fileToPublish.fileName;
+          fileItem.filePath = fileToPublish.filePath;
+          fileItem.hashValue = fileToPublish.hashValue;
+          fileItem.fileSize = fileToPublish.fileSize;
 
           filesToCopy[fullFileName] = fileItem;
 
@@ -296,28 +290,6 @@ function mkdirSync(path) {
 //     });
 //   });
 // }
-
-function parseFileToPublish(filesToPublishXML) {
-
-  return new Promise( (resolve, reject) => {
-
-    let parser = new xml2js.Parser();
-    try {
-      parser.parseString(filesToPublishXML, (err, filesToPublish) => {
-        if (err) {
-          console.log(err);
-          debugger;
-        }
-        console.log(filesToPublish.files.file);
-        resolve(filesToPublish.files.file);
-      });
-    }
-    catch (e) {
-      console.log(e);
-      reject();
-    }
-  });
-}
 
 function getTargetPathFromDestinationFilePath(destinationFileName, rootDir) {
 
