@@ -20,7 +20,7 @@ let appServer = express();
 appServer.use(bodyParser.json());
 
 const targetFolder = PlatformService.default.getRootDirectory();
-const uploadFolder = PlatformService.default.getUploadDirectory();
+const uploadFolder = path.join(targetFolder, 'uploads');
 
 const upload = multer({ dest: uploadFolder });
 const uploadLarge = multer({ dest: uploadFolder, limits: { fieldSize : 50000000 } });

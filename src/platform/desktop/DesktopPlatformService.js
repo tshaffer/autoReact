@@ -10,10 +10,6 @@ class DesktopPlatformService extends APlatformService {
     return '/Users/tedshaffer/Desktop/baconTestCard';
   }
 
-  static getUploadDirectory() {
-    return '/Users/tedshaffer/Desktop/baconTestCard/uploads/';
-  }
-
   static isTickerSupported() {
     return false;
   }

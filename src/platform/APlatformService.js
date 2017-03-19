@@ -8,10 +8,6 @@ export default class APlatformService {
     return '';
   }
 
-  static getUploadDirectory() {
-    return '';
-  }
-
   // TODO - FIXME
   getHtmlSiteUrl(_) {       // siteUrl
     return '';

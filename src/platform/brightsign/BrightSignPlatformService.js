@@ -10,10 +10,6 @@ class BrightSignPlatformService extends APlatformService {
     return '/sd:/';
   }
 
-  static getUploadDirectory() {
-    return 'storage/sd/uploads/';
-  }
-
   static isTickerSupported() {
     return true;
   }
