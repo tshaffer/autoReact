@@ -50,6 +50,14 @@ appServer.post('/PrepareForTransfer', upload.array('files', 1), function (req, r
   const fileStr: string = decoder.write(filesToPublishJsonBuf);
   const filesToPublish: Object = JSON.parse(fileStr);
 
+  // remove file
+  fs.unlink(path, (err) => {
+    if (err) {
+      console.log('unable to delete filesToPublish.json: ', path);
+      console.log(err);
+    }
+  });
+
   freeSpaceOnDrive(filesToPublish.file).then((missingFiles) => {
 
     let requiredFiles = {};
@@ -97,20 +105,29 @@ appServer.post('/UploadFile', uploadLarge.array('files', 1), function (req, res)
 
     const filePath = path.join(targetFolder, targetFilePath);
 
-    console.log('copying file from: ', uploadedFilePath, ' to: ', filePath);
+    console.log('renaming file from: ', uploadedFilePath, ' to: ', filePath);
 
-    // move file from path to filePath
-    let source = fs.createReadStream(uploadedFilePath);
-    let dest = fs.createWriteStream(filePath);
-    source.pipe(dest);
-    source.on('end', () => {
-      console.log('copy complete');
-      // TODO - delete source?
+    fs.rename(uploadedFilePath, filePath, function(err) {
+      if (err) {
+        console.log('Rename file failed: ', err);
+      }
+      else {
+        console.log('Rename file successful');
+      }
     });
 
-    source.on('error', function(err) {
-      console.log('copy failed: ', err);
-    });
+    // // move file from path to filePath
+    // let source = fs.createReadStream(uploadedFilePath);
+    // let dest = fs.createWriteStream(filePath);
+    // source.pipe(dest);
+    // source.on('end', () => {
+    //   console.log('copy complete');
+    //   // TODO - delete source?
+    // });
+    //
+    // source.on('error', function(err) {
+    //   console.log('copy failed: ', err);
+    // });
 
     res.send('ok');
 
@@ -139,7 +156,6 @@ appServer.post('/UploadSyncSpec', upload.array('files', 1), function (req, res) 
   const newSyncSpecStr = decoder.write(newSyncSpecBuffer);
   const newSyncSpec = JSON.parse(newSyncSpecStr);
 
-
   let scriptFilesByName = {};
 
   localSyncSpec.files.forEach((downloadFile) => {
@@ -162,8 +178,16 @@ appServer.post('/UploadSyncSpec', upload.array('files', 1), function (req, res) 
     }
   });
 
-  // as a final step, overwrite the current sync spec with the new sync spec
+  // as a near final step, overwrite the current sync spec with the new sync spec
   fs.writeFileSync(localSyncFilePath, JSON.stringify(newSyncSpec, null, 2));
+
+  // remove uploaded sync spec from tmp location
+  fs.unlink(file.path, (err) => {
+    if (err) {
+      console.log('unable to delete new sync spec: ', path);
+      console.log(err);
+    }
+  });
 
   console.log(myApp);
   myApp.restartPresentation();
