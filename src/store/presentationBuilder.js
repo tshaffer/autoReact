@@ -85,7 +85,16 @@ export function buildPresentation(filePath) {
     action = dispatch(dmAddZone('Ticker', ZoneType.Ticker, 'ticker', zoneRect));
     let tickerZoneContainer = dmGetZoneMediaStateContainer(action.payload.id);
 
-    // add content to first zone
+// example code for adding an HTML site
+/*
+    let addHtmlSiteAction = dispatch(dmAddHtmlSite('TestSite',
+      'file:///Users/tedshaffer/Documents/Projects/autoReact/data/test.html', false));
+    let htmlSiteId = addHtmlSiteAction.payload.id;
+    let contentItem = dmCreateHtmlContentItem('htmlItem', htmlSiteId);
+    dispatch(dmPlaylistAppendMediaState(zone1Container, contentItem));
+*/
+
+// Add content
     contentItem = dmCreateMediaContentItem('image7093.jpg',
       '/Users/tedshaffer/Pictures/SanMateoCoast2013/IMG_7093.JPG', MediaType.Image);
 

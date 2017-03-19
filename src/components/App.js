@@ -35,9 +35,9 @@ class App extends Component {
 
     // this.props.setPlaybackState('active');
 
-    this.props.buildPresentation('/Users/tedshaffer/Desktop/baconTestCard/poo.bpf');
+    // this.props.buildPresentation('/Users/tedshaffer/Desktop/baconTestCard/ThreeZones.bpf');
 
-    // this.props.initStateMachine(rootPath, pathToPool);
+    this.props.initStateMachine(rootPath, pathToPool);
   }
 
   restartPresentation() {
@@ -60,26 +60,26 @@ class App extends Component {
 
   render() {
 
-    return (
-      <div>
-        Waiting for for presentation to be loaded...
-      </div>
-    );
-
-    // if (this.props.bsdm.zones.allZones.length === 0) {
-    //   return (
-    //     <div>
-    //       Waiting for for presentation to be loaded...
-    //     </div>
-    //   );
-    // }
-    //
     // return (
-    //   <Sign
-    //     bsdm={this.props.bsdm}
-    //     playbackState={this.props.playbackState}
-    //   />
+    //   <div>
+    //     Waiting for for presentation to be loaded...
+    //   </div>
     // );
+
+    if (this.props.bsdm.zones.allZones.length === 0) {
+      return (
+        <div>
+          Waiting for for presentation to be loaded...
+        </div>
+      );
+    }
+
+    return (
+      <Sign
+        bsdm={this.props.bsdm}
+        playbackState={this.props.playbackState}
+      />
+    );
   }
 }
 
