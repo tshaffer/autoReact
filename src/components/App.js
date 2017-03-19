@@ -8,6 +8,7 @@ import PlatformService from '../platform';
 import { initStateMachine } from '../store/stateMachine';
 import { restartPresentation } from '../store/stateMachine';
 import { setPlaybackState } from '../store/stateMachine';
+import { buildPresentation } from '../store/presentationBuilder';
 
 import Sign from './sign';
 
@@ -33,6 +34,8 @@ class App extends Component {
     const pathToPool: string = PlatformService.default.getPathToPool();
 
     // this.props.setPlaybackState('active');
+
+    this.props.buildPresentation('/Users/tedshaffer/Desktop/baconTestCard/poo.bpf');
 
     this.props.initStateMachine(rootPath, pathToPool);
   }
@@ -85,6 +88,7 @@ const mapDispatchToProps = (dispatch) => {
     initStateMachine,
     restartPresentation,
     setPlaybackState,
+    buildPresentation,
   }, dispatch);
 };
 
@@ -94,6 +98,7 @@ App.propTypes = {
   setPlaybackState: React.PropTypes.func.isRequired,
   restartPresentation: React.PropTypes.func.isRequired,
   bsdm: React.PropTypes.object.isRequired,
+  buildPresentation: React.PropTypes.func.isRequired,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(App);
