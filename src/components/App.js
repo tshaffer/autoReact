@@ -28,12 +28,12 @@ class App extends Component {
 
     console.log("app.js::componentDidMount invoked");
 
-    const dataPath: string = PlatformService.default.getDataPath();
+    const rootPath: string = PlatformService.default.getRootPath();
     const pathToPool: string = PlatformService.default.getPathToPool();
 
     // this.props.setPlaybackState('active');
 
-    this.props.initStateMachine(dataPath, pathToPool);
+    this.props.initStateMachine(rootPath, pathToPool);
   }
 
   restartPresentation() {
@@ -48,10 +48,10 @@ class App extends Component {
       this.props.setPlaybackState('active');
     }, 100);
 
-    const dataPath: string = PlatformService.default.getDataPath();
+    const rootPath: string = PlatformService.default.getRootPath();
     const pathToPool: string = PlatformService.default.getPathToPool();
 
-    this.props.restartPresentation(dataPath, pathToPool);
+    this.props.restartPresentation(rootPath, pathToPool);
   }
 
   render() {

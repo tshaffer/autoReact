@@ -4,10 +4,6 @@ export default class APlatformService {
     return '';
   }
 
-  static getDataPath() {
-    return '';
-  }
-
   static getPathToPool() {
     return '';
   }
