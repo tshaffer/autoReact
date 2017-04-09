@@ -1,55 +1,64 @@
 /* @flow */
 
 export class HSM {
-  topState: Object;
-  activeState: Object;
+  topState: ?HState;
+  activeState: ?HState;
+  constructorHandler: Function;
+  initialPseudoStateHandler: Function;
 
   constructor(
   ) {
     this.topState = null;
     this.activeState = null;
+    this.constructorHandler = this.nullFunction;
+    this.initialPseudoStateHandler = this.nullFunction;
   }
 
-  ConstructorFunction () {
-    this.ConstructorHandler();
+  nullFunction() {
+    debugger;
   }
 
-  Initialize () {
+  constructorFunction () {
+    this.constructorHandler();
+  }
 
-    var stateData = {};
+  initialize () {
+
+    let stateData = {};
 
     // empty event used to get super states
-    var emptyEvent = {};
+    let emptyEvent = {};
     emptyEvent["EventType"] = "EMPTY_SIGNAL";
 
     // entry event
-    var entryEvent = {};
+    let entryEvent = {};
     entryEvent["EventType"] = "ENTRY_SIGNAL";
 
     // init event
-    var initEvent = {};
+    let initEvent = {};
     initEvent["EventType"] = "INIT_SIGNAL";
 
     // execute initial transition
-    this.activeState = this.InitialPseudoStateHandler();
+    this.activeState = this.initialPseudoStateHandler();
 
     // if there is no activeState, the playlist is empty
     if (this.activeState == null) return;
 
-    var activeState = this.activeState;
+    let activeState = this.activeState;
 
     //start at the top state
     if (this.topState == null) debugger;
-    var sourceState = this.topState;
+    let sourceState = this.topState;
 
     while (true) {
 
-      var entryStates = [];
-      var entryStateIndex = 0;
+      let entryStates = [];
+      let entryStateIndex = 0;
 
       entryStates[0] = activeState;                                                   // target of the initial transition
 
-      var status = this.activeState.HStateEventHandler(emptyEvent, stateData);        // send an empty event to get the super state
+      let status = this.activeState.HStateEventHandler(emptyEvent, stateData);        // send an empty event to get the super state
+
       activeState = stateData.nextState;
       this.activeState = stateData.nextState;
 
@@ -82,33 +91,33 @@ export class HSM {
     }
   }
 
-  Dispatch (event) {
+  Dispatch (event : Object) {
 
     // if there is no activeState, the playlist is empty
     if (this.activeState == null) return;
 
-    var stateData = {};
+    let stateData = {};
 
     // empty event used to get super states
-    var emptyEvent = {};
+    let emptyEvent = {};
     emptyEvent["EventType"] = "EMPTY_SIGNAL";
 
     // entry event
-    var entryEvent = {};
+    let entryEvent = {};
     entryEvent["EventType"] = "ENTRY_SIGNAL";
 
     // exit event
-    var exitEvent = {};
+    let exitEvent = {};
     exitEvent["EventType"] = "EXIT_SIGNAL";
 
     // init event
-    var initEvent = {};
+    let initEvent = {};
     initEvent["EventType"] = "INIT_SIGNAL";
 
-    var t = this.activeState;                                                      // save the current state
+    let t = this.activeState;                                                      // save the current state
 
-    var status = "SUPER";
-    var s = null;
+    let status = "SUPER";
+    let s = null;
     while (status === "SUPER") {                                                 // process the event hierarchically
       s = this.activeState;
       status = s.HStateEventHandler(event, stateData);
@@ -116,7 +125,7 @@ export class HSM {
     }
 
     if (status === "TRANSITION") {
-      var path = [];
+      let path = [];
 
       path[0] = this.activeState;                                                // save the target of the transition
       path[1] = t;                                                            // save the current state
@@ -132,7 +141,7 @@ export class HSM {
       t = path[0];                                                            // target of the transition
 
       // s is the source of the transition
-      var ip;
+      let ip;
       if (s.id === t.id) {                                                     // check source == target (transition to self)
         status = s.HStateEventHandler(exitEvent, stateData);                // exit the source
         ip = 0;
@@ -154,7 +163,7 @@ export class HSM {
               status = s.HStateEventHandler(exitEvent, stateData);    // exit the source
             }
             else {                                                      // check rest of source == target->super->super and store the entry path along the way
-              var iq = 0;                                             // indicate LCA not found
+              let iq = 0;                                             // indicate LCA not found
               ip = 1;                                                 // enter target and its superstate
               path[1] = t;                                            // save the superstate of the target
               t = stateData.nextState;                                // save source->super
@@ -264,9 +273,9 @@ export class HSM {
 export class HState {
 
   topState: Object;
-  HStateEventHandler : Object;
+  HStateEventHandler : Function;
   stateMachine: Object;
-  superState: Object;
+  superState: HState;
   id: String;
 
   constructor(
