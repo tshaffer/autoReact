@@ -8,8 +8,19 @@ const decoder = new StringDecoder('utf8');
 
 import {
   dmOpenSign,
+  dmGetZonesForSign,
+  dmGetZoneById,
+  ZoneTypeCompactName,
 } from '@brightsign/bsdatamodel';
 
+import {
+  ZoneStateMachine
+} from '../entities/zoneStateMachine';
+
+import {
+  HState,
+  STTopEventHandler
+} from '../entities/HSM';
 
 // ------------------------------------
 // Constants
@@ -141,11 +152,30 @@ function launchPresentationPlayback(rootPath : string, pathToPool : string, disp
     dispatch(dmOpenSign(autoPlay));
     const state = getState();
     console.log(state);
+    return buildSign(state.bsdm);
 
   }).catch((err) => {
     console.log(err);
     debugger;
   });
+}
+
+function buildSign(bsdm : Object) {
+
+  debugger;
+  const zoneIds = dmGetZonesForSign(bsdm);
+  zoneIds.forEach( (zoneId) => {
+
+    const zone = dmGetZoneById(bsdm, { id: zoneId });
+    const zoneHSM = new ZoneStateMachine();
+    this.stTop = new HState(this, "Top");
+    this.stTop.HStateEventHandler = STTopEventHandler;
+
+    this.topState = this.stTop;
+
+  });
+
+  resolve();
 }
 
 function getFile(syncSpec : Object, fileName : string) : ?Object {
