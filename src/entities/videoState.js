@@ -19,10 +19,17 @@ export default class VideoState extends HState {
 
   STDisplayingVideoEventHandler(event : Object, stateData : Object) : string {
 
+    debugger;
+
     stateData.nextState = null;
 
-    console.log(event);
-    console.log(stateData);
+    if (event.EventType && event.EventType === 'ENTRY_SIGNAL') {
+      console.log('entry signal');
+      return 'HANDLED';
+    }
+    else if (event.EventType && event.EventType === 'EXIT_SIGNAL') {
+      console.log('exit signal');
+    }
 
     stateData.nextState = this.superState;
     return 'SUPER';
