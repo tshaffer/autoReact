@@ -9,18 +9,13 @@ const decoder = new StringDecoder('utf8');
 import {
   dmOpenSign,
   dmGetZonesForSign,
-  dmGetZoneById,
-  ZoneTypeCompactName,
+  // dmGetZoneById,
+  // ZoneTypeCompactName,
 } from '@brightsign/bsdatamodel';
 
 import {
   ZoneStateMachine
 } from '../entities/zoneStateMachine';
-
-import {
-  HState,
-  STTopEventHandler
-} from '../entities/HSM';
 
 // ------------------------------------
 // Constants
@@ -28,6 +23,7 @@ import {
 export const SET_SYNC_SPEC = 'SET_SYNC_SPEC';
 export const SET_POOL_ASSET_FILES = 'SET_POOL_ASSET_FILES';
 export const SET_PLAYBACK_STATE = 'SET_PLAYBACK_STATE';
+export const ADD_ZONE = 'ADD_ZONE';
 
 // ------------------------------------
 // Actions
@@ -56,6 +52,16 @@ export function setPlaybackState(playbackState : string){
   };
 }
 
+export function addZone(zoneId : string, zone : Object) {
+
+  return {
+    type: ADD_ZONE,
+    payload: {
+      zoneId,
+      zone
+    }
+  };
+}
 
 // ------------------------------------
 // Action Creators
@@ -79,7 +85,8 @@ export function restartPresentation(rootPath : string, pathToPool : string) {
 const initialState = {
   syncSpec : {},
   poolAssetFiles : {},
-  playbackState: 'active'
+  playbackState: 'active',
+  zonesById: {}
 };
 
 export default function(state : Object = initialState, action : Object) {
@@ -118,6 +125,19 @@ export default function(state : Object = initialState, action : Object) {
       console.log(newState);
       return newState;
     }
+
+    case ADD_ZONE: {
+
+      let newZonesById = Object.assign({}, state.zonesById);
+      newZonesById[action.payload.zoneId] = action.payload.zone;
+
+      let newState = {
+        ...state,
+        zonesById: newZonesById
+      };
+
+      return newState;
+    }
   }
 
   return state;
@@ -152,7 +172,7 @@ function launchPresentationPlayback(rootPath : string, pathToPool : string, disp
     dispatch(dmOpenSign(autoPlay));
     const state = getState();
     console.log(state);
-    return buildSign(state.bsdm);
+    buildSign(dispatch, state.bsdm);
 
   }).catch((err) => {
     console.log(err);
@@ -160,22 +180,14 @@ function launchPresentationPlayback(rootPath : string, pathToPool : string, disp
   });
 }
 
-function buildSign(bsdm : Object) {
+function buildSign(dispatch : Function, bsdm : Object) {
 
-  debugger;
   const zoneIds = dmGetZonesForSign(bsdm);
   zoneIds.forEach( (zoneId) => {
-
-    const zone = dmGetZoneById(bsdm, { id: zoneId });
-    const zoneHSM = new ZoneStateMachine();
-    this.stTop = new HState(this, "Top");
-    this.stTop.HStateEventHandler = STTopEventHandler;
-
-    this.topState = this.stTop;
-
+    const zoneHSM = new ZoneStateMachine(bsdm, zoneId);
+    dispatch(addZone(zoneId, zoneHSM));
   });
 
-  resolve();
 }
 
 function getFile(syncSpec : Object, fileName : string) : ?Object {

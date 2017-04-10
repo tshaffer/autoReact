@@ -16,6 +16,7 @@ class BrightSignPlatformService extends APlatformService {
 
   // TODO - FIXME
   getHtmlSiteUrl(site) {
+    console.log(site);
     return 'pool/test.html';
   }
 }

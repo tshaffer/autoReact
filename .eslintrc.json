@@ -24,6 +24,8 @@
     "react"
   ],
   "rules": {
+    "no-constant-condition": [
+      "error", { "checkLoops": false }],
     "no-console": [
       "off"
     ],

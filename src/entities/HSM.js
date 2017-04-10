@@ -1,21 +1,11 @@
-/* @flow */
-
 export class HSM {
-  topState: ?HState;
-  activeState: ?HState;
-  constructorHandler: Function;
-  initialPseudoStateHandler: Function;
 
   constructor(
   ) {
     this.topState = null;
     this.activeState = null;
-    this.constructorHandler = this.nullFunction;
-    this.initialPseudoStateHandler = this.nullFunction;
-  }
-
-  nullFunction() {
-    debugger;
+    this.constructorHandler = null;
+    this.initialPseudoStateHandler = null;
   }
 
   constructorFunction () {
@@ -91,7 +81,9 @@ export class HSM {
     }
   }
 
-  Dispatch (event : Object) {
+  Dispatch (event) {
+
+    debugger;
 
     // if there is no activeState, the playlist is empty
     if (this.activeState == null) return;
@@ -267,21 +259,11 @@ export class HSM {
 
     this.activeState = t;                                                       // set the new state or restore the current state
   }
-
 }
 
 export class HState {
 
-  topState: Object;
-  HStateEventHandler : Function;
-  stateMachine: Object;
-  superState: HState;
-  id: String;
-
-  constructor(
-    obj : Object,
-    id : string
-  ) {
+  constructor(obj, id) {
     this.topState = null;
 
     this.HStateEventHandler = null;                                             // filled in by HState instance
