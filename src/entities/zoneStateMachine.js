@@ -49,10 +49,10 @@ export class ZoneStateMachine extends HSM {
     this.mediaStateIds.forEach( (mediaStateId) => {
       const bsdmMediaState = dmGetMediaStateById(bsdm, { id : mediaStateId});
       if (bsdmMediaState.contentItem.type === ContentItemType.Image) {
-        newState = new ImageState(bsdmMediaState);
+        newState = new ImageState(this, bsdmMediaState);
       }
       else if (bsdmMediaState.contentItem.type === ContentItemTypeName.Video) {
-        newState = new VideoState(bsdmMediaState);
+        newState = new VideoState(this, bsdmMediaState);
       }
       this.mediaStates.push(newState);
     });
