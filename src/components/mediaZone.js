@@ -25,6 +25,10 @@ export default class MediaZone extends Component {
 
   constructor(props : Object) {
     super(props);
+
+    console.log("mediaZone::constructor invoked");
+    debugger;
+
     this.state = { stateIndex : 0 };
     this.numStates = 0;
   }
@@ -146,6 +150,8 @@ export default class MediaZone extends Component {
 
   render() {
 
+    debugger;
+
     console.log('mediaZone.js::render invoked');
 
     if (this.props.playbackState !== 'active') {
@@ -154,11 +160,14 @@ export default class MediaZone extends Component {
       );
     }
 
-    let mediaStateIds : Array<string> = [];
-    let mediaState : Object = {};
-
     const bsdm : Object = this.props.bsdm;
     const zone = this.props.zone;
+    const activeState = this.props.activeState;
+
+    debugger;
+
+    let mediaStateIds : Array<string> = [];
+    let mediaState : Object = {};
 
     mediaStateIds = dmGetZoneSimplePlaylist(bsdm, { id: zone.id });
     mediaState = dmGetMediaStateById(bsdm, { id : mediaStateIds[this.state.stateIndex]});
@@ -189,5 +198,6 @@ MediaZone.propTypes = {
   zone: React.PropTypes.object.isRequired,
   width: React.PropTypes.number.isRequired,
   height: React.PropTypes.number.isRequired,
+  // activeState: React.PropTypes.object.isRequired
   zoneIndex: React.PropTypes.number.isRequired,
 };

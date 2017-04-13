@@ -17,6 +17,15 @@ export default class Sign extends Component {
   //         key={zoneIndex}
 
   getMediaZoneHSM(zone : Object, activeState : Object) {
+
+    return (
+      <div
+        key={zone.id}
+      >
+        poo
+      </div>
+    );
+
     return (
       <div
         style={{
@@ -110,11 +119,11 @@ export default class Sign extends Component {
 
     const activeState = zoneHSM.activeState;
 
-    debugger;
-
     switch (ZoneTypeCompactName(zone.type)) {
       case 'VideoOrImages': {
-        return this.getMediaZoneHSM(zone, activeState);
+        // return this.getMediaZoneHSM(zone, activeState);
+        const mediaZoneJSX = this.getMediaZoneHSM(zone, activeState);
+        return mediaZoneJSX;
       }
       // case 'Ticker': {
       //   return this.getTickerZoneHSM(bsdm, zone, activeState);
@@ -133,9 +142,9 @@ export default class Sign extends Component {
     return (
       <div>
         {
-          zoneHSMs.map( (zoneHSM, index) => {
-            this.getZoneHSMJSX(zoneHSM);
-          })
+          zoneHSMs.map( (zoneHSM, index) =>
+            this.getZoneHSMJSX(zoneHSM)
+          )
         }
       </div>
     );
