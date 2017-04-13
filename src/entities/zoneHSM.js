@@ -57,8 +57,6 @@ export class ZoneHSM extends HSM {
       this.mediaStates.push(newState);
     });
 
-    debugger;
-
     this.constructorFunction();
 
     this.initialize();

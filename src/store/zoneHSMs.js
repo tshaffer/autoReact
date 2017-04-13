@@ -40,8 +40,6 @@ export default function(state : Object = initialState, action : Object) {
 
       console.log(newState);
 
-      debugger;
-
       return newState;
     }
 
