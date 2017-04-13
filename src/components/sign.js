@@ -81,23 +81,35 @@ export default class Sign extends Component {
 
   render() {
 
-    const bsdm = this.props.bsdm;
+    const zoneHSMs = this.props.zoneHSMs.zoneHSMs;
 
-    const zoneIds = dmGetZonesForSign(bsdm);
+    if (zoneHSMs.length > 0) {
+      debugger;
+    }
 
     return (
-      <div>
-        {
-          zoneIds.map((zoneId, index) =>
-            this.getZoneJSX(bsdm, zoneId, index)
-          )
-        }
-      </div>
+      <div>poo</div>
     );
+
+    // const bsdm = this.props.bsdm;
+    //
+    // const zoneIds = dmGetZonesForSign(bsdm);
+    //
+    //
+    // return (
+    //   <div>
+    //     {
+    //       zoneIds.map((zoneId, index) =>
+    //         this.getZoneJSX(bsdm, zoneId, index)
+    //       )
+    //     }
+    //   </div>
+    // );
   }
 }
 
 Sign.propTypes = {
   bsdm: React.PropTypes.object.isRequired,
   playbackState: React.PropTypes.string.isRequired,
+  zoneHSMs : React.PropTypes.object
 };
