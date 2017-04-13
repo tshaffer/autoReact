@@ -19,8 +19,6 @@ export default class ImageState extends HState {
 
   STDisplayingImageEventHandler(event : Object, stateData : Object) : string {
 
-    debugger;
-
     stateData.nextState = null;
 
     if (event.EventType && event.EventType === 'ENTRY_SIGNAL') {

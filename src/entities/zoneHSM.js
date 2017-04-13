@@ -13,9 +13,9 @@ import {
 import ImageState from './imageState';
 import VideoState from './videoState';
 
-export class ZoneStateMachine extends HSM {
+export class ZoneHSM extends HSM {
 
-  constructor(bsdm : Object, zoneId : string) {
+  constructor(dispatch : Function, bsdm : Object, zoneId : string) {
     super();
 
     this.bsdm = bsdm;

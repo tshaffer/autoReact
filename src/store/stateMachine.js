@@ -14,8 +14,10 @@ import {
 } from '@brightsign/bsdatamodel';
 
 import {
-  ZoneStateMachine
-} from '../entities/zoneStateMachine';
+  ZoneHSM
+} from '../entities/zoneHSM';
+
+import { addZoneHSM } from './zoneHSMs';
 
 // ------------------------------------
 // Constants
@@ -184,8 +186,9 @@ function buildSign(dispatch : Function, bsdm : Object) {
 
   const zoneIds = dmGetZonesForSign(bsdm);
   zoneIds.forEach( (zoneId) => {
-    const zoneHSM = new ZoneStateMachine(bsdm, zoneId);
-    dispatch(addZone(zoneId, zoneHSM));
+    const zoneHSM = new ZoneHSM(dispatch, bsdm, zoneId);
+    // dispatch(addZone(zoneId, zoneHSM));
+    dispatch(addZoneHSM(zoneHSM, zoneId));
   });
 
 }
