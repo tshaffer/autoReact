@@ -2,7 +2,7 @@
 
 import React, { Component } from 'react';
 
-import MediaZone from './mediaZone';
+import MediaZoneContainer from '../containers/mediaZoneContainer';
 import TickerZone from './tickerZone';
 
 import {
@@ -16,7 +16,7 @@ export default class Sign extends Component {
 
   //         key={zoneIndex}
 
-  getMediaZoneHSM(zone : Object, activeState : Object) {
+  getMediaZoneHSM(zone : Object) {
 
     return (
       <div
@@ -28,13 +28,12 @@ export default class Sign extends Component {
           height: zone.absolutePosition.height
         }}
       >
-        <MediaZone
+        <MediaZoneContainer
           playbackState={this.props.playbackState}
           bsdm={this.props.bsdm}
           zone={zone}
           width={Number(zone.absolutePosition.width)}
           height={Number(zone.absolutePosition.height)}
-          activeState={activeState}
           postMessage={this.props.postMessage}
         />
       </div>
@@ -70,15 +69,13 @@ export default class Sign extends Component {
 
     const zone = dmGetZoneById(this.props.bsdm, { id: zoneHSM.id });
 
-    const activeState = this.props.activeState;
-
     switch (ZoneTypeCompactName(zone.type)) {
       case 'VideoOrImages': {
-        const mediaZoneJSX = this.getMediaZoneHSM(zone, activeState);
+        const mediaZoneJSX = this.getMediaZoneHSM(zone);
         return mediaZoneJSX;
       }
       // case 'Ticker': {
-      //   return this.getTickerZoneHSM(bsdm, zone, activeState);
+      //   return this.getTickerZoneHSM(bsdm, zone);
       // }
       default: {
         debugger;
@@ -108,5 +105,4 @@ Sign.propTypes = {
   playbackState: React.PropTypes.string.isRequired,
   zoneHSMs : React.PropTypes.object,
   postMessage: React.PropTypes.func.isRequired,
-  activeState: React.PropTypes.object,
 };

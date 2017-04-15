@@ -13,7 +13,7 @@ import {
 
 import {
   ZoneHSM
-} from '../entities/zoneHSM';
+} from '../hsm/zoneHSM';
 
 import { addZoneHSM } from './zoneHSMs';
 
