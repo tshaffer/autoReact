@@ -2,7 +2,7 @@
 
 import { connect } from 'react-redux';
 
-import MediaZone from '../components/mediaZoneOG';
+import MediaZone from '../components/mediaZone';
 
 function mapStateToProps (state, ownProps) {
   return {

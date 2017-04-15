@@ -1,6 +1,6 @@
 /* @flow */
 
-import { HState } from './hsmOG';
+import { HState } from './HState';
 
 export default class VideoState extends HState {
 
