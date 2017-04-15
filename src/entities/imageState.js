@@ -46,8 +46,8 @@ export default class ImageState extends HState {
       console.log('timeoutEvent');
 
       const eventIds = dmGetEventIdsForMediaState( this.bsdm, { id : this.bsdmImageState.id });
-      const event = dmGetEventById( this.bsdm, { id : eventIds[0] } );
-      // if (event.EventType === 'timeoutEvent') {
+      // const bsdmEvent = dmGetEventById( this.bsdm, { id : eventIds[0] } );
+      if (event.EventType === 'timeoutEvent') {
         const transitionIds = dmGetTransitionIdsForEvent( this.bsdm, { id : eventIds[0] });
         const transition = dmGetTransitionById(this.bsdm, { id : transitionIds[0] } );
         const targetMediaStateId = transition.targetMediaStateId;
@@ -55,7 +55,7 @@ export default class ImageState extends HState {
 
         stateData.nextState = this.nextState;
         return "TRANSITION";
-      // }
+      }
     }
 
 
