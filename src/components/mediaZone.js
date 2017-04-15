@@ -6,6 +6,8 @@ import path from 'path';
 
 import PlatformService from '../platform';
 
+import ImageHS from './imageHS';
+
 import ImageContainer from '../containers/imageContainer';
 import VideoContainer from '../containers/videoContainer';
 import Html from './html';
@@ -59,15 +61,20 @@ export default class MediaZone extends Component {
     switch (mediaType) {
       case MediaType.Image: {
         return (
-          <ImageContainer
-            resourceIdentifier={resourceIdentifier}
-            width={this.props.width}
-            height={this.props.height}
-            duration={duration * 1000}
-            onTimeout={self.nextAsset.bind(this)}
-          />
-        );
+          <ImageHS/>
+        )
       }
+      // case MediaType.Image: {
+      //   return (
+      //     <ImageContainer
+      //       resourceIdentifier={resourceIdentifier}
+      //       width={this.props.width}
+      //       height={this.props.height}
+      //       duration={duration * 1000}
+      //       onTimeout={self.nextAsset.bind(this)}
+      //     />
+      //   );
+      // }
       case MediaType.Video: {
         return (
           <VideoContainer
