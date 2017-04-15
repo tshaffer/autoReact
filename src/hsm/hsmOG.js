@@ -1,15 +1,16 @@
-export const HSM = {
+export class HSM {
 
-  constructHSM() {
+  constructor(
+  ) {
     this.topState = null;
     this.activeState = null;
     this.constructorHandler = null;
     this.initialPseudoStateHandler = null;
-  },
+  }
 
   constructorFunction () {
     this.constructorHandler();
-  },
+  }
 
   initialize () {
 
@@ -78,7 +79,7 @@ export const HSM = {
       activeState = stateData.nextState;
       this.activeState = stateData.nextState;
     }
-  },
+  }
 
   Dispatch (event) {
 
@@ -256,7 +257,21 @@ export const HSM = {
 
     this.activeState = t;                                                       // set the new state or restore the current state
   }
-};
+}
+
+export class HState {
+
+  constructor(obj, id) {
+    this.topState = null;
+
+    this.HStateEventHandler = null;                                             // filled in by HState instance
+
+    this.stateMachine = obj;
+
+    this.superState = null;                                                     // filled in by HState instance
+    this.id = id;
+  }
+}
 
 export function STTopEventHandler(_, stateData) {
 

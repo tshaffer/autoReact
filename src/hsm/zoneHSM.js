@@ -1,6 +1,8 @@
 /* @flow */
 
-import { HSM, HState, STTopEventHandler } from './HSM';
+// import { HSM, HState, STTopEventHandler } from './HSM';
+import { HSM, HState } from './hsmOG';
+import { STTopEventHandler } from './HSM';
 
 import {
   dmGetZoneById,

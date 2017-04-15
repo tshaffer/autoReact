@@ -1,13 +1,7 @@
+// @flow
+
 import React, { Component } from 'react';
 import { HState } from '../hsm/HState';
-
-const flibbet = {
-
-  poop() {
-    console.log('poop invoked');
-  }
-
-};
 
 export default class ImageHS extends Component {
 

@@ -2,6 +2,8 @@
 
 import React, { Component } from 'react';
 
+import MediaZoneHSM from './mediaZoneHSM';
+
 import MediaZoneContainer from '../containers/mediaZoneContainer';
 // import TickerZone from './tickerZone';
 
@@ -18,26 +20,30 @@ export default class Sign extends Component {
   getMediaZoneHSM(zone : Object) {
 
     return (
-      <div
-        key={zone.id}
-        style={{
-          position: 'absolute',
-          left: zone.absolutePosition.x,
-          top: zone.absolutePosition.y,
-          width: zone.absolutePosition.width,
-          height: zone.absolutePosition.height
-        }}
-      >
-        <MediaZoneContainer
-          playbackState={this.props.playbackState}
-          bsdm={this.props.bsdm}
-          zone={zone}
-          width={Number(zone.absolutePosition.width)}
-          height={Number(zone.absolutePosition.height)}
-          postMessage={this.props.postMessage}
-        />
-      </div>
+      <MediaZoneHSM/>
     );
+
+    // return (
+    //   <div
+    //     key={zone.id}
+    //     style={{
+    //       position: 'absolute',
+    //       left: zone.absolutePosition.x,
+    //       top: zone.absolutePosition.y,
+    //       width: zone.absolutePosition.width,
+    //       height: zone.absolutePosition.height
+    //     }}
+    //   >
+    //     <MediaZoneContainer
+    //       playbackState={this.props.playbackState}
+    //       bsdm={this.props.bsdm}
+    //       zone={zone}
+    //       width={Number(zone.absolutePosition.width)}
+    //       height={Number(zone.absolutePosition.height)}
+    //       postMessage={this.props.postMessage}
+    //     />
+    //   </div>
+    // );
   }
 
 
