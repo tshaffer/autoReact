@@ -23,41 +23,11 @@ import {
 
 export default class MediaZone extends Component {
 
-  // constructor(props : Object) {
-  //   super(props);
-  //
-  //   console.log("mediaZone::constructor invoked");
-  //
-  //   this.state = { stateIndex : 0 };
-  //   // this.numStates = 0;
-  // }
-
-  // state : Object;
-  // numStates : number;
-
   nextAsset() {
-
     let event = {
       'EventType' : 'timeoutEvent'
     };
     this.props.postMessage(event);
-
-    // let stateIndex = 0;
-    //
-    // console.log('nextAsset invoked');
-    // if (this.props.playbackState !== 'active') {
-    //   stateIndex = 0;
-    //   this.setState( { stateIndex });
-    //   console.log('nextAsset: exit prematurely');
-    //   return;
-    // }
-    //
-    // stateIndex = this.state.stateIndex + 1;
-    // if (stateIndex >= this.numStates) {
-    //   stateIndex = 0;
-    // }
-
-    // this.setState( { stateIndex });
   }
 
   renderMediaItem(mediaContentItem: Object, event : Object) {
@@ -162,22 +132,10 @@ export default class MediaZone extends Component {
       );
     }
 
-    const bsdm : Object = this.props.bsdm;
-    // const zone = this.props.zone;
     const activeState = this.props.activeState;
-
     const mediaStateId : string = activeState.id;
-    const mediaState : Object = dmGetMediaStateById(bsdm, { id : mediaStateId });
-
-    // let mediaStateIds : Array<string> = [];
-    // let mediaState : Object = {};
-    //
-    // mediaStateIds = dmGetZoneSimplePlaylist(bsdm, { id: zone.id });
-    // mediaState = dmGetMediaStateById(bsdm, { id : mediaStateIds[this.state.stateIndex]});
-    // this.numStates = mediaStateIds.length;
-
-    const event = this.getEvent(bsdm, mediaState.id);
-
+    const mediaState : Object = dmGetMediaStateById(this.props.bsdm, { id : mediaStateId });
+    const event = this.getEvent(this.props.bsdm, mediaState.id);
     const mediaContentItem = mediaState.contentItem;
 
     switch(mediaContentItem.type) {
@@ -202,7 +160,5 @@ MediaZone.propTypes = {
   width: React.PropTypes.number.isRequired,
   height: React.PropTypes.number.isRequired,
   activeState: React.PropTypes.object.isRequired,
-  // zoneIndex: React.PropTypes.number.isRequired,
   postMessage: React.PropTypes.func.isRequired,
-
 };

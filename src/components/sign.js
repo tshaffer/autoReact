@@ -18,14 +18,6 @@ export default class Sign extends Component {
 
   getMediaZoneHSM(zone : Object, activeState : Object) {
 
-    // return (
-    //   <div
-    //     key={zone.id}
-    //   >
-    //     poo
-    //   </div>
-    // );
-
     return (
       <div
         style={{
@@ -49,29 +41,6 @@ export default class Sign extends Component {
     );
   }
 
-  // getMediaZone(bsdm: Object, zone : Object, zoneIndex : number) {
-  //   return (
-  //     <div
-  //       key={zoneIndex}
-  //       style={{
-  //         position: 'absolute',
-  //         left: zone.absolutePosition.x,
-  //         top: zone.absolutePosition.y,
-  //         width: zone.absolutePosition.width,
-  //         height: zone.absolutePosition.height
-  //       }}
-  //     >
-  //       <MediaZone
-  //         playbackState={this.props.playbackState}
-  //         bsdm={bsdm}
-  //         zone={zone}
-  //         width={Number(zone.absolutePosition.width)}
-  //         height={Number(zone.absolutePosition.height)}
-  //         zoneIndex={zoneIndex}
-  //       />
-  //     </div>
-  //   );
-  // }
 
   // getTickerZone(bsdm: Object, zone : Object, zoneIndex : number) {
   //   return (
@@ -97,23 +66,6 @@ export default class Sign extends Component {
   //   );
   // }
 
-  // getZoneJSX(bsdm: Object, zoneId: string, zoneIndex: number) {
-  //
-  //   const zone = dmGetZoneById(bsdm, { id: zoneId });
-  //
-  //   switch (ZoneTypeCompactName(zone.type)) {
-  //     case 'VideoOrImages': {
-  //       return this.getMediaZone(bsdm, zone, zoneIndex);
-  //     }
-  //     case 'Ticker': {
-  //       return this.getTickerZone(bsdm, zone, zoneIndex);
-  //     }
-  //     default: {
-  //       debugger;
-  //     }
-  //   }
-  // }
-
   getZoneHSMJSX(zoneHSM : Object) {
 
     const zone = dmGetZoneById(this.props.bsdm, { id: zoneHSM.id });
@@ -122,7 +74,6 @@ export default class Sign extends Component {
 
     switch (ZoneTypeCompactName(zone.type)) {
       case 'VideoOrImages': {
-        // return this.getMediaZoneHSM(zone, activeState);
         const mediaZoneJSX = this.getMediaZoneHSM(zone, activeState);
         return mediaZoneJSX;
       }
@@ -149,21 +100,6 @@ export default class Sign extends Component {
         }
       </div>
     );
-
-    // const bsdm = this.props.bsdm;
-    //
-    // const zoneIds = dmGetZonesForSign(bsdm);
-    //
-    //
-    // return (
-    //   <div>
-    //     {
-    //       zoneIds.map((zoneId, index) =>
-    //         this.getZoneJSX(bsdm, zoneId, index)
-    //       )
-    //     }
-    //   </div>
-    // );
   }
 }
 

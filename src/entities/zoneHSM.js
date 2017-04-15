@@ -46,7 +46,6 @@ export class ZoneHSM extends HSM {
     this.initialMediaStateId = this.bsdmZone.initialMediaStateId;
     this.mediaStateIds = dmGetZoneSimplePlaylist(this.bsdm, { id: zoneId });
     this.mediaStates = [];
-    this.mediaStateIndex = 0;
 
     let newState = null;
 

@@ -36,9 +36,6 @@ export default class ImageState extends HState {
 
     if (event.EventType && event.EventType === 'ENTRY_SIGNAL') {
       console.log('entry signal');
-
-      // set activeState in redux
-
       return 'HANDLED';
     }
     else if (event.EventType && event.EventType === 'EXIT_SIGNAL') {

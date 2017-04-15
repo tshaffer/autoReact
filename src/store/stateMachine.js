@@ -9,8 +9,6 @@ const decoder = new StringDecoder('utf8');
 import {
   dmOpenSign,
   dmGetZonesForSign,
-  // dmGetZoneById,
-  // ZoneTypeCompactName,
 } from '@brightsign/bsdatamodel';
 
 import {
@@ -214,7 +212,6 @@ function buildSign(dispatch : Function, bsdm : Object) {
   const zoneIds = dmGetZonesForSign(bsdm);
   zoneIds.forEach( (zoneId) => {
     const zoneHSM = new ZoneHSM(dispatch, bsdm, zoneId);
-    // dispatch(addZone(zoneId, zoneHSM));
     dispatch(addZoneHSM(zoneHSM, zoneId));
     dispatch(registerHSM(zoneHSM));
   });
