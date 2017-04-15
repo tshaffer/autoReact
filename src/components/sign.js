@@ -118,7 +118,7 @@ export default class Sign extends Component {
 
     const zone = dmGetZoneById(this.props.bsdm, { id: zoneHSM.id });
 
-    const activeState = zoneHSM.activeState;
+    const activeState = this.props.activeState;
 
     switch (ZoneTypeCompactName(zone.type)) {
       case 'VideoOrImages': {
@@ -172,4 +172,5 @@ Sign.propTypes = {
   playbackState: React.PropTypes.string.isRequired,
   zoneHSMs : React.PropTypes.object,
   postMessage: React.PropTypes.func.isRequired,
+  activeState: React.PropTypes.object,
 };

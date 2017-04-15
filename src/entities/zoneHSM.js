@@ -13,6 +13,10 @@ import {
 import ImageState from './imageState';
 import VideoState from './videoState';
 
+import {
+  setActiveState
+} from '../store/zone';
+
 export class ZoneHSM extends HSM {
 
   constructor(dispatch : Function, bsdm : Object, zoneId : string) {
@@ -65,6 +69,8 @@ export class ZoneHSM extends HSM {
     this.constructorFunction();
 
     this.initialize();
+
+    dispatch(setActiveState(this.activeState));
   }
 
   videoOrImagesZoneConstructor() {

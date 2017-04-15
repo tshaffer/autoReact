@@ -36,6 +36,9 @@ export default class ImageState extends HState {
 
     if (event.EventType && event.EventType === 'ENTRY_SIGNAL') {
       console.log('entry signal');
+
+      // set activeState in redux
+
       return 'HANDLED';
     }
     else if (event.EventType && event.EventType === 'EXIT_SIGNAL') {
@@ -45,8 +48,6 @@ export default class ImageState extends HState {
     else if (event.EventType && event.EventType === 'timeoutEvent') {
       console.log('timeoutEvent');
 
-      debugger;
-
       const eventIds = dmGetEventIdsForMediaState( this.bsdm, { id : this.bsdmImageState.id });
       const event = dmGetEventById( this.bsdm, { id : eventIds[0] } );
       // if (event.EventType === 'timeoutEvent') {
@@ -55,7 +56,6 @@ export default class ImageState extends HState {
         const targetMediaStateId = transition.targetMediaStateId;
         const targetMediaState = dmGetMediaStateById(this.bsdm, { id : targetMediaStateId});
 
-        // this needs to be an HState, not a bsdm state
         stateData.nextState = this.nextState;
         return "TRANSITION";
       // }

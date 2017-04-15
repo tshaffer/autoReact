@@ -19,6 +19,8 @@ import {
 
 import { addZoneHSM } from './zoneHSMs';
 
+import { setActiveState } from './zone';
+
 // ------------------------------------
 // Constants
 // ------------------------------------
@@ -93,7 +95,7 @@ export function restartPresentation(rootPath : string, pathToPool : string) {
 
 export function postMessage(event : Object) {
   return (dispatch: Function, getState: Function) => {
-    dispatchEvent(getState, event);
+    dispatchEvent(dispatch, getState, event);
   };
 }
 
@@ -354,13 +356,18 @@ export function getPoolFilePath(state : Object, resourceIdentifier : string) {
 // ------------------------------------
 // ??
 // ------------------------------------
-function dispatchEvent(getState : Function, event : Object) {
+function dispatchEvent(dispatch : Function, getState : Function, event : Object) {
 
   const stateMachine = getState().stateMachine;
   const hsmList : Array<Object> = stateMachine.hsm;
 
   hsmList.forEach( (hsm) => {
+    console.log('before: ', hsm.activeState);
     hsm.Dispatch(event);
+    console.log('after: ', hsm.activeState);
+
+    // update activeEvent
+    dispatch(setActiveState(hsm.activeState));
   });
 }
 

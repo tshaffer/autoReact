@@ -83,8 +83,6 @@ export class HSM {
 
   Dispatch (event) {
 
-    debugger;
-
     // if there is no activeState, the playlist is empty
     if (this.activeState == null) return;
 

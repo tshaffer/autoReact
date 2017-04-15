@@ -71,6 +71,7 @@ class App extends Component {
         bsdm={this.props.bsdm}
         playbackState={this.props.playbackState}
         postMessage={this.props.postMessage}
+        activeState={this.props.activeState}
       />
     );
   }
@@ -79,6 +80,7 @@ class App extends Component {
 const mapStateToProps = (state) => ({
   bsdm: state.bsdm,
   playbackState: state.stateMachine.playbackState,
+  activeState: state.zone.activeState,
 });
 
 
