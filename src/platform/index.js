@@ -1,6 +1,9 @@
+// @flow
+
 let platform;
 console.log('attempt to create BS javascript object.');
 try {
+// $FlowBrightSignExternalObject
   const deviceInfo = new BSDeviceInfo();
   console.log('deviceInfo creation succeeded, running on a brightSign');
   console.log(deviceInfo);

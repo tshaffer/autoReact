@@ -18,7 +18,8 @@
   },
   "globals": {
     "__PLATFORM__": true,
-    "BSTicker": true
+    "BSTicker": true,
+    "BSDeviceInfo": true
   },
   "plugins": [
     "react"

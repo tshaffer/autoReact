@@ -3,10 +3,9 @@
 import React, { Component } from 'react';
 
 import MediaZoneContainer from '../containers/mediaZoneContainer';
-import TickerZone from './tickerZone';
+// import TickerZone from './tickerZone';
 
 import {
-  dmGetZonesForSign,
   dmGetZoneById,
   ZoneTypeCompactName,
 } from '@brightsign/bsdatamodel';
@@ -20,6 +19,7 @@ export default class Sign extends Component {
 
     return (
       <div
+        key={zone.id}
         style={{
           position: 'absolute',
           left: zone.absolutePosition.x,
@@ -91,7 +91,7 @@ export default class Sign extends Component {
     return (
       <div>
         {
-          zoneHSMs.map( (zoneHSM, index) =>
+          zoneHSMs.map( (zoneHSM) =>
             this.getZoneHSMJSX(zoneHSM)
           )
         }
