@@ -18,13 +18,13 @@ export default class Sign extends Component {
 
   getMediaZoneHSM(zone : Object, activeState : Object) {
 
-    return (
-      <div
-        key={zone.id}
-      >
-        poo
-      </div>
-    );
+    // return (
+    //   <div
+    //     key={zone.id}
+    //   >
+    //     poo
+    //   </div>
+    // );
 
     return (
       <div

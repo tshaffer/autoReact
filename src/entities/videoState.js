@@ -12,7 +12,7 @@ export default class VideoState extends HState {
     super(zoneHSM, bsdmVideoState.id);
     this.bsdmVideoState = bsdmVideoState;
 
-    this.superState = zoneHSM.stTop
+    this.superState = zoneHSM.stTop;
 
     this.HStateEventHandler = this.STDisplayingVideoEventHandler;
   }
