@@ -2,6 +2,14 @@
 
 import { HState } from './HSM';
 
+import {
+  dmGetEventIdsForMediaState,
+  dmGetEventById,
+  dmGetTransitionIdsForEvent,
+  dmGetTransitionById,
+  dmGetMediaStateById,
+} from '@brightsign/bsdatamodel';
+
 export default class ImageState extends HState {
 
   bsdmImageState : Object;
@@ -10,11 +18,16 @@ export default class ImageState extends HState {
   constructor(zoneHSM : Object, bsdmImageState : Object) {
 
     super(zoneHSM, bsdmImageState.id);
+    this.bsdm = zoneHSM.bsdm;
     this.bsdmImageState = bsdmImageState;
 
     this.superState = zoneHSM.stTop;
 
     this.HStateEventHandler = this.STDisplayingImageEventHandler;
+  }
+
+  setNextState( nextState : Object ) {
+    this.nextState = nextState;
   }
 
   STDisplayingImageEventHandler(event : Object, stateData : Object) : string {
@@ -28,6 +41,26 @@ export default class ImageState extends HState {
     else if (event.EventType && event.EventType === 'EXIT_SIGNAL') {
       console.log('exit signal');
     }
+
+    else if (event.EventType && event.EventType === 'timeoutEvent') {
+      console.log('timeoutEvent');
+
+      debugger;
+
+      const eventIds = dmGetEventIdsForMediaState( this.bsdm, { id : this.bsdmImageState.id });
+      const event = dmGetEventById( this.bsdm, { id : eventIds[0] } );
+      // if (event.EventType === 'timeoutEvent') {
+        const transitionIds = dmGetTransitionIdsForEvent( this.bsdm, { id : eventIds[0] });
+        const transition = dmGetTransitionById(this.bsdm, { id : transitionIds[0] } );
+        const targetMediaStateId = transition.targetMediaStateId;
+        const targetMediaState = dmGetMediaStateById(this.bsdm, { id : targetMediaStateId});
+
+        // this needs to be an HState, not a bsdm state
+        stateData.nextState = this.nextState;
+        return "TRANSITION";
+      // }
+    }
+
 
     stateData.nextState = this.superState;
     return 'SUPER';

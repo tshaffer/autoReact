@@ -46,7 +46,7 @@ export class ZoneHSM extends HSM {
 
     let newState = null;
 
-    this.mediaStateIds.forEach( (mediaStateId) => {
+    this.mediaStateIds.forEach( (mediaStateId, index) => {
       const bsdmMediaState = dmGetMediaStateById(bsdm, { id : mediaStateId});
       if (bsdmMediaState.contentItem.type === ContentItemType.Image) {
         newState = new ImageState(this, bsdmMediaState);
@@ -55,7 +55,12 @@ export class ZoneHSM extends HSM {
         newState = new VideoState(this, bsdmMediaState);
       }
       this.mediaStates.push(newState);
+
+      if (index > 0) {
+        this.mediaStates[index - 1].setNextState(newState);
+      }
     });
+    this.mediaStates[this.mediaStates.length - 1].setNextState(this.mediaStates[0]);
 
     this.constructorFunction();
 

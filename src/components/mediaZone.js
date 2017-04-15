@@ -37,14 +37,10 @@ export default class MediaZone extends Component {
 
   nextAsset() {
 
-    debugger;
-
     let event = {
       'EventType' : 'timeoutEvent'
     };
     this.props.postMessage(event);
-
-    debugger;
 
     // let stateIndex = 0;
     //

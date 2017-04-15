@@ -356,8 +356,6 @@ export function getPoolFilePath(state : Object, resourceIdentifier : string) {
 // ------------------------------------
 function dispatchEvent(getState : Function, event : Object) {
 
-  debugger;
-
   const stateMachine = getState().stateMachine;
   const hsmList : Array<Object> = stateMachine.hsm;
 
