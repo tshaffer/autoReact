@@ -8,6 +8,7 @@ import PlatformService from '../platform';
 import { initStateMachine } from '../store/stateMachine';
 import { restartPresentation } from '../store/stateMachine';
 import { setPlaybackState } from '../store/stateMachine';
+import { postMessage } from '../store/stateMachine';
 
 import SignContainer from '../containers/signContainer';
 
@@ -69,6 +70,7 @@ class App extends Component {
       <SignContainer
         bsdm={this.props.bsdm}
         playbackState={this.props.playbackState}
+        postMessage={this.props.postMessage}
       />
     );
   }
@@ -85,6 +87,7 @@ const mapDispatchToProps = (dispatch) => {
     initStateMachine,
     restartPresentation,
     setPlaybackState,
+    postMessage,
   }, dispatch);
 };
 
@@ -93,6 +96,7 @@ App.propTypes = {
   initStateMachine: React.PropTypes.func.isRequired,
   setPlaybackState: React.PropTypes.func.isRequired,
   restartPresentation: React.PropTypes.func.isRequired,
+  postMessage: React.PropTypes.func.isRequired,
   bsdm: React.PropTypes.object.isRequired,
 };
 

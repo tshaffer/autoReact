@@ -39,6 +39,13 @@ export default class MediaZone extends Component {
 
     debugger;
 
+    let event = {
+      'EventType' : 'timeoutEvent'
+    };
+    this.props.postMessage(event);
+
+    debugger;
+
     // let stateIndex = 0;
     //
     // console.log('nextAsset invoked');
@@ -198,6 +205,8 @@ MediaZone.propTypes = {
   zone: React.PropTypes.object.isRequired,
   width: React.PropTypes.number.isRequired,
   height: React.PropTypes.number.isRequired,
-  activeState: React.PropTypes.object.isRequired
+  activeState: React.PropTypes.object.isRequired,
   // zoneIndex: React.PropTypes.number.isRequired,
+  postMessage: React.PropTypes.func.isRequired,
+
 };

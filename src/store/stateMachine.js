@@ -26,6 +26,8 @@ export const SET_SYNC_SPEC = 'SET_SYNC_SPEC';
 export const SET_POOL_ASSET_FILES = 'SET_POOL_ASSET_FILES';
 export const SET_PLAYBACK_STATE = 'SET_PLAYBACK_STATE';
 export const ADD_ZONE = 'ADD_ZONE';
+export const POST_MESSAGE = 'POST_MESSAGE';
+export const REGISTER_HSM = 'REGISTER_HSM';
 
 // ------------------------------------
 // Actions
@@ -65,6 +67,15 @@ export function addZone(zoneId : string, zone : Object) {
   };
 }
 
+export function registerHSM(hsm : Object) {
+
+  return {
+    type: REGISTER_HSM,
+    payload: hsm
+  };
+}
+
+
 // ------------------------------------
 // Action Creators
 // ------------------------------------
@@ -80,6 +91,11 @@ export function restartPresentation(rootPath : string, pathToPool : string) {
   };
 }
 
+export function postMessage(event : Object) {
+  return (dispatch: Function, getState: Function) => {
+    dispatchEvent(getState, event);
+  };
+}
 
 // ------------------------------------
 // Reducer
@@ -88,7 +104,8 @@ const initialState = {
   syncSpec : {},
   poolAssetFiles : {},
   playbackState: 'active',
-  zonesById: {}
+  zonesById: {},
+  hsm: []
 };
 
 export default function(state : Object = initialState, action : Object) {
@@ -137,6 +154,14 @@ export default function(state : Object = initialState, action : Object) {
         ...state,
         zonesById: newZonesById
       };
+
+      return newState;
+    }
+
+    case REGISTER_HSM: {
+
+      let newState = Object.assign({}, state);
+      newState.hsm.push(action.payload);
 
       return newState;
     }
@@ -189,6 +214,7 @@ function buildSign(dispatch : Function, bsdm : Object) {
     const zoneHSM = new ZoneHSM(dispatch, bsdm, zoneId);
     // dispatch(addZone(zoneId, zoneHSM));
     dispatch(addZoneHSM(zoneHSM, zoneId));
+    dispatch(registerHSM(zoneHSM));
   });
 
 }
@@ -323,3 +349,20 @@ export function getPoolFilePath(state : Object, resourceIdentifier : string) {
   console.log('resourceIdentifier: ' + resourceIdentifier + ', filePath: ' +  filePath);
   return filePath;
 }
+
+
+// ------------------------------------
+// ??
+// ------------------------------------
+function dispatchEvent(getState : Function, event : Object) {
+
+  debugger;
+
+  const stateMachine = getState().stateMachine;
+  const hsmList : Array<Object> = stateMachine.hsm;
+
+  hsmList.forEach( (hsm) => {
+    hsm.Dispatch(event);
+  });
+}
+

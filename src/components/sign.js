@@ -43,6 +43,7 @@ export default class Sign extends Component {
           width={Number(zone.absolutePosition.width)}
           height={Number(zone.absolutePosition.height)}
           activeState={activeState}
+          postMessage={this.props.postMessage}
         />
       </div>
     );
@@ -169,5 +170,6 @@ export default class Sign extends Component {
 Sign.propTypes = {
   bsdm: React.PropTypes.object.isRequired,
   playbackState: React.PropTypes.string.isRequired,
-  zoneHSMs : React.PropTypes.object
+  zoneHSMs : React.PropTypes.object,
+  postMessage: React.PropTypes.func.isRequired,
 };
