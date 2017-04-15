@@ -1,21 +1,18 @@
 // @flow
 
 import React, { Component } from 'react';
-import { HState } from '../hsm/HState';
 
 import path from 'path';
 
 export default class Image extends Component {
 
-  constructor(props) {
+  constructor(props : Object) {
     super(props);
-    // this.constructHState(obj, id);
-    this.constructHState({ poo: 'smelly' }, 'flibbet');
-
     this.timeout = null;
   }
 
   shouldComponentUpdate() {
+
     if (this.timeout) {
       return false;
     }
@@ -33,9 +30,9 @@ export default class Image extends Component {
     }
 
     this.timeout = setTimeout( () => {
-        this.timeout = null;
-        self.props.onTimeout();
-      }
+      this.timeout = null;
+      self.props.onTimeout();
+    }
       ,this.props.duration);
 
     const src = path.join('file://', this.props.poolFilePath);
@@ -60,4 +57,4 @@ Image.propTypes = {
   poolFilePath: React.PropTypes.string,
 };
 
-Object.assign(Image.prototype, HState);
+//   poolFilePath: React.PropTypes.string.isRequired,

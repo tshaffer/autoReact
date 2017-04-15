@@ -2,7 +2,7 @@
 
 import { connect } from 'react-redux';
 
-import Image from '../components/image';
+import Image from '../components/imageOG';
 
 import { getPoolFilePath } from '../store/stateMachine';
 

@@ -1,11 +1,12 @@
 // @flow
 
 import React, { Component } from 'react';
-import { HSM } from '../hsm/HSM';
 
 import path from 'path';
 
 import PlatformService from '../platform';
+
+import ImageHS from './image';
 
 import ImageContainer from '../containers/imageContainer';
 import VideoContainer from '../containers/videoContainer';
@@ -23,11 +24,6 @@ import {
 } from '@brightsign/bsdatamodel';
 
 export default class MediaZone extends Component {
-
-  constructor(props) {
-    super(props);
-    this.constructHSM({ poop: 'large' }, 'grog');
-  }
 
   nextAsset() {
     let event = {
@@ -132,7 +128,9 @@ export default class MediaZone extends Component {
     return event;
   }
 
+
   render() {
+
     console.log('mediaZone.js::render invoked');
 
     if (this.props.playbackState !== 'active') {
@@ -162,5 +160,12 @@ export default class MediaZone extends Component {
   }
 }
 
-Object.assign(MediaZone.prototype, HSM);
-
+MediaZone.propTypes = {
+  playbackState: React.PropTypes.string.isRequired,
+  bsdm: React.PropTypes.object.isRequired,
+  zone: React.PropTypes.object.isRequired,
+  width: React.PropTypes.number.isRequired,
+  height: React.PropTypes.number.isRequired,
+  activeState: React.PropTypes.object.isRequired,
+  postMessage: React.PropTypes.func.isRequired,
+};

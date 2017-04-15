@@ -2,7 +2,7 @@
 
 import React, { Component } from 'react';
 
-import MediaZoneHSM from './mediaZoneHSM';
+import MediaZoneHSM from './mediaZone';
 
 import MediaZoneContainer from '../containers/mediaZoneContainer';
 // import TickerZone from './tickerZone';
