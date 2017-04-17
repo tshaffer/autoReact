@@ -64,8 +64,15 @@ export default class MediaZone extends Component {
     this.height = this.bsdmZone.absolutePosition.height;
 
     this.initialMediaStateId = this.bsdmZone.initialMediaStateId;
-    // this.mediaStateIds = dmGetZoneSimplePlaylist(this.bsdm, { id: zoneId });
+    this.mediaStateIds = dmGetZoneSimplePlaylist(this.bsdm, { id: zoneId });
     this.mediaStates = [];
+
+    this.mediaStateIds.forEach( (mediaStateId, index) => {
+      const bsdmMediaState = dmGetMediaStateById(bsdm, { id : mediaStateId});
+      if (bsdmMediaState.contentItem.type === ContentItemType.Image) {
+        newState = new ImageState(this, bsdmMediaState);
+      }
+    });
 
     // this.mediaStateIds.forEach( (mediaStateId, index) => {
     //   const bsdmMediaState = dmGetMediaStateById(bsdm, { id : mediaStateId});
