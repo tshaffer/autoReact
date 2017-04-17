@@ -8,14 +8,10 @@ const decoder = new StringDecoder('utf8');
 
 import {
   dmOpenSign,
-  dmGetZonesForSign,
+  // dmGetZonesForSign,
 } from '@brightsign/bsdatamodel';
 
-import {
-  ZoneHSM
-} from '../hsm/zoneHSM';
-
-import { addZoneHSM } from './zoneHSMs';
+// import { addZoneHSM } from './zoneHSMs';
 
 import { setActiveState } from './zone';
 
@@ -199,7 +195,7 @@ function launchPresentationPlayback(rootPath : string, pathToPool : string, disp
     dispatch(dmOpenSign(autoPlay));
     const state = getState();
     console.log(state);
-    buildSign(dispatch, state.bsdm);
+    // buildSign(dispatch, state.bsdm);
 
   }).catch((err) => {
     console.log(err);
@@ -207,16 +203,17 @@ function launchPresentationPlayback(rootPath : string, pathToPool : string, disp
   });
 }
 
-function buildSign(dispatch : Function, bsdm : Object) {
-
-  const zoneIds = dmGetZonesForSign(bsdm);
-  zoneIds.forEach( (zoneId) => {
-    const zoneHSM = new ZoneHSM(dispatch, bsdm, zoneId);
-    dispatch(addZoneHSM(zoneHSM, zoneId));
-    dispatch(registerHSM(zoneHSM));
-  });
-
-}
+// function buildSign(dispatch : Function, bsdm : Object) {
+//
+//   console.log('buildSign');
+//   // const zoneIds = dmGetZonesForSign(bsdm);
+//   // zoneIds.forEach( (zoneId) => {
+//   //   const zoneHSM = new ZoneHSM(dispatch, bsdm, zoneId);
+//   //   dispatch(addZoneHSM(zoneHSM, zoneId));
+//   //   dispatch(registerHSM(zoneHSM));
+//   // });
+//
+// }
 
 function getFile(syncSpec : Object, fileName : string) : ?Object {
 

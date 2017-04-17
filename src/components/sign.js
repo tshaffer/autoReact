@@ -2,7 +2,7 @@
 
 import React, { Component } from 'react';
 
-import MediaZoneHSM from './mediaZone';
+// import MediaZoneHSM from './mediaZone';
 
 import MediaZoneContainer from '../containers/mediaZoneContainer';
 // import TickerZone from './tickerZone';
@@ -20,7 +20,14 @@ export default class Sign extends Component {
   getMediaZoneHSM(zone : Object) {
 
     return (
-      <MediaZoneHSM/>
+      <MediaZoneContainer
+        bsdm={this.props.bsdm}
+        zoneId={zone.id}
+        width={Number(zone.absolutePosition.width)}
+        height={Number(zone.absolutePosition.height)}
+        playbackState={this.props.playbackState}
+        zone={zone}
+      />
     );
 
     // return (
@@ -71,9 +78,9 @@ export default class Sign extends Component {
   //   );
   // }
 
-  getZoneHSMJSX(zoneHSM : Object) {
+  getZoneHSMJSX(zoneId : string) {
 
-    const zone = dmGetZoneById(this.props.bsdm, { id: zoneHSM.id });
+    const zone = dmGetZoneById(this.props.bsdm, { id: zoneId });
 
     switch (ZoneTypeCompactName(zone.type)) {
       case 'VideoOrImages': {
@@ -92,13 +99,14 @@ export default class Sign extends Component {
 
   render() {
 
-    const zoneHSMs = this.props.zoneHSMs.zoneHSMs;
+    const zoneIds = this.props.bsdm.zones.allZones; // zonesById
+debugger;
 
     return (
       <div>
         {
-          zoneHSMs.map( (zoneHSM) =>
-            this.getZoneHSMJSX(zoneHSM)
+          zoneIds.map( (zoneId) =>
+            this.getZoneHSMJSX(zoneId)
           )
         }
       </div>
