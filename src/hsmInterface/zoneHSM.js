@@ -15,7 +15,7 @@ import VideoHS from './videoHS';
 
 import {
   setActiveState
-} from '../store/zone';
+} from '../store/zones';
 
 export class ZoneHSM extends HSM {
 
@@ -58,7 +58,7 @@ export class ZoneHSM extends HSM {
 
     this.initialize();
 
-    dispatch(setActiveState(this.activeState));
+    // dispatch(setActiveState(this.activeState));
   }
 
   videoOrImagesZoneConstructor() {

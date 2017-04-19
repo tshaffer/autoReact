@@ -3,26 +3,28 @@
 // ------------------------------------
 // Constants
 // ------------------------------------
-export const SET_ZONE_ID = 'SET_ZONE_ID';
-export const SET_STATE_INDEX = 'SET_STATE_INDEX';
+export const ADD_ZONE = 'ADD_ZONE';
 export const SET_ACTIVE_STATE = 'SET_ACTIVE_STATE';
 
 // ------------------------------------
 // Actions
 // ------------------------------------
-export function setZoneId(zoneId : string){
+export function addZone(zone : Object) {
 
   return {
-    type: SET_ZONE_ID,
-    payload: zoneId
+    type: ADD_ZONE,
+    payload: zone
   };
 }
 
-export function setActiveState(activeState : Object) {
+export function setActiveState(zoneId : string, activeState : Object) {
 
   return {
     type: SET_ACTIVE_STATE,
-    payload: activeState
+    payload: {
+      zoneId,
+      activeState,
+    }
   };
 }
 
@@ -30,20 +32,21 @@ export function setActiveState(activeState : Object) {
 // Reducer
 // ------------------------------------
 const initialState = {
-  zoneId : '',
-  activeState: null
+  zones : [],
+  zonesById: {}
 };
 
 export default function(state : Object = initialState, action : Object) {
 
   switch (action.type) {
 
-    case SET_ZONE_ID: {
+    case ADD_ZONE: {
 
-      let newState = {
-        ...state,
-        zoneId: action.payload
-      };
+      const zone = action.payload;
+
+      let newState = Object.assign({}, state);
+      newState.zones.push(zone);
+      newState.zonesById[zone.id] = zone;
 
       console.log(newState);
       return newState;
@@ -51,10 +54,12 @@ export default function(state : Object = initialState, action : Object) {
 
     case SET_ACTIVE_STATE: {
 
-      let newState = {
-        ...state,
-        activeState: action.payload
-      };
+      let newState = Object.assign({}, state);
+
+      // let newState = {
+      //   ...state,
+      //   activeState: action.payload
+      // };
 
       console.log(newState);
       return newState;

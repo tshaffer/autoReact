@@ -7,7 +7,7 @@ import MediaZone from '../components/mediaZone';
 function mapStateToProps (state, ownProps) {
   return {
     ...ownProps,
-    activeState: state.zone.activeState,
+    // activeState: state.zone.activeState,
   };
 }
 

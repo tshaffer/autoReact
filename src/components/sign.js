@@ -65,7 +65,7 @@ export default class Sign extends Component {
   //   );
   // }
 
-  getZoneHSMJSX(zoneHSM : Object) {
+  getZoneJSX(zoneHSM : Object) {
 
     const zone = dmGetZoneById(this.props.bsdm, { id: zoneHSM.id });
 
@@ -86,13 +86,13 @@ export default class Sign extends Component {
 
   render() {
 
-    const zoneHSMs = this.props.zoneHSMs.zoneHSMs;
+    const zones = this.props.zones.zones;
 
     return (
       <div>
         {
-          zoneHSMs.map( (zoneHSM) =>
-            this.getZoneHSMJSX(zoneHSM)
+          zones.map( (zone) =>
+            this.getZoneJSX(zone)
           )
         }
       </div>

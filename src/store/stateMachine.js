@@ -13,7 +13,7 @@ import {
 
 import { buildZoneHSM } from '../hsmInterface/hsmController';
 
-import { setActiveState } from './zone';
+import { addZone, setActiveState } from './zones';
 
 // ------------------------------------
 // Constants
@@ -52,16 +52,16 @@ export function setPlaybackState(playbackState : string){
   };
 }
 
-export function addZone(zoneId : string, zone : Object) {
-
-  return {
-    type: ADD_ZONE,
-    payload: {
-      zoneId,
-      zone
-    }
-  };
-}
+// export function addZone(zoneId : string, zone : Object) {
+//
+//   return {
+//     type: ADD_ZONE,
+//     payload: {
+//       zoneId,
+//       zone
+//     }
+//   };
+// }
 
 export function registerHSM(hsm : Object) {
 
@@ -195,6 +195,7 @@ function launchPresentationPlayback(rootPath : string, pathToPool : string, disp
     dispatch(dmOpenSign(autoPlay));
     let state = getState();
     console.log(state);
+    debugger;
     buildHSM(dispatch, state.bsdm);
     // buildSign(dispatch, state.bsdm);
     state = getState();
@@ -210,7 +211,15 @@ function buildHSM( dispatch : Function, bsdm : Object) {
 
   const zoneIds = dmGetZonesForSign(bsdm);
   zoneIds.forEach( (zoneId) => {
-    buildZoneHSM(dispatch, bsdm, zoneId);
+
+    const zoneHSM = buildZoneHSM(dispatch, bsdm, zoneId);
+
+    const zone = {
+      id : zoneId,
+      hsm: zoneHSM
+    };
+    dispatch(addZone(zone));
+
     // const zoneHSM = new ZoneHSM(dispatch, bsdm, zoneId);
   });
 }
@@ -372,7 +381,7 @@ function dispatchEvent(dispatch : Function, getState : Function, event : Object)
     console.log('after: ', hsm.activeState);
 
     // update activeEvent
-    dispatch(setActiveState(hsm.activeState));
+    // dispatch(setActiveState(hsm.activeState));
   });
 }
 

@@ -7,7 +7,7 @@ import Sign from '../components/sign';
 function mapStateToProps (state, ownProps) {
   return {
     ...ownProps,
-    zoneHSMs : state.zoneHSMs
+    zones : state.zones
   };
 }
 

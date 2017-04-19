@@ -1,13 +1,14 @@
 
 import { ZoneHSM } from './zoneHSM';
 
-import { setActiveState } from '../store/zone';
+import { setActiveState } from '../store/zones';
 
 let hsmList = [];
 
 export function buildZoneHSM(dispatch : Function, bsdm : Object, zoneId : string) {
   const zoneHSM = new ZoneHSM(dispatch, bsdm, zoneId);
   registerHSM(zoneHSM);
+  return zoneHSM;
 }
 
 function registerHSM(hsm) {
