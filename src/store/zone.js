@@ -18,14 +18,6 @@ export function setZoneId(zoneId : string){
   };
 }
 
-export function setStateIndex(stateIndex : number){
-
-  return {
-    type: SET_STATE_INDEX,
-    payload: stateIndex
-  };
-}
-
 export function setActiveState(activeState : Object) {
 
   return {
@@ -39,7 +31,6 @@ export function setActiveState(activeState : Object) {
 // ------------------------------------
 const initialState = {
   zoneId : '',
-  stateIndex : 0,
   activeState: null
 };
 
@@ -52,17 +43,6 @@ export default function(state : Object = initialState, action : Object) {
       let newState = {
         ...state,
         zoneId: action.payload
-      };
-
-      console.log(newState);
-      return newState;
-    }
-
-    case SET_STATE_INDEX: {
-
-      let newState = {
-        ...state,
-        stateIndex: action.payload
       };
 
       console.log(newState);

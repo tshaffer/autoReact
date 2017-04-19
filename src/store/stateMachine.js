@@ -11,12 +11,6 @@ import {
   dmGetZonesForSign,
 } from '@brightsign/bsdatamodel';
 
-import {
-  ZoneHSM
-} from '../hsm/zoneHSM';
-
-// import { addZoneHSM } from './zoneHSMs';
-
 import { buildZoneHSM } from '../hsmInterface/hsmController';
 
 import { setActiveState } from './zone';
@@ -201,7 +195,6 @@ function launchPresentationPlayback(rootPath : string, pathToPool : string, disp
     dispatch(dmOpenSign(autoPlay));
     let state = getState();
     console.log(state);
-    debugger;
     buildHSM(dispatch, state.bsdm);
     // buildSign(dispatch, state.bsdm);
     state = getState();
