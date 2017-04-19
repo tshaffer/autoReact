@@ -15,7 +15,9 @@ import {
   ZoneHSM
 } from '../hsm/zoneHSM';
 
-import { addZoneHSM } from './zoneHSMs';
+// import { addZoneHSM } from './zoneHSMs';
+
+import { buildZoneHSM } from '../hsmInterface/hsmController';
 
 import { setActiveState } from './zone';
 
@@ -197,9 +199,13 @@ function launchPresentationPlayback(rootPath : string, pathToPool : string, disp
 
     console.log(autoPlay);
     dispatch(dmOpenSign(autoPlay));
-    const state = getState();
+    let state = getState();
     console.log(state);
-    buildSign(dispatch, state.bsdm);
+    debugger;
+    buildHSM(dispatch, state.bsdm);
+    // buildSign(dispatch, state.bsdm);
+    state = getState();
+    console.log(state);
 
   }).catch((err) => {
     console.log(err);
@@ -207,16 +213,25 @@ function launchPresentationPlayback(rootPath : string, pathToPool : string, disp
   });
 }
 
-function buildSign(dispatch : Function, bsdm : Object) {
+function buildHSM( dispatch : Function, bsdm : Object) {
 
   const zoneIds = dmGetZonesForSign(bsdm);
   zoneIds.forEach( (zoneId) => {
-    const zoneHSM = new ZoneHSM(dispatch, bsdm, zoneId);
-    dispatch(addZoneHSM(zoneHSM, zoneId));
-    dispatch(registerHSM(zoneHSM));
+    buildZoneHSM(dispatch, bsdm, zoneId);
+    // const zoneHSM = new ZoneHSM(dispatch, bsdm, zoneId);
   });
-
 }
+
+// function buildSign(dispatch : Function, bsdm : Object) {
+//
+//   const zoneIds = dmGetZonesForSign(bsdm);
+//   zoneIds.forEach( (zoneId) => {
+//     const zoneHSM = new ZoneHSM(dispatch, bsdm, zoneId);
+//     dispatch(addZoneHSM(zoneHSM, zoneId));
+//     dispatch(registerHSM(zoneHSM));
+//   });
+//
+// }
 
 function getFile(syncSpec : Object, fileName : string) : ?Object {
 
