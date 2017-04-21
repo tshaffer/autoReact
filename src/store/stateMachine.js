@@ -25,7 +25,6 @@ import { setActiveMediaState } from './activeMediaStates';
 export const SET_SYNC_SPEC = 'SET_SYNC_SPEC';
 export const SET_POOL_ASSET_FILES = 'SET_POOL_ASSET_FILES';
 export const SET_PLAYBACK_STATE = 'SET_PLAYBACK_STATE';
-export const ADD_ZONE = 'ADD_ZONE';
 export const POST_MESSAGE = 'POST_MESSAGE';
 export const REGISTER_HSM = 'REGISTER_HSM';
 
@@ -53,17 +52,6 @@ export function setPlaybackState(playbackState : string){
   return {
     type: SET_PLAYBACK_STATE,
     payload: playbackState
-  };
-}
-
-export function addZone(zoneId : string, zone : Object) {
-
-  return {
-    type: ADD_ZONE,
-    payload: {
-      zoneId,
-      zone
-    }
   };
 }
 
@@ -104,7 +92,6 @@ const initialState = {
   syncSpec : {},
   poolAssetFiles : {},
   playbackState: 'active',
-  zonesById: {},
   hsm: []
 };
 
@@ -142,19 +129,6 @@ export default function(state : Object = initialState, action : Object) {
       };
 
       console.log(newState);
-      return newState;
-    }
-
-    case ADD_ZONE: {
-
-      let newZonesById = Object.assign({}, state.zonesById);
-      newZonesById[action.payload.zoneId] = action.payload.zone;
-
-      let newState = {
-        ...state,
-        zonesById: newZonesById
-      };
-
       return newState;
     }
 
