@@ -4,10 +4,9 @@ import { connect } from 'react-redux';
 
 import Sign from '../components/sign';
 
-function mapStateToProps (state, ownProps) {
+function mapStateToProps (_, ownProps) {
   return {
     ...ownProps,
-    zoneHSMs : state.zoneHSMs
   };
 }
 

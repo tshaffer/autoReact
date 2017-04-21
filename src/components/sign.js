@@ -76,7 +76,7 @@ export default class Sign extends Component {
         return mediaZoneJSX;
       }
       // case 'Ticker': {
-      //   return this.getTickerZoneHSM(bsdm, zone);
+      //   return this.getTickerZoneJSX(bsdm, zone);
       // }
       default: {
         debugger;
@@ -103,6 +103,5 @@ export default class Sign extends Component {
 Sign.propTypes = {
   bsdm: React.PropTypes.object.isRequired,
   playbackState: React.PropTypes.string.isRequired,
-  zoneHSMs : React.PropTypes.object,
   postMessage: React.PropTypes.func.isRequired,
 };
