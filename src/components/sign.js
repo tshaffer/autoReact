@@ -8,6 +8,7 @@ import MediaZoneContainer from '../containers/mediaZoneContainer';
 import {
   dmGetZoneById,
   ZoneTypeCompactName,
+  dmGetZonesForSign,
 } from '@brightsign/bsdatamodel';
 
 
@@ -15,7 +16,7 @@ export default class Sign extends Component {
 
   //         key={zoneIndex}
 
-  getMediaZoneHSM(zone : Object) {
+  getMediaZoneJSX(zone : Object) {
 
     return (
       <div
@@ -65,13 +66,13 @@ export default class Sign extends Component {
   //   );
   // }
 
-  getZoneHSMJSX(zoneHSM : Object) {
+  getZoneJSX(zoneId : string) {
 
-    const zone = dmGetZoneById(this.props.bsdm, { id: zoneHSM.id });
+    const zone = dmGetZoneById(this.props.bsdm, { id: zoneId });
 
     switch (ZoneTypeCompactName(zone.type)) {
       case 'VideoOrImages': {
-        const mediaZoneJSX = this.getMediaZoneHSM(zone);
+        const mediaZoneJSX = this.getMediaZoneJSX(zone);
         return mediaZoneJSX;
       }
       // case 'Ticker': {
@@ -81,22 +82,21 @@ export default class Sign extends Component {
         debugger;
       }
     }
-
   }
 
   render() {
 
-    const zoneHSMs = this.props.zoneHSMs.zoneHSMs;
+    const zoneIds = dmGetZonesForSign(this.props.bsdm);
 
     return (
       <div>
         {
-          zoneHSMs.map( (zoneHSM) =>
-            this.getZoneHSMJSX(zoneHSM)
+          zoneIds.map( (zoneId) =>
+            this.getZoneJSX(zoneId)
           )
         }
       </div>
-    );
+    )
   }
 }
 
