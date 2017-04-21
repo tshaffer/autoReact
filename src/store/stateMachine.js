@@ -19,6 +19,8 @@ import { addZoneHSM } from './zoneHSMs';
 
 import { setActiveState } from './zone';
 
+import { setActiveMediaState } from './activeMediaStates';
+
 // ------------------------------------
 // Constants
 // ------------------------------------
@@ -349,7 +351,6 @@ export function getPoolFilePath(state : Object, resourceIdentifier : string) {
   return filePath;
 }
 
-
 // ------------------------------------
 // ??
 // ------------------------------------
@@ -363,8 +364,11 @@ function dispatchEvent(dispatch : Function, getState : Function, event : Object)
     hsm.Dispatch(event);
     console.log('after: ', hsm.activeState);
 
-    // update activeEvent
     dispatch(setActiveState(hsm.activeState));
+    dispatch(setActiveMediaState(hsm.id, hsm.activeState.id));
+
+    const state = getState();
+    console.log(state);
   });
 }
 

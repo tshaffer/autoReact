@@ -132,8 +132,9 @@ export default class MediaZone extends Component {
       );
     }
 
-    const activeState = this.props.activeState;
-    const mediaStateId : string = activeState.id;
+    // const activeState = this.props.activeState;
+    // const mediaStateId : string = activeState.id;
+    const mediaStateId : string = this.props.activeMediaStateId;
     const mediaState : Object = dmGetMediaStateById(this.props.bsdm, { id : mediaStateId });
     const event = this.getEvent(this.props.bsdm, mediaState.id);
     const mediaContentItem = mediaState.contentItem;
@@ -161,4 +162,5 @@ MediaZone.propTypes = {
   height: React.PropTypes.number.isRequired,
   activeState: React.PropTypes.object.isRequired,
   postMessage: React.PropTypes.func.isRequired,
+  activeMediaStateId: React.PropTypes.string.isRequired
 };

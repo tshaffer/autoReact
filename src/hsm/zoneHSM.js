@@ -17,6 +17,10 @@ import {
   setActiveState
 } from '../store/zone';
 
+import {
+  setActiveMediaState
+} from '../store/activeMediaStates';
+
 export class ZoneHSM extends HSM {
 
   constructor(dispatch : Function, bsdm : Object, zoneId : string) {
@@ -70,6 +74,7 @@ export class ZoneHSM extends HSM {
     this.initialize();
 
     dispatch(setActiveState(this.activeState));
+    dispatch(setActiveMediaState(this.id, this.activeState.id));
   }
 
   videoOrImagesZoneConstructor() {
