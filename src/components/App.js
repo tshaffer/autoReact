@@ -59,7 +59,7 @@ class App extends Component {
   render() {
 
     if (this.props.bsdm.zones.allZones.length === 0 ||
-      Object.keys(this.props.activeMediaStates.activeMediaStateByZone).length == 0) {
+      Object.keys(this.props.activeMediaStates.activeMediaStateByZone).length === 0) {
       return (
         <div>
           Waiting for for presentation to be loaded...
@@ -100,6 +100,7 @@ App.propTypes = {
   restartPresentation: React.PropTypes.func.isRequired,
   postMessage: React.PropTypes.func.isRequired,
   bsdm: React.PropTypes.object.isRequired,
+  activeMediaStates: React.PropTypes.object.isRequired,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(App);

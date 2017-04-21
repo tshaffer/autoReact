@@ -96,7 +96,7 @@ export default class Sign extends Component {
           )
         }
       </div>
-    )
+    );
   }
 }
 
