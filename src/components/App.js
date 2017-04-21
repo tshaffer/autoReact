@@ -10,7 +10,7 @@ import { restartPresentation } from '../store/stateMachine';
 import { setPlaybackState } from '../store/stateMachine';
 import { postMessage } from '../store/stateMachine';
 
-import SignContainer from '../containers/signContainer';
+import Sign from '../components/sign';
 
 // HACK
 export let myApp = {};
@@ -68,7 +68,7 @@ class App extends Component {
     }
 
     return (
-      <SignContainer
+      <Sign
         bsdm={this.props.bsdm}
         playbackState={this.props.playbackState}
         postMessage={this.props.postMessage}
