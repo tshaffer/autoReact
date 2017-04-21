@@ -9,9 +9,7 @@ import { getActiveMediaStateId } from '../store/activeMediaStates';
 function mapStateToProps (state, ownProps) {
   return {
     ...ownProps,
-    activeState: state.zone.activeState,
     activeMediaStateId: getActiveMediaStateId(state, ownProps.zone.id),
-
   };
 }
 

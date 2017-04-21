@@ -17,8 +17,6 @@ import {
 
 import { addZoneHSM } from './zoneHSMs';
 
-import { setActiveState } from './zone';
-
 import { setActiveMediaState } from './activeMediaStates';
 
 // ------------------------------------
@@ -364,7 +362,6 @@ function dispatchEvent(dispatch : Function, getState : Function, event : Object)
     hsm.Dispatch(event);
     console.log('after: ', hsm.activeState);
 
-    dispatch(setActiveState(hsm.activeState));
     dispatch(setActiveMediaState(hsm.id, hsm.activeState.id));
 
     const state = getState();
