@@ -15,8 +15,6 @@ import {
   ZoneHSM
 } from '../hsm/zoneHSM';
 
-import { addZoneHSM } from './zoneHSMs';
-
 import { setActiveMediaState } from './activeMediaStates';
 
 // ------------------------------------
@@ -186,7 +184,6 @@ function buildSign(dispatch : Function, bsdm : Object) {
   const zoneIds = dmGetZonesForSign(bsdm);
   zoneIds.forEach( (zoneId) => {
     const zoneHSM = new ZoneHSM(dispatch, bsdm, zoneId);
-    dispatch(addZoneHSM(zoneHSM, zoneId));
     dispatch(registerHSM(zoneHSM));
   });
 
