@@ -58,22 +58,28 @@ class App extends Component {
 
   render() {
 
-    if (this.props.bsdm.zones.allZones.length === 0 ||
-      Object.keys(this.props.activeMediaStates.activeMediaStateByZone).length === 0) {
-      return (
-        <div>
-          Waiting for for presentation to be loaded...
-        </div>
-      );
-    }
-
     return (
-      <Sign
-        bsdm={this.props.bsdm}
-        playbackState={this.props.playbackState}
-        postMessage={this.props.postMessage}
-      />
+      <div>
+        Building presentation ...
+      </div>
     );
+
+    // if (this.props.bsdm.zones.allZones.length === 0 ||
+    //   Object.keys(this.props.activeMediaStates.activeMediaStateByZone).length === 0) {
+    //   return (
+    //     <div>
+    //       Waiting for for presentation to be loaded...
+    //     </div>
+    //   );
+    // }
+    //
+    // return (
+    //   <Sign
+    //     bsdm={this.props.bsdm}
+    //     playbackState={this.props.playbackState}
+    //     postMessage={this.props.postMessage}
+    //   />
+    // );
   }
 }
 

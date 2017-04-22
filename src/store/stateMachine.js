@@ -17,6 +17,8 @@ import {
 
 import { setActiveMediaState } from './activeMediaStates';
 
+import { buildPresentation } from './presentationBuilder';
+
 // ------------------------------------
 // Constants
 // ------------------------------------
@@ -172,7 +174,8 @@ function launchPresentationPlayback(rootPath : string, pathToPool : string, disp
     const state = getState();
     console.log(state);
     buildSign(dispatch, state.bsdm);
-
+  }).then( () => {
+    dispatch(buildPresentation('/Users/tedshaffer/Desktop/baconPresBuilderOut/mz.bpf'));
   }).catch((err) => {
     console.log(err);
     debugger;
