@@ -193,7 +193,7 @@ function getFile(syncSpec : Object, fileName : string) : ?Object {
 
   let file = null;
 
-  syncSpec.files.forEach( (syncSpecFile) => {
+  syncSpec.files.download.forEach( (syncSpecFile) => {
     if (syncSpecFile.name === fileName) {
       file = syncSpecFile;
       return;
@@ -201,26 +201,6 @@ function getFile(syncSpec : Object, fileName : string) : ?Object {
   });
 
   return file;
-}
-
-function buildPoolFilePath(sha1: string) {
-
-  let relativeFilePath = '';
-
-  if (sha1.length >= 2) {
-
-    let folders = [];
-    folders.push(sha1.substring(sha1.length - 2, sha1.length - 2 + 1));
-    folders.push(sha1.substring(sha1.length - 1, sha1.length - 1 + 1));
-
-    relativeFilePath = path.join(folders[0], folders[1]);
-  }
-  else {
-    // not sure if this case can occur
-    debugger;
-  }
-
-  return relativeFilePath;
 }
 
 
@@ -234,13 +214,8 @@ function getSyncSpecFile(fileName : string, syncSpec : Object, rootPath : string
       syncSpecFile = {};    // required to eliminate flow warnings
     }
 
-    const hashValue = syncSpecFile.hash["#"];
-    // const hashMethod = syncSpecFile.hash['@'];
     const fileSize = syncSpecFile.size;
-    // const link = syncSpecFile.link;
-
-    const relativePath = buildPoolFilePath(hashValue);
-    const filePath = path.join(rootPath, 'pool', relativePath, 'sha1-' + hashValue.toString());
+    const filePath = path.join(rootPath, syncSpecFile.link);
 
     fs.readFile(filePath, (err, dataBuffer) => {
       if (err) {
@@ -281,15 +256,8 @@ function buildPoolAssetFiles(syncSpec : Object, pathToPool : string) : Object {
 
   let poolAssetFiles = {};
   
-  syncSpec.files.forEach( (syncSpecFile) => {
-
-    const hashValue = syncSpecFile.hash["#"];
-
-    const relativePath = buildPoolFilePath(hashValue);
-    const filePath = path.join(pathToPool, 'pool', relativePath, 'sha1-' + hashValue.toString());
-
-    poolAssetFiles[syncSpecFile.name] = filePath;
-    
+  syncSpec.files.download.forEach( (syncSpecFile) => {
+    poolAssetFiles[syncSpecFile.name] = path.join(pathToPool, syncSpecFile.link);
   });
 
   return poolAssetFiles;
@@ -301,7 +269,9 @@ function getAutoschedule(syncSpec : Object, rootPath : string) {
 
 function getBml(autoSchedule : Object, syncSpec : Object, rootPath : string) {
 
-  const scheduledPresentation = autoSchedule.scheduledPresentation;
+  // TODO - only a single scheduled item is supported
+
+  const scheduledPresentation = autoSchedule.scheduledPresentations[0];
   const presentationToSchedule = scheduledPresentation.presentationToSchedule;
   const presentationName = presentationToSchedule.name;
   const bmlFileName = presentationName + '.bml';
