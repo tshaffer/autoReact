@@ -214,7 +214,7 @@ function getSyncSpecFile(fileName : string, syncSpec : Object, rootPath : string
       syncSpecFile = {};    // required to eliminate flow warnings
     }
 
-    const fileSize = syncSpecFile.size;
+    // const fileSize = syncSpecFile.size;
     const filePath = path.join(rootPath, syncSpecFile.link);
 
     fs.readFile(filePath, (err, dataBuffer) => {
@@ -224,9 +224,11 @@ function getSyncSpecFile(fileName : string, syncSpec : Object, rootPath : string
         const fileStr : string = decoder.write(dataBuffer);
         const file : Object = JSON.parse(fileStr);
 
-        if (fileSize !== fileStr.length) {
-          debugger;
-        }
+        // disable to allow hacking of files - that is, overwriting files in the pool without updating the sync spec
+        // with updated sha1
+        // if (fileSize !== fileStr.length) {
+        //   debugger;
+        // }
         resolve(file);
       }
     });

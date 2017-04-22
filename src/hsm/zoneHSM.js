@@ -54,8 +54,14 @@ export class ZoneHSM extends HSM {
       if (bsdmMediaState.contentItem.type === ContentItemType.Image) {
         newState = new ImageState(this, bsdmMediaState);
       }
-      else if (bsdmMediaState.contentItem.type === ContentItemTypeName.Video) {
+      else if (bsdmMediaState.contentItem.type === ContentItemType.Video) {
         newState = new VideoState(this, bsdmMediaState);
+      }
+      else if (bsdmMediaState.contentItem.type === ContentItemType.DataFeed) {
+        debugger;
+      }
+      else {
+        debugger;
       }
       this.mediaStates.push(newState);
 

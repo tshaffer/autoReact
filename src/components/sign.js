@@ -75,9 +75,12 @@ export default class Sign extends Component {
         const mediaZoneJSX = this.getMediaZoneJSX(zone);
         return mediaZoneJSX;
       }
-      // case 'Ticker': {
-      //   return this.getTickerZoneJSX(bsdm, zone);
-      // }
+      case 'Ticker': {
+        return (
+          <div>ticker</div>
+        )
+        // return this.getTickerZoneJSX(bsdm, zone);
+      }
       default: {
         debugger;
       }
