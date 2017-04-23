@@ -2,6 +2,8 @@
 
 import { HSM, HState, STTopEventHandler } from './HSM';
 
+import { restartBSP } from '../store/stateMachine';
+
 export class PlayerHSM extends HSM {
 
   constructor(dispatch: Function, bsdm: Object) {
@@ -30,11 +32,11 @@ export class PlayerHSM extends HSM {
     this.topState = this.stTop;
   }
 
-  initializePlayerStateMachine() {
+  initializePlayerStateMachine(dispatch : Function, getState : Function) {
 
     console.log("initializePlayerStateMachine invoked");
 
-    // m.bsp.Restart("") XMLAutoschedule in restart
+    restartBSP('', dispatch, getState);
 
     // activeScheduledPresentation = m.bsp.schedule.activeScheduledEvent
     // if type(activeScheduledPresentation) = "roAssociativeArray" then

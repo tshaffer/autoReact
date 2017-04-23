@@ -5,7 +5,7 @@ import { bindActionCreators } from 'redux';
 
 import PlatformService from '../platform';
 
-import { initStateMachine } from '../store/stateMachine';
+import { initBSP } from '../store/stateMachine';
 import { restartPresentation } from '../store/stateMachine';
 import { setPlaybackState } from '../store/stateMachine';
 import { postMessage } from '../store/stateMachine';
@@ -35,7 +35,8 @@ class App extends Component {
 
     // this.props.setPlaybackState('active');
 
-    this.props.initStateMachine(rootPath, pathToPool);
+    // this.props.initStateMachine(rootPath, pathToPool);
+    this.props.initBSP(rootPath, pathToPool);
   }
 
   restartPresentation() {
@@ -86,7 +87,7 @@ const mapStateToProps = (state) => ({
 
 const mapDispatchToProps = (dispatch) => {
   return bindActionCreators({
-    initStateMachine,
+    initBSP,
     restartPresentation,
     setPlaybackState,
     postMessage,
@@ -95,7 +96,7 @@ const mapDispatchToProps = (dispatch) => {
 
 App.propTypes = {
   playbackState: React.PropTypes.string.isRequired,
-  initStateMachine: React.PropTypes.func.isRequired,
+  initBSP: React.PropTypes.func.isRequired,
   setPlaybackState: React.PropTypes.func.isRequired,
   restartPresentation: React.PropTypes.func.isRequired,
   postMessage: React.PropTypes.func.isRequired,

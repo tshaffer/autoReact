@@ -19,6 +19,7 @@ import {
   ZoneHSM
 } from '../hsm/zoneHSM';
 
+import PlatformService from '../platform';
 
 import { setActiveMediaState } from './activeMediaStates';
 
@@ -79,15 +80,15 @@ export function setPlayerHSM(playerHSM : Object){
 // ------------------------------------
 // Action Creators
 // ------------------------------------
-export function initStateMachine(rootPath : string, pathToPool : string) {
+export function initBSP(rootPath : string, pathToPool : string) {
   return (dispatch : Function, getState : Function) => {
-    launchPresentationPlayback(rootPath, pathToPool, dispatch, getState);
+    runBSP(rootPath, pathToPool, dispatch, getState);
   };
 }
 
 export function restartPresentation(rootPath : string, pathToPool : string) {
   return (dispatch : Function, getState : Function) => {
-    launchPresentationPlayback(rootPath, pathToPool, dispatch, getState);
+    runBSP(rootPath, pathToPool, dispatch, getState);
   };
 }
 
@@ -170,8 +171,13 @@ export default function(state : Object = initialState, action : Object) {
 // ------------------------------------
 // Utilities
 // ------------------------------------
-function launchPresentationPlayback(rootPath : string, pathToPool : string, dispatch : Function, getState : Function) {
-  let syncSpec: Object = {};
+let syncSpec: Object = {};
+
+function runBSP(rootPath : string, pathToPool : string, dispatch : Function, getState : Function) {
+
+  debugger;
+
+  let state;
 
   openSyncSpec(path.join(rootPath, 'local-sync.json')).then((cardSyncSpec) => {
 
@@ -182,21 +188,31 @@ function launchPresentationPlayback(rootPath : string, pathToPool : string, disp
     const poolAssetFiles = buildPoolAssetFiles(syncSpec, pathToPool);
     dispatch(setPoolAssetFiles(poolAssetFiles));
 
-    return getAutoschedule(syncSpec, rootPath);
 
-  }).then((autoSchedule) => {
+    state = getState();
 
-    console.log(autoSchedule);
-    return getBml(autoSchedule, syncSpec, rootPath);
+// Create player state machine
+    const playerHSM = new PlayerHSM(dispatch, state.bsdm);
+    dispatch(setPlayerHSM(playerHSM));
 
-  }).then((autoPlay) => {
+// Zone state machines are created by the Player state machine when it parses the schedule and autoplay files
+    playerHSM.initialize(dispatch, getState);
 
-    console.log(autoPlay);
-    dispatch(dmOpenSign(autoPlay));
-    const state = getState();
-    console.log(state);
-    buildBSP(dispatch, state.bsdm);
-    buildSign(dispatch, state.bsdm);
+    // return getAutoschedule(syncSpec, rootPath);
+
+  // }).then((autoSchedule) => {
+  //
+  //   console.log(autoSchedule);
+    // return getBml(autoSchedule, syncSpec, rootPath);
+
+  // }).then((autoPlay) => {
+  //
+  //   console.log(autoPlay);
+  //   dispatch(dmOpenSign(autoPlay));
+  //   state = getState();
+  //   console.log(state);
+  //   // buildBSP(dispatch, state.bsdm);
+  //   // buildSign(dispatch, state.bsdm);
   }).catch((err) => {
     console.log(err);
     debugger;
@@ -204,21 +220,38 @@ function launchPresentationPlayback(rootPath : string, pathToPool : string, disp
 }
 
 
-function buildBSP(dispatch : Function, bsdm : Object) {
-  const playerHSM = new PlayerHSM(dispatch, bsdm);
-  dispatch(setPlayerHSM(playerHSM));
-}
+export function restartBSP(presentationName : string, dispatch : Function, getState : Function) {
 
+  debugger;
 
-function buildSign(dispatch : Function, bsdm : Object) {
+  const rootPath: string = PlatformService.default.getRootDirectory();
+  getAutoschedule(syncSpec, rootPath).then( (autoSchedule) => {
 
-  const zoneIds = dmGetZonesForSign(bsdm);
-  zoneIds.forEach( (zoneId) => {
-    const zoneHSM = new ZoneHSM(dispatch, bsdm, zoneId);
-    dispatch(registerHSM(zoneHSM));
+    // TODO - only a single scheduled item is supported
+
+    const scheduledPresentation = autoSchedule.scheduledPresentations[0];
+    const presentationToSchedule = scheduledPresentation.presentationToSchedule;
+    const presentationName = presentationToSchedule.name;
+    const bmlFileName = presentationName + '.bml';
+
+    getSyncSpecFile(bmlFileName, syncSpec, rootPath).then( (autoPlay) => {
+      console.log(autoPlay);
+      dispatch(dmOpenSign(autoPlay));
+      let state = getState();
+      console.log(state);
+    });
   });
-
 }
+
+
+// function buildSign(dispatch : Function, bsdm : Object) {
+//
+//   const zoneIds = dmGetZonesForSign(bsdm);
+//   zoneIds.forEach( (zoneId) => {
+//     const zoneHSM = new ZoneHSM(dispatch, bsdm, zoneId);
+//     dispatch(registerHSM(zoneHSM));
+//   });
+// }
 
 function getFile(syncSpec : Object, fileName : string) : ?Object {
 
@@ -300,17 +333,17 @@ function getAutoschedule(syncSpec : Object, rootPath : string) {
   return getSyncSpecFile('autoschedule.json', syncSpec, rootPath);
 }
 
-function getBml(autoSchedule : Object, syncSpec : Object, rootPath : string) {
-
-  // TODO - only a single scheduled item is supported
-
-  const scheduledPresentation = autoSchedule.scheduledPresentations[0];
-  const presentationToSchedule = scheduledPresentation.presentationToSchedule;
-  const presentationName = presentationToSchedule.name;
-  const bmlFileName = presentationName + '.bml';
-
-  return getSyncSpecFile(bmlFileName, syncSpec, rootPath);
-}
+// function getBml(autoSchedule : Object, syncSpec : Object, rootPath : string) {
+//
+//   // TODO - only a single scheduled item is supported
+//
+//   const scheduledPresentation = autoSchedule.scheduledPresentations[0];
+//   const presentationToSchedule = scheduledPresentation.presentationToSchedule;
+//   const presentationName = presentationToSchedule.name;
+//   const bmlFileName = presentationName + '.bml';
+//
+//   return getSyncSpecFile(bmlFileName, syncSpec, rootPath);
+// }
 
 // ------------------------------------
 // Selectors
