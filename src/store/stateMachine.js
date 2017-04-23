@@ -241,9 +241,17 @@ export function restartBSP(presentationName : string, dispatch : Function, getSt
   });
 }
 
-export function startBSPPlayback() {
-  debugger;
+export function startBSPPlayback(dispatch : Function, bsdm : Object) {
+
+  // debugger;
+
+  const zoneIds = dmGetZonesForSign(bsdm);
+  zoneIds.forEach( (zoneId) => {
+    const zoneHSM = new ZoneHSM(dispatch, bsdm, zoneId);
+    dispatch(registerHSM(zoneHSM));
+  });
 }
+
 // function buildSign(dispatch : Function, bsdm : Object) {
 //
 //   const zoneIds = dmGetZonesForSign(bsdm);

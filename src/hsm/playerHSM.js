@@ -12,6 +12,7 @@ export class PlayerHSM extends HSM {
 
     super();
 
+    this.dispatch = dispatch;
     this.bsdm = bsdm;
 
     this.stTop = new HState(this, "Top");
@@ -38,6 +39,11 @@ export class PlayerHSM extends HSM {
 
     console.log("initializePlayerStateMachine invoked");
 
+
+    // ISSUE
+    // would like restartBSP to return a promise, then transition to the stPlaying state once that is done.
+    // however, this function requires an immediate response
+    // the problem is that entering stPlaying state invokes startBSPPlayback before the zones are even created
     restartBSP('', dispatch, getState);
 
     // from autorunClassic
@@ -49,10 +55,24 @@ export class PlayerHSM extends HSM {
     //   return m.stWaiting
     // endif
 
-    return this.stPlaying;
+    // because of issue above
+    return this.stWaiting;
   }
 
   STPlayerEventHandler(event:  Object, stateData: Object) : string {
+
+    stateData.nextState = null;
+
+    if (event.EventType && event.EventType === 'ENTRY_SIGNAL') {
+      console.log(this.id + ": entry signal");
+      return 'HANDLED';
+    }
+
+    stateData.nextState = this.superState;
+    return "SUPER";
+  }
+
+  STPlayingEventHandler(event:  Object, stateData: Object) : string {
 
     stateData.nextState = null;
 
@@ -75,7 +95,7 @@ export class PlayerHSM extends HSM {
       // queue live data feeds for downloading
 
       // launch playback
-      startBSPPlayback();
+      startBSPPlayback(this.stateMachine.dispatch, this.stateMachine.bsdm);
 
       return 'HANDLED';
     }
@@ -83,30 +103,21 @@ export class PlayerHSM extends HSM {
     stateData.nextState = this.superState;
     return "SUPER";
   }
+
 
   STWaitingEventHandler(event:  Object, stateData: Object) : string {
 
     stateData.nextState = null;
 
-    stateData.nextState = this.superState;
-    return "SUPER";
-  }
-
-  STPlayingEventHandler(event:  Object, stateData: Object) : string {
-
-    stateData.nextState = null;
-
     if (event.EventType && event.EventType === 'ENTRY_SIGNAL') {
-      debugger;
-      console.log('entry signal');
-      return 'HANDLED';
+      console.log(this.id + ": entry signal");
+      return "HANDLED";
     }
 
-    // QueueRetrieveLiveDataFeed
-
     stateData.nextState = this.superState;
     return "SUPER";
   }
+
 
 
 }
