@@ -2,7 +2,9 @@
 
 import { HSM, HState, STTopEventHandler } from './HSM';
 
-import { restartBSP } from '../store/stateMachine';
+import {
+  restartBSP, startBSPPlayback
+} from '../store/stateMachine';
 
 export class PlayerHSM extends HSM {
 
@@ -38,6 +40,8 @@ export class PlayerHSM extends HSM {
 
     restartBSP('', dispatch, getState);
 
+    // from autorunClassic
+
     // activeScheduledPresentation = m.bsp.schedule.activeScheduledEvent
     // if type(activeScheduledPresentation) = "roAssociativeArray" then
     //   return m.stPlaying
@@ -45,14 +49,36 @@ export class PlayerHSM extends HSM {
     //   return m.stWaiting
     // endif
 
-    return this.playing;
+    return this.stPlaying;
   }
 
   STPlayerEventHandler(event:  Object, stateData: Object) : string {
 
     stateData.nextState = null;
 
-    // TBD
+    if (event.EventType && event.EventType === 'ENTRY_SIGNAL') {
+
+      console.log(this.id + ": entry signal");
+
+      // TODO
+      // set a timer for when the current presentation should end
+
+      // TODO
+      // assume presentation is active
+
+      // TODO
+      //check for live data feeds that include content (either MRSS or content for Media Lists / PlayFiles).
+      // for each of them, check to see if the feed and/or content already exists.
+
+      // load live data feeds
+
+      // queue live data feeds for downloading
+
+      // launch playback
+      startBSPPlayback();
+
+      return 'HANDLED';
+    }
 
     stateData.nextState = this.superState;
     return "SUPER";

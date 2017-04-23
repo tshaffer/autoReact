@@ -222,8 +222,6 @@ function runBSP(rootPath : string, pathToPool : string, dispatch : Function, get
 
 export function restartBSP(presentationName : string, dispatch : Function, getState : Function) {
 
-  debugger;
-
   const rootPath: string = PlatformService.default.getRootDirectory();
   getAutoschedule(syncSpec, rootPath).then( (autoSchedule) => {
 
@@ -243,7 +241,9 @@ export function restartBSP(presentationName : string, dispatch : Function, getSt
   });
 }
 
-
+export function startBSPPlayback() {
+  debugger;
+}
 // function buildSign(dispatch : Function, bsdm : Object) {
 //
 //   const zoneIds = dmGetZonesForSign(bsdm);

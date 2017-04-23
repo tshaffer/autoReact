@@ -29,7 +29,7 @@ export class HSM {
     initEvent["EventType"] = "INIT_SIGNAL";
 
     // execute initial transition
-    this.activeState = this.initialPseudoStateHandler();
+    this.activeState = this.initialPseudoStateHandler(...arguments);
 
     // if there is no activeState, the playlist is empty
     if (this.activeState == null) return;
