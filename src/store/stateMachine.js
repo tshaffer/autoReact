@@ -12,8 +12,13 @@ import {
 } from '@brightsign/bsdatamodel';
 
 import {
+  PlayerHSM
+} from '../hsm/playerHSM';
+
+import {
   ZoneHSM
 } from '../hsm/zoneHSM';
+
 
 import { setActiveMediaState } from './activeMediaStates';
 
@@ -25,6 +30,7 @@ export const SET_POOL_ASSET_FILES = 'SET_POOL_ASSET_FILES';
 export const SET_PLAYBACK_STATE = 'SET_PLAYBACK_STATE';
 export const POST_MESSAGE = 'POST_MESSAGE';
 export const REGISTER_HSM = 'REGISTER_HSM';
+export const SET_PLAYER_HSM = 'SET_PLAYER_HSM';
 
 // ------------------------------------
 // Actions
@@ -61,6 +67,14 @@ export function registerHSM(hsm : Object) {
   };
 }
 
+export function setPlayerHSM(playerHSM : Object){
+
+  return {
+    type: SET_PLAYER_HSM,
+    payload: playerHSM
+  };
+}
+
 
 // ------------------------------------
 // Action Creators
@@ -90,7 +104,8 @@ const initialState = {
   syncSpec : {},
   poolAssetFiles : {},
   playbackState: 'active',
-  hsm: []
+  hsm: [],
+  playerHSM: {}
 };
 
 export default function(state : Object = initialState, action : Object) {
@@ -137,6 +152,15 @@ export default function(state : Object = initialState, action : Object) {
 
       return newState;
     }
+
+    case SET_PLAYER_HSM: {
+      let newState = {
+        ...state,
+        playerHSM: action.payload
+      };
+
+      return newState;
+    }
   }
 
   return state;
@@ -171,13 +195,20 @@ function launchPresentationPlayback(rootPath : string, pathToPool : string, disp
     dispatch(dmOpenSign(autoPlay));
     const state = getState();
     console.log(state);
+    buildBSP(dispatch, state.bsdm);
     buildSign(dispatch, state.bsdm);
-
   }).catch((err) => {
     console.log(err);
     debugger;
   });
 }
+
+
+function buildBSP(dispatch : Function, bsdm : Object) {
+  const playerHSM = new PlayerHSM(dispatch, bsdm);
+  dispatch(setPlayerHSM(playerHSM));
+}
+
 
 function buildSign(dispatch : Function, bsdm : Object) {
 
@@ -299,6 +330,8 @@ function dispatchEvent(dispatch : Function, getState : Function, event : Object)
 
   const stateMachine = getState().stateMachine;
   const hsmList : Array<Object> = stateMachine.hsm;
+
+  stateMachine.playerHSM.Dispatch(event);
 
   hsmList.forEach( (hsm) => {
     console.log('before: ', hsm.activeState);

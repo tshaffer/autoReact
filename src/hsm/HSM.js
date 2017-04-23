@@ -261,12 +261,12 @@ export class HSM {
 
 export class HState {
 
-  constructor(obj, id) {
+  constructor(stateMachine, id) {
     this.topState = null;
 
     this.HStateEventHandler = null;                                             // filled in by HState instance
 
-    this.stateMachine = obj;
+    this.stateMachine = stateMachine;
 
     this.superState = null;                                                     // filled in by HState instance
     this.id = id;

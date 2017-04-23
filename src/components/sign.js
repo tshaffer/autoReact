@@ -78,7 +78,7 @@ export default class Sign extends Component {
       case 'Ticker': {
         return (
           <div>ticker</div>
-        )
+        );
         // return this.getTickerZoneJSX(bsdm, zone);
       }
       default: {
