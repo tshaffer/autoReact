@@ -190,7 +190,7 @@ function runBSP(rootPath : string, pathToPool : string, dispatch : Function, get
     state = getState();
 
 // Create player state machine
-    const playerHSM = new PlayerHSM(dispatch, state.bsdm);
+    const playerHSM = new PlayerHSM(dispatch, getState, state.bsdm);
     dispatch(setPlayerHSM(playerHSM));
 
 // Zone state machines are created by the Player state machine when it parses the schedule and autoplay files
@@ -237,20 +237,35 @@ export function restartBSP(presentationName : string, dispatch : Function, getSt
         dispatch(dmOpenSign(autoPlay));
         let state = getState();
         console.log(state);
+
+        resolve();
+
       });
     });
 
-    resolve();
   });
 }
 
 export function startBSPPlayback(dispatch : Function, bsdm : Object) {
 
+  let zoneHSMs = [];
+
   const zoneIds = dmGetZonesForSign(bsdm);
   zoneIds.forEach( (zoneId) => {
     const zoneHSM = new ZoneHSM(dispatch, bsdm, zoneId);
+    zoneHSMs.push(zoneHSM);
     dispatch(registerHSM(zoneHSM));
   });
+
+  zoneHSMs.forEach( (zoneHSM) => {
+
+    // zoneHSM.initialize();
+
+    zoneHSM.constructorFunction();
+    zoneHSM.initialize();
+
+    dispatch(setActiveMediaState(zoneHSM.id, zoneHSM.activeState.id));
+  })
 }
 
 // function buildSign(dispatch : Function, bsdm : Object) {

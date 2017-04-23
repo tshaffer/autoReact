@@ -10,11 +10,12 @@ import { postMessage } from '../store/stateMachine';
 
 export class PlayerHSM extends HSM {
 
-  constructor(dispatch: Function, bsdm: Object) {
+  constructor(dispatch: Function, getState : Function, bsdm: Object) {
 
     super();
 
     this.dispatch = dispatch;
+    this.getState = getState;
     this.bsdm = bsdm;
 
     this.stTop = new HState(this, "Top");
@@ -103,6 +104,8 @@ export class PlayerHSM extends HSM {
       // queue live data feeds for downloading
 
       // launch playback
+      const state = this.stateMachine.getState();
+      this.stateMachine.bsdm = state.bsdm;
       startBSPPlayback(this.stateMachine.dispatch, this.stateMachine.bsdm);
 
       return 'HANDLED';

@@ -34,15 +34,15 @@ export default class ImageState extends HState {
     stateData.nextState = null;
 
     if (event.EventType && event.EventType === 'ENTRY_SIGNAL') {
-      console.log('entry signal');
+      console.log(this.id + ": entry signal");
       return 'HANDLED';
     }
     else if (event.EventType && event.EventType === 'EXIT_SIGNAL') {
-      console.log('exit signal');
+      console.log(this.id + ": exit signal");
     }
 
     else if (event.EventType && event.EventType === 'timeoutEvent') {
-      console.log('timeoutEvent');
+      console.log(this.id + ": timeoutEvent");
 
       // const eventIds = dmGetEventIdsForMediaState( this.bsdm, { id : this.bsdmImageState.id });
       // const bsdmEvent = dmGetEventById( this.bsdm, { id : eventIds[0] } );

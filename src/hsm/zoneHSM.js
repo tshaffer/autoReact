@@ -72,11 +72,11 @@ export class ZoneHSM extends HSM {
     });
     this.mediaStates[this.mediaStates.length - 1].setNextState(this.mediaStates[0]);
 
-    this.constructorFunction();
-
-    this.initialize();
-
-    dispatch(setActiveMediaState(this.id, this.activeState.id));
+    // this.constructorFunction();
+    //
+    // this.initialize();
+    //
+    // dispatch(setActiveMediaState(this.id, this.activeState.id));
   }
 
   videoOrImagesZoneConstructor() {
