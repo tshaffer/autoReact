@@ -175,8 +175,6 @@ let syncSpec: Object = {};
 
 function runBSP(rootPath : string, pathToPool : string, dispatch : Function, getState : Function) {
 
-  debugger;
-
   let state;
 
   openSyncSpec(path.join(rootPath, 'local-sync.json')).then((cardSyncSpec) => {
@@ -223,27 +221,30 @@ function runBSP(rootPath : string, pathToPool : string, dispatch : Function, get
 export function restartBSP(presentationName : string, dispatch : Function, getState : Function) {
 
   const rootPath: string = PlatformService.default.getRootDirectory();
-  getAutoschedule(syncSpec, rootPath).then( (autoSchedule) => {
 
-    // TODO - only a single scheduled item is supported
+  return new Promise( (resolve, reject) => {
+    getAutoschedule(syncSpec, rootPath).then( (autoSchedule) => {
 
-    const scheduledPresentation = autoSchedule.scheduledPresentations[0];
-    const presentationToSchedule = scheduledPresentation.presentationToSchedule;
-    const presentationName = presentationToSchedule.name;
-    const bmlFileName = presentationName + '.bml';
+      // TODO - only a single scheduled item is supported
 
-    getSyncSpecFile(bmlFileName, syncSpec, rootPath).then( (autoPlay) => {
-      console.log(autoPlay);
-      dispatch(dmOpenSign(autoPlay));
-      let state = getState();
-      console.log(state);
+      const scheduledPresentation = autoSchedule.scheduledPresentations[0];
+      const presentationToSchedule = scheduledPresentation.presentationToSchedule;
+      const presentationName = presentationToSchedule.name;
+      const bmlFileName = presentationName + '.bml';
+
+      getSyncSpecFile(bmlFileName, syncSpec, rootPath).then( (autoPlay) => {
+        console.log(autoPlay);
+        dispatch(dmOpenSign(autoPlay));
+        let state = getState();
+        console.log(state);
+      });
     });
+
+    resolve();
   });
 }
 
 export function startBSPPlayback(dispatch : Function, bsdm : Object) {
-
-  // debugger;
 
   const zoneIds = dmGetZonesForSign(bsdm);
   zoneIds.forEach( (zoneId) => {
