@@ -32,7 +32,7 @@ const store = createStore(
 );
 
 bsp = new BSP(store);
-bsp.run();
+bsp.initialize();
 
 // Needed for onTouchTap
 // http://stackoverflow.com/a/34015469/988941

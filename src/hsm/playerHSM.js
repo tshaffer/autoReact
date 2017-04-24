@@ -42,7 +42,7 @@ export class PlayerHSM extends HSM {
     // would like restartBSP to return a promise, then transition to the stPlaying state once that is done.
     // however, this function requires an immediate response
     // the problem is that entering stPlaying state invokes startBSPPlayback before the zones are even created
-    this.bsp.restart('', dispatch, getState).then( () => {
+    this.bsp.restartPlayback('', dispatch, getState).then( () => {
       // send event to cause transition to stPlaying
       let event = {
         'EventType' : 'TRANSITION_TO_PLAYING'

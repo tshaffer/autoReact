@@ -46,7 +46,7 @@ export class BSP {
     myBSP = this;
   }
 
-  run() {
+  initialize() {
 
     const dispatch = this.store.dispatch;
     const getState = this.store.getState;
@@ -75,7 +75,80 @@ export class BSP {
       console.log(err);
       debugger;
     });
+  }
 
+  startPlayback(dispatch : Function, bsdm : Object) {
+
+    let zoneHSMs = [];
+
+    const zoneIds = dmGetZonesForSign(bsdm);
+    zoneIds.forEach( (zoneId) => {
+      const zoneHSM = new ZoneHSM(dispatch, bsdm, zoneId);
+      zoneHSMs.push(zoneHSM);
+      this.hsmList.push(zoneHSM);
+    });
+
+    zoneHSMs.forEach( (zoneHSM) => {
+      zoneHSM.constructorFunction();
+      zoneHSM.initialize();
+      dispatch(setActiveMediaState(zoneHSM.id, zoneHSM.activeState.id));
+    });
+  }
+
+  restartPlayback(presentationName : string, dispatch : Function, getState : Function) {
+
+    console.log('restart: ', presentationName);
+
+    const rootPath: string = PlatformService.default.getRootDirectory();
+
+    return new Promise( (resolve) => {
+      this.getAutoschedule(this.syncSpec, rootPath).then( (autoSchedule) => {
+
+        // TODO - only a single scheduled item is supported
+
+        const scheduledPresentation = autoSchedule.scheduledPresentations[0];
+        const presentationToSchedule = scheduledPresentation.presentationToSchedule;
+        const presentationName = presentationToSchedule.name;
+        const bmlFileName = presentationName + '.bml';
+
+        this.getSyncSpecFile(bmlFileName, this.syncSpec, rootPath).then( (autoPlay) => {
+          console.log(autoPlay);
+          dispatch(dmOpenSign(autoPlay));
+          let state = getState();
+          console.log(state);
+
+          resolve();
+
+        });
+      });
+
+    });
+  }
+
+  postMessage(event : Object) {
+    return (dispatch: Function, getState: Function) => {
+      this.dispatchEvent(dispatch, getState, event);
+    };
+  }
+
+  dispatchEvent(dispatch : Function, getState : Function, event : Object) {
+
+    this.playerHSM.Dispatch(event);
+
+    this.hsmList.forEach( (hsm) => {
+      console.log('before: ', hsm.activeState);
+      hsm.Dispatch(event);
+      console.log('after: ', hsm.activeState);
+
+      dispatch(setActiveMediaState(hsm.id, hsm.activeState.id));
+
+      const state = getState();
+      console.log(state);
+    });
+  }
+
+  getAutoschedule(syncSpec : Object, rootPath : string) {
+    return this.getSyncSpecFile('autoschedule.json', syncSpec, rootPath);
   }
 
   openSyncSpec(filePath : string = '') {
@@ -135,32 +208,6 @@ export class BSP {
     });
   }
 
-  getAutoschedule(syncSpec : Object, rootPath : string) {
-    return this.getSyncSpecFile('autoschedule.json', syncSpec, rootPath);
-  }
-
-  postMessage(event : Object) {
-    return (dispatch: Function, getState: Function) => {
-      this.dispatchEvent(dispatch, getState, event);
-    };
-  }
-
-  dispatchEvent(dispatch : Function, getState : Function, event : Object) {
-
-    this.playerHSM.Dispatch(event);
-
-    this.hsmList.forEach( (hsm) => {
-      console.log('before: ', hsm.activeState);
-      hsm.Dispatch(event);
-      console.log('after: ', hsm.activeState);
-
-      dispatch(setActiveMediaState(hsm.id, hsm.activeState.id));
-
-      const state = getState();
-      console.log(state);
-    });
-  }
-
   getFile(syncSpec : Object, fileName : string) : ?Object {
 
     let file = null;
@@ -173,54 +220,6 @@ export class BSP {
     });
 
     return file;
-  }
-
-  restart(presentationName : string, dispatch : Function, getState : Function) {
-
-    console.log('restart: ', presentationName);
-
-    const rootPath: string = PlatformService.default.getRootDirectory();
-
-    return new Promise( (resolve) => {
-      this.getAutoschedule(this.syncSpec, rootPath).then( (autoSchedule) => {
-
-        // TODO - only a single scheduled item is supported
-
-        const scheduledPresentation = autoSchedule.scheduledPresentations[0];
-        const presentationToSchedule = scheduledPresentation.presentationToSchedule;
-        const presentationName = presentationToSchedule.name;
-        const bmlFileName = presentationName + '.bml';
-
-        this.getSyncSpecFile(bmlFileName, this.syncSpec, rootPath).then( (autoPlay) => {
-          console.log(autoPlay);
-          dispatch(dmOpenSign(autoPlay));
-          let state = getState();
-          console.log(state);
-
-          resolve();
-
-        });
-      });
-
-    });
-  }
-
-  startPlayback(dispatch : Function, bsdm : Object) {
-
-    let zoneHSMs = [];
-
-    const zoneIds = dmGetZonesForSign(bsdm);
-    zoneIds.forEach( (zoneId) => {
-      const zoneHSM = new ZoneHSM(dispatch, bsdm, zoneId);
-      zoneHSMs.push(zoneHSM);
-      this.hsmList.push(zoneHSM);
-    });
-
-    zoneHSMs.forEach( (zoneHSM) => {
-      zoneHSM.constructorFunction();
-      zoneHSM.initialize();
-      dispatch(setActiveMediaState(zoneHSM.id, zoneHSM.activeState.id));
-    });
   }
 
 }
