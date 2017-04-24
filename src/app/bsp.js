@@ -28,7 +28,6 @@ import {
 import {
   registerHSM,
   setPoolAssetFiles,
-  setPlayerHSM,
 } from '../store/stateMachine';
 
 export let myBSP = {};
@@ -36,6 +35,7 @@ export let myBSP = {};
 export class BSP {
 
   store : Object;
+  playerHSM : Object;
   syncSpec : Object;
 
   constructor(reduxStore : Object) {
@@ -65,11 +65,10 @@ export class BSP {
       state = this.store.getState();
 
 // Create player state machine
-      const playerHSM = new PlayerHSM(this, dispatch, getState, state.bsdm);
-      dispatch(setPlayerHSM(playerHSM));
+      this.playerHSM = new PlayerHSM(this, dispatch, getState, state.bsdm);
 
 // Zone state machines are created by the Player state machine when it parses the schedule and autoplay files
-      playerHSM.initialize(dispatch, getState);
+      this.playerHSM.initialize(dispatch, getState);
 
     }).catch((err) => {
       console.log(err);
@@ -150,7 +149,7 @@ export class BSP {
     const stateMachine = getState().stateMachine;
     const hsmList : Array<Object> = stateMachine.hsm;
 
-    stateMachine.playerHSM.Dispatch(event);
+    this.playerHSM.Dispatch(event);
 
     hsmList.forEach( (hsm) => {
       console.log('before: ', hsm.activeState);

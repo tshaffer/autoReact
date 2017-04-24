@@ -59,15 +59,6 @@ export function registerHSM(hsm : Object) {
   };
 }
 
-export function setPlayerHSM(playerHSM : Object){
-
-  return {
-    type: SET_PLAYER_HSM,
-    payload: playerHSM
-  };
-}
-
-
 // ------------------------------------
 // Action Creators
 // ------------------------------------
@@ -84,7 +75,6 @@ const initialState = {
   poolAssetFiles : {},
   playbackState: 'active',
   hsm: [],
-  playerHSM: {}
 };
 
 export default function(state : Object = initialState, action : Object) {
@@ -117,15 +107,6 @@ export default function(state : Object = initialState, action : Object) {
 
       let newState = Object.assign({}, state);
       newState.hsm.push(action.payload);
-
-      return newState;
-    }
-
-    case SET_PLAYER_HSM: {
-      let newState = {
-        ...state,
-        playerHSM: action.payload
-      };
 
       return newState;
     }
