@@ -34,12 +34,16 @@ export let myBSP = {};
 export class BSP {
 
   store : Object;
+  dispatch : Function;
+  getState : Function;
   playerHSM : Object;
   hsmList : Array<Object>;
   syncSpec : Object;
 
   constructor(reduxStore : Object) {
     this.store = reduxStore;
+    this.dispatch = this.store.dispatch;
+    this.getState = this.store.getState;
     // this.syncSpec = null;
     this.hsmList = [];
 
@@ -47,9 +51,6 @@ export class BSP {
   }
 
   initialize() {
-
-    const dispatch = this.store.dispatch;
-    const getState = this.store.getState;
 
     const rootPath: string = PlatformService.default.getRootDirectory();
     const pathToPool: string = PlatformService.default.getPathToPool();
@@ -66,10 +67,10 @@ export class BSP {
       state = this.store.getState();
 
 // Create player state machine
-      this.playerHSM = new PlayerHSM(this, dispatch, getState, state.bsdm);
+      this.playerHSM = new PlayerHSM(this, this.dispatch, this.getState, state.bsdm);
 
 // Zone state machines are created by the Player state machine when it parses the schedule and autoplay files
-      this.playerHSM.initialize(dispatch, getState);
+      this.playerHSM.initialize(this.dispatch, this.getState);
 
     }).catch((err) => {
       console.log(err);
@@ -77,13 +78,13 @@ export class BSP {
     });
   }
 
-  startPlayback(dispatch : Function, bsdm : Object) {
+  startPlayback(bsdm : Object) {
 
     let zoneHSMs = [];
 
     const zoneIds = dmGetZonesForSign(bsdm);
     zoneIds.forEach( (zoneId) => {
-      const zoneHSM = new ZoneHSM(dispatch, bsdm, zoneId);
+      const zoneHSM = new ZoneHSM(this.dispatch, bsdm, zoneId);
       zoneHSMs.push(zoneHSM);
       this.hsmList.push(zoneHSM);
     });
@@ -91,11 +92,11 @@ export class BSP {
     zoneHSMs.forEach( (zoneHSM) => {
       zoneHSM.constructorFunction();
       zoneHSM.initialize();
-      dispatch(setActiveMediaState(zoneHSM.id, zoneHSM.activeState.id));
+      this.dispatch(setActiveMediaState(zoneHSM.id, zoneHSM.activeState.id));
     });
   }
 
-  restartPlayback(presentationName : string, dispatch : Function, getState : Function) {
+  restartPlayback(presentationName : string) {
 
     console.log('restart: ', presentationName);
 
@@ -113,9 +114,7 @@ export class BSP {
 
         this.getSyncSpecFile(bmlFileName, this.syncSpec, rootPath).then( (autoPlay) => {
           console.log(autoPlay);
-          dispatch(dmOpenSign(autoPlay));
-          let state = getState();
-          console.log(state);
+          this.dispatch(dmOpenSign(autoPlay));
 
           resolve();
 
@@ -127,23 +126,18 @@ export class BSP {
 
   postMessage(event : Object) {
     return (dispatch: Function, getState: Function) => {
-      this.dispatchEvent(dispatch, getState, event);
+      this.dispatchEvent(event);
     };
   }
 
-  dispatchEvent(dispatch : Function, getState : Function, event : Object) {
+  dispatchEvent(event : Object) {
 
     this.playerHSM.Dispatch(event);
 
     this.hsmList.forEach( (hsm) => {
-      console.log('before: ', hsm.activeState);
       hsm.Dispatch(event);
-      console.log('after: ', hsm.activeState);
 
-      dispatch(setActiveMediaState(hsm.id, hsm.activeState.id));
-
-      const state = getState();
-      console.log(state);
+      this.dispatch(setActiveMediaState(hsm.id, hsm.activeState.id));
     });
   }
 
