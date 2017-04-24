@@ -27,7 +27,6 @@ import {
 
 import {
   registerHSM,
-  setSyncSpec,
   setPoolAssetFiles,
   setPlayerHSM,
 } from '../store/stateMachine';
@@ -57,8 +56,6 @@ export class BSP {
     let state;
 
     this.openSyncSpec(path.join(rootPath, 'local-sync.json')).then((cardSyncSpec) => {
-
-      dispatch(setSyncSpec(cardSyncSpec));
 
       this.syncSpec = cardSyncSpec;
 

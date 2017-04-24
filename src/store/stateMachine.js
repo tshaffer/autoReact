@@ -26,7 +26,6 @@
 // ------------------------------------
 // Constants
 // ------------------------------------
-export const SET_SYNC_SPEC = 'SET_SYNC_SPEC';
 export const SET_POOL_ASSET_FILES = 'SET_POOL_ASSET_FILES';
 export const SET_PLAYBACK_STATE = 'SET_PLAYBACK_STATE';
 export const POST_MESSAGE = 'POST_MESSAGE';
@@ -36,14 +35,6 @@ export const SET_PLAYER_HSM = 'SET_PLAYER_HSM';
 // ------------------------------------
 // Actions
 // ------------------------------------
-export function setSyncSpec(syncSpec : Object){
-
-  return {
-    type: SET_SYNC_SPEC,
-    payload: syncSpec
-  };
-}
-
 export function setPoolAssetFiles(poolAssetFiles : Object) {
 
   return {
@@ -90,7 +81,6 @@ export function setPlayerHSM(playerHSM : Object){
 // Reducer
 // ------------------------------------
 const initialState = {
-  syncSpec : {},
   poolAssetFiles : {},
   playbackState: 'active',
   hsm: [],
@@ -100,17 +90,6 @@ const initialState = {
 export default function(state : Object = initialState, action : Object) {
 
   switch (action.type) {
-
-    case SET_SYNC_SPEC: {
-
-      let newState = {
-        ...state,
-        syncSpec: action.payload
-      };
-
-      console.log(newState);
-      return newState;
-    }
 
     case SET_POOL_ASSET_FILES: {
 
