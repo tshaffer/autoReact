@@ -35,14 +35,15 @@ export default class Sign extends Component {
           zone={zone}
           width={Number(zone.absolutePosition.width)}
           height={Number(zone.absolutePosition.height)}
-          postMessage={this.props.postMessage}
         />
       </div>
     );
   }
 
+  // postMessage={this.props.postMessage}
 
-  // getTickerZone(bsdm: Object, zone : Object, zoneIndex : number) {
+
+// getTickerZone(bsdm: Object, zone : Object, zoneIndex : number) {
   //   return (
   //     <div
   //       key={zoneIndex}
@@ -106,5 +107,5 @@ export default class Sign extends Component {
 Sign.propTypes = {
   bsdm: React.PropTypes.object.isRequired,
   playbackState: React.PropTypes.string.isRequired,
-  postMessage: React.PropTypes.func.isRequired,
+  // postMessage: React.PropTypes.func.isRequired,
 };

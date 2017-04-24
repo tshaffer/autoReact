@@ -2,18 +2,13 @@
 
 import { HSM, HState, STTopEventHandler } from './HSM';
 
-import {
-  restartBSP, startBSPPlayback
-} from '../store/stateMachine';
-
-import { postMessage } from '../store/stateMachine';
-
 export class PlayerHSM extends HSM {
 
-  constructor(dispatch: Function, getState : Function, bsdm: Object) {
+  constructor(bsp : Object, dispatch: Function, getState : Function, bsdm: Object) {
 
     super();
 
+    this.bsp = bsp;
     this.dispatch = dispatch;
     this.getState = getState;
     this.bsdm = bsdm;
@@ -47,12 +42,12 @@ export class PlayerHSM extends HSM {
     // would like restartBSP to return a promise, then transition to the stPlaying state once that is done.
     // however, this function requires an immediate response
     // the problem is that entering stPlaying state invokes startBSPPlayback before the zones are even created
-    restartBSP('', dispatch, getState).then( () => {
+    this.bsp.restart('', dispatch, getState).then( () => {
       // send event to cause transition to stPlaying
       let event = {
         'EventType' : 'TRANSITION_TO_PLAYING'
       };
-      dispatch(postMessage(event));
+      dispatch(this.bsp.postMessage(event));
     });
 
     // from autorunClassic
@@ -106,7 +101,7 @@ export class PlayerHSM extends HSM {
       // launch playback
       const state = this.stateMachine.getState();
       this.stateMachine.bsdm = state.bsdm;
-      startBSPPlayback(this.stateMachine.dispatch, this.stateMachine.bsdm);
+      this.stateMachine.bsp.startPlayback(this.stateMachine.dispatch, this.stateMachine.bsdm);
 
       return 'HANDLED';
     }

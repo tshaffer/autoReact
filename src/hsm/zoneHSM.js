@@ -13,9 +13,9 @@ import ImageState from './imageState';
 import VideoState from './videoState';
 import RSSDataFeedState from './rssDataFeedState';
 
-import {
-  setActiveMediaState
-} from '../store/activeMediaStates';
+// import {
+//   setActiveMediaState
+// } from '../store/activeMediaStates';
 
 export class ZoneHSM extends HSM {
 

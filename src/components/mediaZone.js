@@ -21,13 +21,16 @@ import {
   dmGetEventById,
 } from '@brightsign/bsdatamodel';
 
+import { myBSP } from '../app/bsp';
+
 export default class MediaZone extends Component {
 
   nextAsset() {
     let event = {
       'EventType' : 'timeoutEvent'
     };
-    this.props.postMessage(event);
+    myBSP.store.dispatch(myBSP.postMessage(event));
+    // this.props.postMessage(event);
   }
 
   renderMediaItem(mediaContentItem: Object, event : Object) {
@@ -158,6 +161,6 @@ MediaZone.propTypes = {
   zone: React.PropTypes.object.isRequired,
   width: React.PropTypes.number.isRequired,
   height: React.PropTypes.number.isRequired,
-  postMessage: React.PropTypes.func.isRequired,
+  // postMessage: React.PropTypes.func.isRequired,
   activeMediaStateId: React.PropTypes.string.isRequired
 };

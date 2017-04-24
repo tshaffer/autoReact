@@ -5,10 +5,8 @@ import { bindActionCreators } from 'redux';
 
 import PlatformService from '../platform';
 
-import { initBSP } from '../store/stateMachine';
-import { restartPresentation } from '../store/stateMachine';
 import { setPlaybackState } from '../store/stateMachine';
-import { postMessage } from '../store/stateMachine';
+// import { postMessage } from '../store/stateMachine';
 
 import Sign from '../components/sign';
 
@@ -30,33 +28,33 @@ class App extends Component {
     console.log("app.js::componentDidMount invoked, PlatformService: ");
     console.log(PlatformService);
 
-    const rootPath: string = PlatformService.default.getRootDirectory();
-    const pathToPool: string = PlatformService.default.getPathToPool();
+    // const rootPath: string = PlatformService.default.getRootDirectory();
+    // const pathToPool: string = PlatformService.default.getPathToPool();
 
     // this.props.setPlaybackState('active');
 
     // this.props.initStateMachine(rootPath, pathToPool);
-    this.props.initBSP(rootPath, pathToPool);
+    // this.props.initBSP(rootPath, pathToPool);
   }
 
-  restartPresentation() {
-
-    console.log('ipcRender - restartPresentation received');
-
-    this.props.setPlaybackState('inactive');
-
-    console.log('start restartPresentation timeout');
-    setTimeout( () => {
-      console.log('timeout occurred');
-      this.props.setPlaybackState('active');
-    }, 100);
-
-    const rootPath: string = PlatformService.default.getRootDirectory();
-    const pathToPool: string = PlatformService.default.getPathToPool();
-
-    this.props.restartPresentation(rootPath, pathToPool);
-  }
-
+  // restartPresentation() {
+  //
+  //   console.log('ipcRender - restartPresentation received');
+  //
+  //   this.props.setPlaybackState('inactive');
+  //
+  //   console.log('start restartPresentation timeout');
+  //   setTimeout( () => {
+  //     console.log('timeout occurred');
+  //     this.props.setPlaybackState('active');
+  //   }, 100);
+  //
+  //   const rootPath: string = PlatformService.default.getRootDirectory();
+  //   const pathToPool: string = PlatformService.default.getPathToPool();
+  //
+  //   this.props.restartPresentation(rootPath, pathToPool);
+  // }
+  //
   render() {
 
     if (this.props.bsdm.zones.allZones.length === 0 ||
@@ -68,11 +66,11 @@ class App extends Component {
       );
     }
 
+    // postMessage={this.props.postMessage}
     return (
       <Sign
         bsdm={this.props.bsdm}
         playbackState={this.props.playbackState}
-        postMessage={this.props.postMessage}
       />
     );
   }
@@ -87,19 +85,19 @@ const mapStateToProps = (state) => ({
 
 const mapDispatchToProps = (dispatch) => {
   return bindActionCreators({
-    initBSP,
-    restartPresentation,
+    // initBSP,
+    // restartPresentation,
     setPlaybackState,
-    postMessage,
+    // postMessage,
   }, dispatch);
 };
 
 App.propTypes = {
   playbackState: React.PropTypes.string.isRequired,
-  initBSP: React.PropTypes.func.isRequired,
+  // initBSP: React.PropTypes.func.isRequired,
   setPlaybackState: React.PropTypes.func.isRequired,
-  restartPresentation: React.PropTypes.func.isRequired,
-  postMessage: React.PropTypes.func.isRequired,
+  // restartPresentation: React.PropTypes.func.isRequired,
+  // postMessage: React.PropTypes.func.isRequired,
   bsdm: React.PropTypes.object.isRequired,
   activeMediaStates: React.PropTypes.object.isRequired,
 };

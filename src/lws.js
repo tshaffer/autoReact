@@ -190,7 +190,7 @@ appServer.post('/UploadSyncSpec', upload.array('files', 1), function (req, res) 
   });
 
   console.log(myApp);
-  myApp.restartPresentation();
+  // myApp.restartPresentation();
 
   // console.log('send ipc restartPresentation');
   // win.webContents.send('restartPresentation');

@@ -16,7 +16,11 @@ import reducers from './store/reducers';
 
 import App from './components/App';
 
+import { BSP } from './app/bsp';
+
 import { initializeLocalWebServer } from './lws';
+
+let bsp;
 
 initializeLocalWebServer();
 
@@ -26,6 +30,9 @@ const store = createStore(
     thunkMiddleware
   )
 );
+
+bsp = new BSP(store);
+bsp.run();
 
 // Needed for onTouchTap
 // http://stackoverflow.com/a/34015469/988941
