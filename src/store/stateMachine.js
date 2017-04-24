@@ -11,14 +11,6 @@
 //   dmGetZonesForSign,
 // } from '@brightsign/bsdatamodel';
 
-// import {
-//   PlayerHSM
-// } from '../hsm/playerHSM';
-//
-// import {
-//   ZoneHSM
-// } from '../hsm/zoneHSM';
-
 // import PlatformService from '../platform';
 
 // import { setActiveMediaState } from './activeMediaStates';
@@ -28,9 +20,6 @@
 // ------------------------------------
 export const SET_POOL_ASSET_FILES = 'SET_POOL_ASSET_FILES';
 export const SET_PLAYBACK_STATE = 'SET_PLAYBACK_STATE';
-export const POST_MESSAGE = 'POST_MESSAGE';
-export const REGISTER_HSM = 'REGISTER_HSM';
-export const SET_PLAYER_HSM = 'SET_PLAYER_HSM';
 
 // ------------------------------------
 // Actions
@@ -51,14 +40,6 @@ export function setPlaybackState(playbackState : string){
   };
 }
 
-export function registerHSM(hsm : Object) {
-
-  return {
-    type: REGISTER_HSM,
-    payload: hsm
-  };
-}
-
 // ------------------------------------
 // Action Creators
 // ------------------------------------
@@ -74,7 +55,6 @@ export function registerHSM(hsm : Object) {
 const initialState = {
   poolAssetFiles : {},
   playbackState: 'active',
-  hsm: [],
 };
 
 export default function(state : Object = initialState, action : Object) {
@@ -100,14 +80,6 @@ export default function(state : Object = initialState, action : Object) {
       };
 
       console.log(newState);
-      return newState;
-    }
-
-    case REGISTER_HSM: {
-
-      let newState = Object.assign({}, state);
-      newState.hsm.push(action.payload);
-
       return newState;
     }
   }

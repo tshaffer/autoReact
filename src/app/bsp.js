@@ -26,7 +26,6 @@ import {
 } from '../store/activeMediaStates';
 
 import {
-  registerHSM,
   setPoolAssetFiles,
 } from '../store/stateMachine';
 
@@ -36,11 +35,13 @@ export class BSP {
 
   store : Object;
   playerHSM : Object;
+  hsmList : Array<Object>;
   syncSpec : Object;
 
   constructor(reduxStore : Object) {
     this.store = reduxStore;
     // this.syncSpec = null;
+    this.hsmList = [];
 
     myBSP = this;
   }
@@ -146,12 +147,9 @@ export class BSP {
 
   dispatchEvent(dispatch : Function, getState : Function, event : Object) {
 
-    const stateMachine = getState().stateMachine;
-    const hsmList : Array<Object> = stateMachine.hsm;
-
     this.playerHSM.Dispatch(event);
 
-    hsmList.forEach( (hsm) => {
+    this.hsmList.forEach( (hsm) => {
       console.log('before: ', hsm.activeState);
       hsm.Dispatch(event);
       console.log('after: ', hsm.activeState);
@@ -215,7 +213,7 @@ export class BSP {
     zoneIds.forEach( (zoneId) => {
       const zoneHSM = new ZoneHSM(dispatch, bsdm, zoneId);
       zoneHSMs.push(zoneHSM);
-      dispatch(registerHSM(zoneHSM));
+      this.hsmList.push(zoneHSM);
     });
 
     zoneHSMs.forEach( (zoneHSM) => {
