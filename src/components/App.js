@@ -27,14 +27,6 @@ class App extends Component {
 
     console.log("app.js::componentDidMount invoked, PlatformService: ");
     console.log(PlatformService);
-
-    // const rootPath: string = PlatformService.default.getRootDirectory();
-    // const pathToPool: string = PlatformService.default.getPathToPool();
-
-    // this.props.setPlaybackState('active');
-
-    // this.props.initStateMachine(rootPath, pathToPool);
-    // this.props.initBSP(rootPath, pathToPool);
   }
 
   // restartPresentation() {

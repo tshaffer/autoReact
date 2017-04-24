@@ -4,13 +4,15 @@ import React, { Component } from 'react';
 
 import path from 'path';
 
+import { getPoolFilePath } from '../utilities/utilities';
+
 export default class Video extends Component {
 
   render () {
 
     let self = this;
 
-    const src = path.join('file://', this.props.poolFilePath);
+    const src = path.join('file://', getPoolFilePath(this.props.resourceIdentifier));
     console.log('video.js::render, video src: ' + src);
 
     return (
@@ -33,7 +35,4 @@ Video.propTypes = {
   height: React.PropTypes.number.isRequired,
   onVideoEnd: React.PropTypes.func.isRequired,
   resourceIdentifier: React.PropTypes.string.isRequired,
-  poolFilePath: React.PropTypes.string,
 };
-
-//  poolFilePath: React.PropTypes.string.isRequired,

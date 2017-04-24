@@ -4,6 +4,8 @@ import React, { Component } from 'react';
 
 import path from 'path';
 
+import { getPoolFilePath } from '../utilities/utilities';
+
 export default class Image extends Component {
 
   constructor(props : Object) {
@@ -35,7 +37,7 @@ export default class Image extends Component {
     }
       ,this.props.duration);
 
-    const src = path.join('file://', this.props.poolFilePath);
+    const src = path.join('file://', getPoolFilePath(this.props.resourceIdentifier));
     console.log('image.js::render, image src: ' + src);
 
     return (
@@ -54,7 +56,4 @@ Image.propTypes = {
   duration: React.PropTypes.number.isRequired,
   onTimeout: React.PropTypes.func.isRequired,
   resourceIdentifier: React.PropTypes.string,
-  poolFilePath: React.PropTypes.string,
 };
-
-//   poolFilePath: React.PropTypes.string.isRequired,

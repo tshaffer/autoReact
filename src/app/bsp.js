@@ -14,6 +14,10 @@ import {
 import PlatformService from '../platform';
 
 import {
+  setPoolAssetFiles
+} from '../utilities/utilities';
+
+import {
   PlayerHSM
 } from '../hsm/playerHSM';
 
@@ -24,10 +28,6 @@ import {
 import {
   setActiveMediaState
 } from '../store/activeMediaStates';
-
-import {
-  setPoolAssetFiles,
-} from '../store/stateMachine';
 
 export let myBSP = {};
 
@@ -61,7 +61,7 @@ export class BSP {
       this.syncSpec = cardSyncSpec;
 
       const poolAssetFiles = this.buildPoolAssetFiles(this.syncSpec, pathToPool);
-      dispatch(setPoolAssetFiles(poolAssetFiles));
+      setPoolAssetFiles(poolAssetFiles);
 
       state = this.store.getState();
 
