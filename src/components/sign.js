@@ -14,8 +14,6 @@ import {
 
 export default class Sign extends Component {
 
-  //         key={zoneIndex}
-
   getMediaZoneJSX(zone : Object) {
 
     return (
@@ -30,6 +28,7 @@ export default class Sign extends Component {
         }}
       >
         <MediaZoneContainer
+          key={zone.id}
           playbackState={this.props.playbackState}
           bsdm={this.props.bsdm}
           zone={zone}
@@ -39,8 +38,6 @@ export default class Sign extends Component {
       </div>
     );
   }
-
-  // postMessage={this.props.postMessage}
 
 
 // getTickerZone(bsdm: Object, zone : Object, zoneIndex : number) {
@@ -78,7 +75,11 @@ export default class Sign extends Component {
       }
       case 'Ticker': {
         return (
-          <div>ticker</div>
+          <div
+            key={zoneId}
+          >
+            ticker
+          </div>
         );
         // return this.getTickerZoneJSX(bsdm, zone);
       }
