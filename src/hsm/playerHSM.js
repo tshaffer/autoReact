@@ -33,7 +33,7 @@ export class PlayerHSM extends HSM {
     this.topState = this.stTop;
   }
 
-  initializePlayerStateMachine(dispatch : Function, getState : Function) {
+  initializePlayerStateMachine() {
 
     console.log("initializePlayerStateMachine invoked");
 
@@ -47,7 +47,7 @@ export class PlayerHSM extends HSM {
       let event = {
         'EventType' : 'TRANSITION_TO_PLAYING'
       };
-      dispatch(this.bsp.postMessage(event));
+      this.dispatch(this.bsp.postMessage(event));
     });
 
     // from autorunClassic
@@ -128,7 +128,4 @@ export class PlayerHSM extends HSM {
     stateData.nextState = this.superState;
     return "SUPER";
   }
-
-
-
 }

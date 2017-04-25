@@ -70,7 +70,7 @@ export class BSP {
       this.playerHSM = new PlayerHSM(this, this.dispatch, this.getState, state.bsdm);
 
 // Zone state machines are created by the Player state machine when it parses the schedule and autoplay files
-      this.playerHSM.initialize(this.dispatch, this.getState);
+      this.playerHSM.initialize();
 
     }).catch((err) => {
       console.log(err);
