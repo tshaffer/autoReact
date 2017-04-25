@@ -7,7 +7,6 @@ import MediaZoneContainer from '../containers/mediaZoneContainer';
 
 import {
   dmGetZoneById,
-  ZoneTypeCompactName,
   dmGetZonesForSign,
 } from '@brightsign/bsdatamodel';
 
@@ -68,7 +67,7 @@ export default class Sign extends Component {
 
     const zone = dmGetZoneById(this.props.bsdm, { id: zoneId });
 
-    switch (ZoneTypeCompactName(zone.type)) {
+    switch (zone.type) {
       case 'VideoOrImages': {
         const mediaZoneJSX = this.getMediaZoneJSX(zone);
         return mediaZoneJSX;

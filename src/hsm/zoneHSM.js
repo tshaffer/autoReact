@@ -6,7 +6,6 @@ import {
   dmGetZoneById,
   dmGetZoneSimplePlaylist,
   dmGetMediaStateById,
-  ContentItemType
 } from '@brightsign/bsdatamodel';
 
 import ImageState from './imageState';
@@ -47,13 +46,13 @@ export class ZoneHSM extends HSM {
 
     this.mediaStateIds.forEach( (mediaStateId, index) => {
       const bsdmMediaState = dmGetMediaStateById(bsdm, { id : mediaStateId});
-      if (bsdmMediaState.contentItem.type === ContentItemType.Image) {
+      if (bsdmMediaState.contentItem.type === 'Image') {
         newState = new ImageState(this, bsdmMediaState);
       }
-      else if (bsdmMediaState.contentItem.type === ContentItemType.Video) {
+      else if (bsdmMediaState.contentItem.type === 'Video') {
         newState = new VideoState(this, bsdmMediaState);
       }
-      else if (bsdmMediaState.contentItem.type === ContentItemType.DataFeed) {
+      else if (bsdmMediaState.contentItem.type === 'DataFeed') {
         newState = new RSSDataFeedState(this, bsdmMediaState);
       }
       else {

@@ -11,13 +11,9 @@ import VideoContainer from '../containers/videoContainer';
 import Html from './html';
 
 import {
-  ContentItemType,
   dmGetHtmlSiteById,
   dmGetMediaStateById,
-  // dmGetZoneSimplePlaylist,
   dmGetEventIdsForMediaState,
-  MediaType,
-  EventTypeName,
   dmGetEventById,
 } from '@brightsign/bsdatamodel';
 
@@ -42,7 +38,7 @@ export default class MediaZone extends Component {
 
     const resourceIdentifier = path.basename(assetId);
 
-    const eventName = EventTypeName(event.type);
+    const eventName = event.type;
     switch(eventName) {
       case 'Timer': {
         duration = event.data.interval;
@@ -57,7 +53,7 @@ export default class MediaZone extends Component {
     }
 
     switch (mediaType) {
-      case MediaType.Image: {
+      case 'Image': {
         return (
           <ImageContainer
             resourceIdentifier={resourceIdentifier}
@@ -68,7 +64,7 @@ export default class MediaZone extends Component {
           />
         );
       }
-      case MediaType.Video: {
+      case 'Video': {
         return (
           <VideoContainer
             resourceIdentifier={resourceIdentifier}
@@ -138,11 +134,11 @@ export default class MediaZone extends Component {
     const mediaContentItem = mediaState.contentItem;
 
     switch(mediaContentItem.type) {
-      case ContentItemType.Video:
-      case ContentItemType.Image: {
+      case'Video':
+      case 'Image': {
         return this.renderMediaItem(mediaContentItem, event);
       }
-      case ContentItemType.Html: {
+      case 'Html': {
         return this.renderHtmlItem(mediaContentItem);
       }
       default: {
