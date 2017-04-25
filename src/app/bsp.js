@@ -31,7 +31,8 @@ import {
 
 export let myBSP = {};
 
-export class BSP {
+let _singleton = null;
+class BSP {
 
   store : Object;
   dispatch : Function;
@@ -40,7 +41,15 @@ export class BSP {
   hsmList : Array<Object>;
   syncSpec : Object;
 
-  constructor(reduxStore : Object) {
+  constructor() {
+    if(!_singleton){
+      console.log('bsp constructor invoked');
+      _singleton = this;
+    }
+  }
+
+  initialize(reduxStore : Object) {
+
     this.store = reduxStore;
     this.dispatch = this.store.dispatch;
     this.getState = this.store.getState;
@@ -48,10 +57,6 @@ export class BSP {
     this.hsmList = [];
 
     myBSP = this;
-  }
-
-  initialize() {
-
     const rootPath: string = PlatformService.default.getRootDirectory();
     const pathToPool: string = PlatformService.default.getPathToPool();
 
@@ -213,3 +218,6 @@ export class BSP {
     return file;
   }
 }
+
+export const bsp = new BSP();
+
