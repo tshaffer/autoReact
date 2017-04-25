@@ -21,7 +21,7 @@ import {
   dmGetEventById,
 } from '@brightsign/bsdatamodel';
 
-import { myBSP } from '../app/bsp';
+import { bsp } from '../app/bsp';
 
 export default class MediaZone extends Component {
 
@@ -29,7 +29,7 @@ export default class MediaZone extends Component {
     let event = {
       'EventType' : 'timeoutEvent'
     };
-    myBSP.store.dispatch(myBSP.postMessage(event));
+    bsp.store.dispatch(bsp.postMessage(event));
     // this.props.postMessage(event);
   }
 

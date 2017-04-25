@@ -29,9 +29,8 @@ import {
   setActiveMediaState
 } from '../store/activeMediaStates';
 
-export let myBSP = {};
-
 let _singleton = null;
+
 class BSP {
 
   store : Object;
@@ -56,7 +55,6 @@ class BSP {
     // this.syncSpec = null;
     this.hsmList = [];
 
-    myBSP = this;
     const rootPath: string = PlatformService.default.getRootDirectory();
     const pathToPool: string = PlatformService.default.getPathToPool();
 
@@ -127,7 +125,7 @@ class BSP {
   }
 
   postMessage(event : Object) {
-    return (dispatch: Function, getState: Function) => {
+    return () => {
       this.dispatchEvent(event);
     };
   }
