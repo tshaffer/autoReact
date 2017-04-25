@@ -54,7 +54,6 @@ export function getActiveMediaStateId(state : Object, zoneId : string) {
 
   const activeMediaStateByZone = state.activeMediaStates.activeMediaStateByZone;
   const activeMediaStateId = activeMediaStateByZone[zoneId];
-  console.log('activeMediaStateId: ' + activeMediaStateId);
   return activeMediaStateId;
 }
 

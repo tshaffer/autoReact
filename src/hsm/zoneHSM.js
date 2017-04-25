@@ -13,13 +13,9 @@ import ImageState from './imageState';
 import VideoState from './videoState';
 import RSSDataFeedState from './rssDataFeedState';
 
-// import {
-//   setActiveMediaState
-// } from '../store/activeMediaStates';
-
 export class ZoneHSM extends HSM {
 
-  constructor(dispatch : Function, bsdm : Object, zoneId : string) {
+  constructor(bsdm : Object, zoneId : string) {
     super();
 
     this.bsdm = bsdm;
@@ -71,12 +67,6 @@ export class ZoneHSM extends HSM {
       }
     });
     this.mediaStates[this.mediaStates.length - 1].setNextState(this.mediaStates[0]);
-
-    // this.constructorFunction();
-    //
-    // this.initialize();
-    //
-    // dispatch(setActiveMediaState(this.id, this.activeState.id));
   }
 
   videoOrImagesZoneConstructor() {
@@ -92,6 +82,5 @@ export class ZoneHSM extends HSM {
 
     return this.activeState;
   }
-
 }
 

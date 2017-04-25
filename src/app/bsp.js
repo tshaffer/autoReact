@@ -84,7 +84,7 @@ export class BSP {
 
     const zoneIds = dmGetZonesForSign(bsdm);
     zoneIds.forEach( (zoneId) => {
-      const zoneHSM = new ZoneHSM(this.dispatch, bsdm, zoneId);
+      const zoneHSM = new ZoneHSM(bsdm, zoneId);
       zoneHSMs.push(zoneHSM);
       this.hsmList.push(zoneHSM);
     });
@@ -105,7 +105,7 @@ export class BSP {
     return new Promise( (resolve) => {
       this.getAutoschedule(this.syncSpec, rootPath).then( (autoSchedule) => {
 
-        // TODO - only a single scheduled item is supported
+        // TODO - only a single scheduled item is currently supported
 
         const scheduledPresentation = autoSchedule.scheduledPresentations[0];
         const presentationToSchedule = scheduledPresentation.presentationToSchedule;
@@ -115,12 +115,9 @@ export class BSP {
         this.getSyncSpecFile(bmlFileName, this.syncSpec, rootPath).then( (autoPlay) => {
           console.log(autoPlay);
           this.dispatch(dmOpenSign(autoPlay));
-
           resolve();
-
         });
       });
-
     });
   }
 
@@ -215,5 +212,4 @@ export class BSP {
 
     return file;
   }
-
 }
