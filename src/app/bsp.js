@@ -9,6 +9,7 @@ const decoder = new StringDecoder('utf8');
 import {
   dmOpenSign,
   dmGetZonesForSign,
+  dmGetZoneById,
 } from '@brightsign/bsdatamodel';
 
 import PlatformService from '../platform';
@@ -24,6 +25,10 @@ import {
 import {
   ZoneHSM
 } from '../hsm/zoneHSM';
+
+import {
+  TickerZoneHSM
+} from '../hsm/tickerZoneHSM';
 
 import {
   setActiveMediaState
@@ -87,7 +92,21 @@ class BSP {
 
     const zoneIds = dmGetZonesForSign(bsdm);
     zoneIds.forEach( (zoneId) => {
-      const zoneHSM = new ZoneHSM(bsdm, zoneId);
+
+      const bsdmZone = dmGetZoneById(bsdm, { id: zoneId });
+
+      let zoneHSM;
+
+      switch (bsdmZone.type) {
+        case 'Ticker': {
+          zoneHSM = new TickerZoneHSM(bsdm, zoneId);
+          break;
+        }
+        default: {
+          zoneHSM = new ZoneHSM(bsdm, zoneId);
+          break;
+        }
+      }
       zoneHSMs.push(zoneHSM);
       this.hsmList.push(zoneHSM);
     });
