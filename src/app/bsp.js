@@ -29,6 +29,22 @@ import {
   setActiveMediaState
 } from '../store/activeMediaStates';
 
+import {
+  bscCreateAbsoluteRect,
+  DataFeedUsageType,
+  ZoneType,
+} from '@brightsign/bscore';
+
+import {
+  dmGetSignState,
+  dmPlaylistAppendMediaState,
+  dmGetZoneMediaStateContainer,
+  dmAddZone,
+  dmGetParameterizedStringFromString,
+  dmAddDataFeed,
+  dmCreateDataFeedContentItem,
+} from '@brightsign/bsdatamodel';
+
 let _singleton = null;
 
 class BSP {
@@ -118,6 +134,7 @@ class BSP {
         this.getSyncSpecFile(bmlFileName, this.syncSpec, rootPath).then( (autoPlay) => {
           console.log(autoPlay);
           this.dispatch(dmOpenSign(autoPlay));
+          this.dispatch(this.buildPresentation('/Users/tedshaffer/Desktop/baconPresBuilderOut/mz2.bpf'));
           resolve();
         });
       });
@@ -214,6 +231,44 @@ class BSP {
     });
 
     return file;
+  }
+
+  buildPresentation(filePath : string) {
+
+    let zoneRect;
+    let action;
+    let contentItem;
+
+    return (dispatch : Function, getState : Function) => {
+
+      debugger;
+
+      // create ticker zone
+      zoneRect = bscCreateAbsoluteRect(0, 880, 1920, 200);
+      action = dispatch(dmAddZone('Ticker', ZoneType.Ticker, 'ticker', zoneRect));
+      let tickerZoneContainer = dmGetZoneMediaStateContainer(action.payload.id);
+
+      let psFeedUrl = dmGetParameterizedStringFromString('http://feeds.reuters.com/Reuters/domesticNews');
+      let innerAction = dispatch(dmAddDataFeed('UsNewsFeed', psFeedUrl, DataFeedUsageType.Text));
+      let dataFeedId = innerAction.payload.id;
+      contentItem = dmCreateDataFeedContentItem('NewsFeed', dataFeedId);
+      dispatch(dmPlaylistAppendMediaState(tickerZoneContainer, contentItem)).then(
+        action => {
+          let state = getState();
+          this.savePresentationAs(dmGetSignState(state.bsdm), filePath);
+          debugger;
+        }
+      ).catch((err) => {
+        console.log(err);
+        debugger;
+      });
+    };
+  }
+
+  savePresentationAs(presentation : Object, path : string) {
+
+    const bpfStr = JSON.stringify(presentation, null, '\t');
+    fs.writeFileSync(path, bpfStr);
   }
 }
 
