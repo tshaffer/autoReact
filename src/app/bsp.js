@@ -317,7 +317,6 @@ class BSP {
 
   processLiveDataFeed(liveDataFeed : Object, feedData : Object) {
 
-    debugger;
     let arLiveDataFeed = this.arLiveDataFeeds[liveDataFeed.name];
 
     if (liveDataFeed.usage === DataFeedUsageType.Content &&

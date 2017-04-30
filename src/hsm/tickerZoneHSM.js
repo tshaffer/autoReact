@@ -91,10 +91,7 @@ export class TickerZoneHSM extends HSM {
     this.stRSSDataFeedInitialLoad.HStateEventHandler = this.STRSSDataFeedInitialLoadEventHandler;
     this.stRSSDataFeedInitialLoad.superState = this.stTop;
 
-    this.stRSSDataFeedPlaying = new HState(this, "RSSDataFeedPlaying");
-    this.stRSSDataFeedPlaying.PopulateRSSDataFeedWidget = this.PopulateRSSDataFeedWidget;
-    this.stRSSDataFeedPlaying.HStateEventHandler = this.STRSSDataFeedPlayingEventHandler;
-    this.stRSSDataFeedPlaying.superState = this.stTop;
+    this.stRSSDataFeedPlaying = new STRSSDataFeedPlaying(this, "RSSDataFeedPlaying");
 
     // in autorun classic, this is done in newPlaylist as called from newZoneHSM
     let self = this;
@@ -108,7 +105,6 @@ export class TickerZoneHSM extends HSM {
         // BACONTODO - I think this is sufficient to set 'includesRSSFeeds'
         self.includesRSSFeeds = true;
 
-        debugger;
         const dataFeedId = bsdmMediaState.contentItem.dataFeedId;
         const dataFeed = dmGetDataFeedById(bsdm, { id: dataFeedId });
         const arLiveDataFeed = self.bsp.arLiveDataFeeds[dataFeed.name];
@@ -134,8 +130,8 @@ export class TickerZoneHSM extends HSM {
     this.height = this.bsdmZone.absolutePosition.height;
 
 // $FlowBrightSignExternalObject
-    const bsTicker = new BSTicker(this.x, this.y, this.width, this.height, this.rotation);
-    console.log(bsTicker);
+//     const bsTicker = new BSTicker(this.x, this.y, this.width, this.height, this.rotation);
+//     console.log(bsTicker);
 //     bsTicker.SetForegroundColor(this.foregroundTextColor);
 //     bsTicker.SetBackroundColor(this.backgroundTextColor);
 //     bsTicker.SetPixelsPerSecond(this.scrollSpeed);
@@ -154,7 +150,7 @@ export class TickerZoneHSM extends HSM {
 
   }
 
-  tickerGetInitialState() {
+  tickerZoneGetInitialState() {
     if (this.includesRSSFeeds) {
       return this.stRSSDataFeedInitialLoad;
     }
@@ -179,6 +175,15 @@ export class TickerZoneHSM extends HSM {
     stateData.nextState = this.superState;
     return "SUPER";
   }
+}
+
+export class STRSSDataFeedPlaying extends HState {
+
+  constructor(stateMachine : Object, id : string) {
+    super(stateMachine, id);
+    this.HStateEventHandler = this.STRSSDataFeedPlayingEventHandler;
+    this.superState = stateMachine.stTop;
+  }
 
   STRSSDataFeedPlayingEventHandler(event: Object, stateData: Object): string {
 
@@ -196,30 +201,23 @@ export class TickerZoneHSM extends HSM {
 
   populateRSSDataFeedWidget() {
 
+    // clear existing strings
+    // rssStringCount = m.stateMachine.widget.GetStringCount();
+    // m.stateMachine.widget.PopStrings(rssStringCount)
+
+    // populate widget with new strings
+    this.stateMachine.rssDataFeedItems.forEach((rssDataFeedItem) => {
+      rssDataFeedItem.rssItems.forEach( (rssItem) => {
+        console.log(rssItem.title);
+        console.log(rssItem.description);
+// m.stateMachine.widget.PushString(textString) (title in our case)
+      });
+    });
+
+// if m.stateMachine.isVisible then m.stateMachine.widget.Show()
+
+    debugger;
   }
 
+
 }
-
-
-// Sub PopulateRSSDataFeedWidget()
-//
-// ' clear existing strings
-// rssStringCount = m.stateMachine.widget.GetStringCount()
-// m.stateMachine.widget.PopStrings(rssStringCount)
-//
-// ' populate widget with new strings
-// for each rssDataFeedItem in m.stateMachine.rssDataFeedItems
-// if type(rssDataFeedItem.textStrings) = "roArray" then
-// for each textString in rssDataFeedItem.textStrings
-// m.stateMachine.widget.PushString(textString)
-// next
-// else
-// for each article in rssDataFeedItem.liveDataFeed.articles
-// m.stateMachine.widget.PushString(article)
-// next
-// endif
-// next
-//
-// if m.stateMachine.isVisible then m.stateMachine.widget.Show()
-//
-// End Sub
