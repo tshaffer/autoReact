@@ -7,13 +7,19 @@ import {
   dmGetZoneSimplePlaylist,
   dmGetZonePropertiesById,
   dmGetZoneById,
+  dmGetDataFeedById,
 } from '@brightsign/bsdatamodel';
+
+import {
+  ARLiveDataFeed
+} from '../entities/liveDataFeed';
 
 export class TickerZoneHSM extends HSM {
 
-  constructor(bsdm: Object, zoneId: string) {
+  constructor(bsp: Object, bsdm: Object, zoneId: string) {
     super();
 
+    this.bsp = bsp;
     this.bsdm = bsdm;
     this.zoneId = zoneId;
 
@@ -91,21 +97,22 @@ export class TickerZoneHSM extends HSM {
     this.stRSSDataFeedPlaying.superState = this.stTop;
 
     // in autorun classic, this is done in newPlaylist as called from newZoneHSM
-    // this.rssDataFeedItems = [];
+    let self = this;
     this.mediaStateIds = dmGetZoneSimplePlaylist(this.bsdm, { id: zoneId });
-    this.mediaStates = [];
+    this.rssDataFeedItems = [];
 
     this.mediaStateIds.forEach( (mediaStateId) => {
       const bsdmMediaState = dmGetMediaStateById(bsdm, {id: mediaStateId});
       if (bsdmMediaState.contentItem.type === 'DataFeed') {
+
         // BACONTODO - I think this is sufficient to set 'includesRSSFeeds'
-        this.includesRSSFeeds = true;
+        self.includesRSSFeeds = true;
 
-        // tickerItem = newTickerItem(bsp, zoneHSM, state)
-        // if tickerItem <> invalid then
-        // zoneHSM.rssDataFeedItems.push(tickerItem)
-        // endif
-
+        debugger;
+        const dataFeedId = bsdmMediaState.contentItem.dataFeedId;
+        const dataFeed = dmGetDataFeedById(bsdm, { id: dataFeedId });
+        const arLiveDataFeed = self.bsp.arLiveDataFeeds[dataFeed.name];
+        self.rssDataFeedItems.push(arLiveDataFeed);
       }
     });
   }
@@ -161,19 +168,58 @@ export class TickerZoneHSM extends HSM {
     stateData.nextState = null;
 
     if (event.EventType && event.EventType === 'ENTRY_SIGNAL') {
-
       console.log(this.id + ": entry signal");
+      return "HANDLED";
+    }
+    else if (event.EventType && event.EventType === 'LIVE_DATA_FEED_UPDATE') {
+      stateData.nextState = this.stateMachine.stRSSDataFeedPlaying;
+      return "TRANSITION";
+    }
 
-      // for each rssDataFeedItem in m.stateMachine.rssDataFeedItems
-      // rssDataFeedItem.loadAttemptComplete = not rssDataFeedItem.isRSSFeed
-      // next
+    stateData.nextState = this.superState;
+    return "SUPER";
+  }
 
+  STRSSDataFeedPlayingEventHandler(event: Object, stateData: Object): string {
+
+    stateData.nextState = null;
+
+    if (event.EventType && event.EventType === 'ENTRY_SIGNAL') {
+      console.log(this.id + ": entry signal");
+      this.populateRSSDataFeedWidget();
       return "HANDLED";
     }
 
     stateData.nextState = this.superState;
     return "SUPER";
+  }
+
+  populateRSSDataFeedWidget() {
 
   }
 
 }
+
+
+// Sub PopulateRSSDataFeedWidget()
+//
+// ' clear existing strings
+// rssStringCount = m.stateMachine.widget.GetStringCount()
+// m.stateMachine.widget.PopStrings(rssStringCount)
+//
+// ' populate widget with new strings
+// for each rssDataFeedItem in m.stateMachine.rssDataFeedItems
+// if type(rssDataFeedItem.textStrings) = "roArray" then
+// for each textString in rssDataFeedItem.textStrings
+// m.stateMachine.widget.PushString(textString)
+// next
+// else
+// for each article in rssDataFeedItem.liveDataFeed.articles
+// m.stateMachine.widget.PushString(article)
+// next
+// endif
+// next
+//
+// if m.stateMachine.isVisible then m.stateMachine.widget.Show()
+//
+// End Sub

@@ -18,6 +18,8 @@ import {
   dmGetSimpleStringFromParameterizedString,
   dmGetZonesForSign,
   dmGetZoneById,
+  dmGetDataFeedIdsForSign,
+  dmGetDataFeedById,
 } from '@brightsign/bsdatamodel';
 
 import PlatformService from '../platform';
@@ -58,6 +60,7 @@ class BSP {
   syncSpec : Object;
   liveDataFeedsByTimer : Object;
   liveDataFeedsToDownload : Array<Object>;
+  arLiveDataFeeds : Object;
 
   constructor() {
     if(!_singleton){
@@ -73,6 +76,7 @@ class BSP {
     this.getState = this.store.getState;
     // this.syncSpec = null;
     this.hsmList = [];
+    this.arLiveDataFeeds = {};
 
     const rootPath: string = PlatformService.default.getRootDirectory();
     const pathToPool: string = PlatformService.default.getPathToPool();
@@ -113,7 +117,7 @@ class BSP {
 
       switch (bsdmZone.type) {
         case 'Ticker': {
-          zoneHSM = new TickerZoneHSM(bsdm, zoneId);
+          zoneHSM = new TickerZoneHSM(this, bsdm, zoneId);
           break;
         }
         default: {
@@ -151,6 +155,16 @@ class BSP {
         this.getSyncSpecFile(bmlFileName, this.syncSpec, rootPath).then( (autoPlay) => {
           console.log(autoPlay);
           this.dispatch(dmOpenSign(autoPlay));
+
+          // get data feeds for the sign
+          let bsdm = this.getState().bsdm;
+          const dataFeedIds = dmGetDataFeedIdsForSign(bsdm);
+          dataFeedIds.forEach( (dataFeedId) => {
+            const dataFeed = dmGetDataFeedById(bsdm, { id: dataFeedId });
+            let arLiveDataFeed : ARLiveDataFeed = new ARLiveDataFeed(dataFeed);
+            this.arLiveDataFeeds[dataFeed.name] = arLiveDataFeed;
+          });
+
           resolve();
         });
       });
@@ -224,8 +238,8 @@ class BSP {
           const fileStr : string = decoder.write(dataBuffer);
           const file : Object = JSON.parse(fileStr);
 
-          // disable to allow hacking of files - that is, overwriting files in the pool without updating the sync spec
-          // with updated sha1
+          // comment out the following code to allow hacking of files -
+          // that is, overwriting files in the pool without updating the sync spec with updated sha1
           // if (fileSize !== fileStr.length) {
           //   debugger;
           // }
@@ -302,15 +316,33 @@ class BSP {
   }
 
   processLiveDataFeed(liveDataFeed : Object, feedData : Object) {
+
+    debugger;
+    let arLiveDataFeed = this.arLiveDataFeeds[liveDataFeed.name];
+
     if (liveDataFeed.usage === DataFeedUsageType.Content &&
       (liveDataFeed.DataFeedType === DataFeedType.BSNDynamicPlaylist) ||
       (liveDataFeed.DataFeedType === DataFeedType.BSNMediaFeed)) {
       console.log(liveDataFeed,' not supported yet');
+      debugger;
     }
     else {
-      let arLiveDataFeed : ARLiveDataFeed = new ARLiveDataFeed(liveDataFeed);
       arLiveDataFeed.parseSimpleRSSFeed(feedData);
     }
+
+    // send internal message indicating that the data feed has been updated
+    let event = {
+      'EventType' : 'LIVE_DATA_FEED_UPDATE',
+      'EventData' : arLiveDataFeed
+    };
+    this.dispatch(this.postMessage(event));
+
+
+    // updateInterval% = liveDataFeed.updateInterval%
+
+    // ' set a timer to update this live data feed
+    // liveDataFeed.RestartLiveDataFeedDownloadTimer(updateInterval%)
+
   }
 }
 
