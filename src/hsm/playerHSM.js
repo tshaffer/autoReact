@@ -104,6 +104,8 @@ export class PlayerHSM extends HSM {
 
       // load live data feeds and queue for downloading
       const dataFeedIds = dmGetDataFeedIdsForSign(this.stateMachine.bsdm);
+
+      // is this necessary?
       this.liveDataFeeds = [];
       dataFeedIds.forEach( (dataFeedId) => {
         this.liveDataFeeds.push(dmGetDataFeedById(this.stateMachine.bsdm, { id: dataFeedId }));

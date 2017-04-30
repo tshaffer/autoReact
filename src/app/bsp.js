@@ -9,7 +9,8 @@ const StringDecoder = require('string_decoder').StringDecoder;
 const decoder = new StringDecoder('utf8');
 
 import {
-  DataFeedUsageType
+  DataFeedType,
+  DataFeedUsageType,
 } from '@brightsign/bscore';
 
 import {
@@ -40,6 +41,10 @@ import {
 import {
   setActiveMediaState
 } from '../store/activeMediaStates';
+
+import {
+  ARLiveDataFeed
+} from '../entities/liveDataFeed';
 
 let _singleton = null;
 
@@ -261,6 +266,7 @@ class BSP {
   }
 
   retrieveLiveDataFeed(liveDataFeeds : Array<Object>, liveDataFeed : Object) {
+
     const url = dmGetSimpleStringFromParameterizedString(liveDataFeed.url);
 
     fetch(url)
@@ -275,9 +281,9 @@ class BSP {
                 debugger;
               }
               console.log(jsonResponse);
-              debugger;
               // resolve(jsonResponse);
               // this.parseRSS(jsonResponse);
+              this.processLiveDataFeed(liveDataFeed, jsonResponse);
             });
           }
           catch (e) {
@@ -286,10 +292,25 @@ class BSP {
           }
         });
       }).catch( (err) => {
-      console.log(err);
-      debugger;
-    });
+        console.log(err);
+        debugger;
+      });
 
+    // is the following necessary in autoreact?
+    // liveDataFeeds.AddReplace(stri(liveDataFeed.rssURLXfer.GetIdentity()), liveDataFeed)
+
+  }
+
+  processLiveDataFeed(liveDataFeed : Object, feedData : Object) {
+    if (liveDataFeed.usage === DataFeedUsageType.Content &&
+      (liveDataFeed.DataFeedType === DataFeedType.BSNDynamicPlaylist) ||
+      (liveDataFeed.DataFeedType === DataFeedType.BSNMediaFeed)) {
+      console.log(liveDataFeed,' not supported yet');
+    }
+    else {
+      let arLiveDataFeed : ARLiveDataFeed = new ARLiveDataFeed(liveDataFeed);
+      arLiveDataFeed.parseSimpleRSSFeed(feedData);
+    }
   }
 }
 
