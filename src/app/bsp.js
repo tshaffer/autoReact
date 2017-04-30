@@ -3,11 +3,18 @@
 import fs from 'fs';
 import path from 'path';
 
+const xml2js = require('xml2js');
+
 const StringDecoder = require('string_decoder').StringDecoder;
 const decoder = new StringDecoder('utf8');
 
 import {
+  DataFeedUsageType
+} from '@brightsign/bscore';
+
+import {
   dmOpenSign,
+  dmGetSimpleStringFromParameterizedString,
   dmGetZonesForSign,
   dmGetZoneById,
 } from '@brightsign/bsdatamodel';
@@ -44,6 +51,8 @@ class BSP {
   playerHSM : Object;
   hsmList : Array<Object>;
   syncSpec : Object;
+  liveDataFeedsByTimer : Object;
+  liveDataFeedsToDownload : Array<Object>;
 
   constructor() {
     if(!_singleton){
@@ -233,6 +242,54 @@ class BSP {
     });
 
     return file;
+  }
+
+  queueRetrieveLiveDataFeed(liveDataFeeds : Array<Object>, liveDataFeed : Object) {
+
+    if (liveDataFeed.usage === DataFeedUsageType.Text) {
+      this.retrieveLiveDataFeed(liveDataFeeds, liveDataFeed);
+    }
+    else {
+      debugger;
+      this.liveDataFeedsToDownload.push(liveDataFeed.name);
+
+      // launch download of first feed
+      if (this.liveDataFeedsToDownload.length === 1) {
+        this.retrieveLiveDataFeed(liveDataFeeds, liveDataFeed);
+      }
+    }
+  }
+
+  retrieveLiveDataFeed(liveDataFeeds : Array<Object>, liveDataFeed : Object) {
+    const url = dmGetSimpleStringFromParameterizedString(liveDataFeed.url);
+
+    fetch(url)
+      .then( (response) => {
+        let blobPromise = response.text();
+        blobPromise.then( (content) => {
+          let parser = new xml2js.Parser();
+          try {
+            parser.parseString(content, (err, jsonResponse) => {
+              if (err) {
+                console.log(err);
+                debugger;
+              }
+              console.log(jsonResponse);
+              debugger;
+              // resolve(jsonResponse);
+              // this.parseRSS(jsonResponse);
+            });
+          }
+          catch (e) {
+            console.log(e);
+            debugger;
+          }
+        });
+      }).catch( (err) => {
+      console.log(err);
+      debugger;
+    });
+
   }
 }
 

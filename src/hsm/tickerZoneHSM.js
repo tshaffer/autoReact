@@ -95,11 +95,16 @@ export class TickerZoneHSM extends HSM {
     this.mediaStateIds = dmGetZoneSimplePlaylist(this.bsdm, { id: zoneId });
     this.mediaStates = [];
 
-    this.mediaStateIds.forEach( (mediaStateId, index) => {
+    this.mediaStateIds.forEach( (mediaStateId) => {
       const bsdmMediaState = dmGetMediaStateById(bsdm, {id: mediaStateId});
       if (bsdmMediaState.contentItem.type === 'DataFeed') {
         // BACONTODO - I think this is sufficient to set 'includesRSSFeeds'
-        this.includesRSSFeeds = true
+        this.includesRSSFeeds = true;
+
+        // tickerItem = newTickerItem(bsp, zoneHSM, state)
+        // if tickerItem <> invalid then
+        // zoneHSM.rssDataFeedItems.push(tickerItem)
+        // endif
 
       }
     });
@@ -122,7 +127,8 @@ export class TickerZoneHSM extends HSM {
     this.height = this.bsdmZone.absolutePosition.height;
 
 // $FlowBrightSignExternalObject
-//     const bsTicker = new BSTicker(this.x, this.y, this.width, this.height, this.rotation);
+    const bsTicker = new BSTicker(this.x, this.y, this.width, this.height, this.rotation);
+    console.log(bsTicker);
 //     bsTicker.SetForegroundColor(this.foregroundTextColor);
 //     bsTicker.SetBackroundColor(this.backgroundTextColor);
 //     bsTicker.SetPixelsPerSecond(this.scrollSpeed);

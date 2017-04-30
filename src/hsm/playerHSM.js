@@ -2,6 +2,11 @@
 
 import { HSM, HState, STTopEventHandler } from './HSM';
 
+import {
+  dmGetDataFeedIdsForSign,
+  dmGetDataFeedById,
+} from '@brightsign/bsdatamodel';
+
 export class PlayerHSM extends HSM {
 
   constructor(bsp : Object, dispatch: Function, getState : Function, bsdm: Object) {
@@ -94,9 +99,22 @@ export class PlayerHSM extends HSM {
       //check for live data feeds that include content (either MRSS or content for Media Lists / PlayFiles).
       // for each of them, check to see if the feed and/or content already exists.
 
-      // load live data feeds
+      // update bsdm
+      this.stateMachine.bsdm = this.stateMachine.getState().bsdm;
 
-      // queue live data feeds for downloading
+      // load live data feeds and queue for downloading
+      const dataFeedIds = dmGetDataFeedIdsForSign(this.stateMachine.bsdm);
+      this.liveDataFeeds = [];
+      dataFeedIds.forEach( (dataFeedId) => {
+        this.liveDataFeeds.push(dmGetDataFeedById(this.stateMachine.bsdm, { id: dataFeedId }));
+      });
+
+      this.stateMachine.bsp.liveDataFeedsByTimer = {};
+      this.stateMachine.bsp.liveDataFeedsToDownload = [];
+
+      this.liveDataFeeds.forEach( (liveDataFeed) => {
+        this.stateMachine.bsp.queueRetrieveLiveDataFeed(this.liveDataFeeds, liveDataFeed);
+      });
 
       // launch playback
       const state = this.stateMachine.getState();
