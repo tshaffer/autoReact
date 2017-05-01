@@ -14,9 +14,12 @@ import RSSDataFeedState from './rssDataFeedState';
 
 export class ZoneHSM extends HSM {
 
-  constructor(bsdm : Object, zoneId : string) {
+  constructor(dispatch: Function, bsdm : Object, zoneId : string) {
     super();
 
+    this.type = 'media';
+
+    this.dispatch = dispatch;
     this.bsdm = bsdm;
     this.zoneId = zoneId;
 

@@ -13,6 +13,8 @@ export class PlayerHSM extends HSM {
 
     super();
 
+    this.type = 'player';
+
     this.bsp = bsp;
     this.dispatch = dispatch;
     this.getState = getState;

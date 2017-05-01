@@ -121,7 +121,7 @@ class BSP {
           break;
         }
         default: {
-          zoneHSM = new ZoneHSM(bsdm, zoneId);
+          zoneHSM = new ZoneHSM(this.dispatch, bsdm, zoneId);
           break;
         }
       }
@@ -132,7 +132,6 @@ class BSP {
     zoneHSMs.forEach( (zoneHSM) => {
       zoneHSM.constructorFunction();
       zoneHSM.initialize();
-      this.dispatch(setActiveMediaState(zoneHSM.id, zoneHSM.activeState.id));
     });
   }
 
@@ -183,8 +182,6 @@ class BSP {
 
     this.hsmList.forEach( (hsm) => {
       hsm.Dispatch(event);
-
-      this.dispatch(setActiveMediaState(hsm.id, hsm.activeState.id));
     });
   }
 

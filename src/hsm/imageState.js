@@ -2,6 +2,10 @@
 
 import { HState } from './HSM';
 
+import {
+  setActiveMediaState
+} from '../store/activeMediaStates';
+
 export default class ImageState extends HState {
 
   bsdmImageState : Object;
@@ -28,6 +32,7 @@ export default class ImageState extends HState {
 
     if (event.EventType && event.EventType === 'ENTRY_SIGNAL') {
       console.log(this.id + ": entry signal");
+      this.stateMachine.dispatch(setActiveMediaState(this.stateMachine.id, this.id));
       return 'HANDLED';
     }
     else if (event.EventType && event.EventType === 'EXIT_SIGNAL') {

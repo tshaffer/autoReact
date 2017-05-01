@@ -19,6 +19,8 @@ export class TickerZoneHSM extends HSM {
   constructor(bsp: Object, bsdm: Object, zoneId: string) {
     super();
 
+    this.type = 'ticker';
+
     this.bsp = bsp;
     this.bsdm = bsdm;
     this.zoneId = zoneId;
