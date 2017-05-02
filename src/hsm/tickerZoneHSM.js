@@ -14,14 +14,19 @@ import {
   ARLiveDataFeed
 } from '../entities/liveDataFeed';
 
+import {
+  updateDataFeed
+} from '../store/dataFeeds';
+
 export class TickerZoneHSM extends HSM {
 
-  constructor(bsp: Object, bsdm: Object, zoneId: string) {
+  constructor(bsp: Object, dispatch: Function, bsdm: Object, zoneId: string) {
     super();
 
     this.type = 'ticker';
 
     this.bsp = bsp;
+    this.dispatch = dispatch;
     this.bsdm = bsdm;
     this.zoneId = zoneId;
 
@@ -170,12 +175,18 @@ export class TickerZoneHSM extends HSM {
       return "HANDLED";
     }
     else if (event.EventType && event.EventType === 'LIVE_DATA_FEED_UPDATE') {
+
+      this.stateMachine.processLiveDataFeedUpdate(event.EventData);
       stateData.nextState = this.stateMachine.stRSSDataFeedPlaying;
       return "TRANSITION";
     }
 
     stateData.nextState = this.superState;
     return "SUPER";
+  }
+
+  processLiveDataFeedUpdate(arLiveDataFeed : ARLiveDataFeed) {
+    this.dispatch(updateDataFeed(arLiveDataFeed));
   }
 }
 
@@ -217,8 +228,6 @@ export class STRSSDataFeedPlaying extends HState {
     });
 
 // if m.stateMachine.isVisible then m.stateMachine.widget.Show()
-
-    debugger;
   }
 
 

@@ -3,7 +3,7 @@
 import React, { Component } from 'react';
 
 import MediaZoneContainer from '../containers/mediaZoneContainer';
-// import TickerZone from './tickerZone';
+import TickerZoneContainer from '../containers/tickerZoneContainer';
 
 import {
   dmGetZoneById,
@@ -39,29 +39,33 @@ export default class Sign extends Component {
   }
 
 
-// getTickerZone(bsdm: Object, zone : Object, zoneIndex : number) {
-  //   return (
-  //     <div
-  //       key={zoneIndex}
-  //       style={{
-  //         position: 'absolute',
-  //         left: zone.absolutePosition.x,
-  //         top: zone.absolutePosition.y,
-  //         width: zone.absolutePosition.width,
-  //         height: zone.absolutePosition.height
-  //       }}
-  //     >
-  //       <TickerZone
-  //         playbackState={this.props.playbackState}
-  //         bsdm={bsdm}
-  //         zone={zone}
-  //         width={Number(zone.absolutePosition.width)}
-  //         height={Number(zone.absolutePosition.height)}
-  //         zoneIndex={zoneIndex}
-  //       />
-  //     </div>
-  //   );
-  // }
+  getTickerZoneJSX(zone : Object) {
+
+    return (
+      <div
+        key={zone.id}
+        style={{
+          position: 'absolute',
+          left: zone.absolutePosition.x,
+          top: zone.absolutePosition.y,
+          width: zone.absolutePosition.width,
+          height: zone.absolutePosition.height
+        }}
+      >
+        <TickerZoneContainer
+          key={zone.id}
+          playbackState={this.props.playbackState}
+          bsdm={this.props.bsdm}
+          zone={zone}
+          left={Number(zone.absolutePosition.x)}
+          top={Number(zone.absolutePosition.y)}
+          width={Number(zone.absolutePosition.width)}
+          height={Number(zone.absolutePosition.height)}
+          dataFeeds={this.props.dataFeeds}
+        />
+      </div>
+    );
+  }
 
   getZoneJSX(zoneId : string) {
 
@@ -73,14 +77,8 @@ export default class Sign extends Component {
         return mediaZoneJSX;
       }
       case 'Ticker': {
-        return (
-          <div
-            key={zoneId}
-          >
-            ticker
-          </div>
-        );
-        // return this.getTickerZoneJSX(bsdm, zone);
+        const tickerZoneJSX = this.getTickerZoneJSX(zone);
+        return tickerZoneJSX;
       }
       default: {
         debugger;

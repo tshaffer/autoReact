@@ -41,12 +41,12 @@ import {
 } from '../hsm/tickerZoneHSM';
 
 import {
-  setActiveMediaState
-} from '../store/activeMediaStates';
-
-import {
   ARLiveDataFeed
 } from '../entities/liveDataFeed';
+
+import {
+  addDataFeed
+} from '../store/dataFeeds';
 
 let _singleton = null;
 
@@ -117,7 +117,7 @@ class BSP {
 
       switch (bsdmZone.type) {
         case 'Ticker': {
-          zoneHSM = new TickerZoneHSM(this, bsdm, zoneId);
+          zoneHSM = new TickerZoneHSM(this, this.dispatch, bsdm, zoneId);
           break;
         }
         default: {
@@ -162,6 +162,7 @@ class BSP {
             const dataFeed = dmGetDataFeedById(bsdm, { id: dataFeedId });
             let arLiveDataFeed : ARLiveDataFeed = new ARLiveDataFeed(dataFeed);
             this.arLiveDataFeeds[dataFeed.name] = arLiveDataFeed;
+            this.dispatch(addDataFeed(arLiveDataFeed));
           });
 
           resolve();
