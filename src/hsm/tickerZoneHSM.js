@@ -221,8 +221,6 @@ export class STRSSDataFeedPlaying extends HState {
     // populate widget with new strings
     this.stateMachine.rssDataFeedItems.forEach((rssDataFeedItem) => {
       rssDataFeedItem.rssItems.forEach( (rssItem) => {
-        console.log(rssItem.title);
-        console.log(rssItem.description);
 // m.stateMachine.widget.PushString(textString) (title in our case)
       });
     });
