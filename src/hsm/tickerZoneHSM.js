@@ -184,7 +184,7 @@ export class STRSSDataFeedPlaying extends HState {
 
     if (event.EventType && event.EventType === 'ENTRY_SIGNAL') {
       console.log(this.id + ": entry signal");
-      this.populateRSSDataFeedWidget();
+      // this.populateRSSDataFeedWidget();
       return "HANDLED";
     }
 

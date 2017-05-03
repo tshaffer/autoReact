@@ -27,7 +27,6 @@ export default class RSSTicker extends Component {
 RSSTicker.propTypes = {
   width: React.PropTypes.number.isRequired,
   height: React.PropTypes.number.isRequired,
-  // feedUrl: React.PropTypes.string.isRequired
   articles: React.PropTypes.array.isRequired,
   bsTicker: React.PropTypes.object,
 };
