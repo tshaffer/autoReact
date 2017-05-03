@@ -4,10 +4,6 @@
 
 import React, { Component } from 'react';
 
-import PlatformService from '../platform';
-
-const xml2js = require('xml2js');
-
 export default class RSSTicker extends Component {
 
   render () {

@@ -67,32 +67,6 @@ export default class TickerZone extends Component {
         bsTicker={this.bsTicker}
       />
     );
-
-      //   const bsdm = this.props.bsdm;
-  //   const mediaStateId = this.props.zone.initialMediaStateId;
-  //
-  //   const mediaState = dmGetMediaStateById(bsdm, { id : mediaStateId });
-  //   const dataFeedContentItem = mediaState.contentItem;
-  //
-  //   const dataFeedId = dataFeedContentItem.dataFeedId;
-  //   const dataFeed = dmGetDataFeedById(bsdm, {id: dataFeedId});
-  //   const feedUrl = dmGetSimpleStringFromParameterizedString(dataFeed.url);
-  //
-  //   if (PlatformService.default.isTickerSupported()) {
-  //     return (
-  //       <RSSTicker
-  //         playbackState={this.props.playbackState}
-  //         width={this.props.width}
-  //         height={this.props.height}
-  //         feedUrl={feedUrl}
-  //       />
-  //     );
-  //   }
-  //   else {
-  //     return (
-  //       <div>Ticker support lacking</div>
-  //     );
-  //   }
   }
 }
 

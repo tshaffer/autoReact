@@ -220,12 +220,11 @@ export class STRSSDataFeedPlaying extends HState {
 
     // populate widget with new strings
     this.stateMachine.rssDataFeedItems.forEach((rssDataFeedItem) => {
+
       rssDataFeedItem.rssItems.forEach( (rssItem) => {
-// m.stateMachine.widget.PushString(textString) (title in our case)
+
       });
     });
-
-// if m.stateMachine.isVisible then m.stateMachine.widget.Show()
   }
 
 

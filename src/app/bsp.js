@@ -261,10 +261,10 @@ class BSP {
     return file;
   }
 
-  queueRetrieveLiveDataFeed(liveDataFeeds : Array<Object>, liveDataFeed : Object) {
+  queueRetrieveLiveDataFeed(liveDataFeed : Object) {
 
     if (liveDataFeed.usage === DataFeedUsageType.Text) {
-      this.retrieveLiveDataFeed(liveDataFeeds, liveDataFeed);
+      this.retrieveLiveDataFeed(liveDataFeed);
     }
     else {
       debugger;
@@ -272,12 +272,12 @@ class BSP {
 
       // launch download of first feed
       if (this.liveDataFeedsToDownload.length === 1) {
-        this.retrieveLiveDataFeed(liveDataFeeds, liveDataFeed);
+        this.retrieveLiveDataFeed(liveDataFeed);
       }
     }
   }
 
-  retrieveLiveDataFeed(liveDataFeeds : Array<Object>, liveDataFeed : Object) {
+  retrieveLiveDataFeed(liveDataFeed : Object) {
 
     const url = dmGetSimpleStringFromParameterizedString(liveDataFeed.url);
 
@@ -293,8 +293,6 @@ class BSP {
                 debugger;
               }
               console.log(jsonResponse);
-              // resolve(jsonResponse);
-              // this.parseRSS(jsonResponse);
               this.processLiveDataFeed(liveDataFeed, jsonResponse);
             });
           }
@@ -307,10 +305,6 @@ class BSP {
         console.log(err);
         debugger;
       });
-
-    // is the following necessary in autoreact?
-    // liveDataFeeds.AddReplace(stri(liveDataFeed.rssURLXfer.GetIdentity()), liveDataFeed)
-
   }
 
   processLiveDataFeed(liveDataFeed : Object, feedData : Object) {

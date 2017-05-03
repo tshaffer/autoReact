@@ -61,7 +61,6 @@ export default class Sign extends Component {
           top={Number(zone.absolutePosition.y)}
           width={Number(zone.absolutePosition.width)}
           height={Number(zone.absolutePosition.height)}
-          dataFeeds={this.props.dataFeeds}
         />
       </div>
     );
