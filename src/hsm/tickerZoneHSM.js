@@ -135,26 +135,6 @@ export class TickerZoneHSM extends HSM {
     this.y = this.bsdmZone.absolutePosition.y;
     this.width = this.bsdmZone.absolutePosition.width;
     this.height = this.bsdmZone.absolutePosition.height;
-
-// $FlowBrightSignExternalObject
-//     const bsTicker = new BSTicker(this.x, this.y, this.width, this.height, this.rotation);
-//     console.log(bsTicker);
-//     bsTicker.SetForegroundColor(this.foregroundTextColor);
-//     bsTicker.SetBackroundColor(this.backgroundTextColor);
-//     bsTicker.SetPixelsPerSecond(this.scrollSpeed);
-//
-//     if (this.font != "" && this.font != "System") {
-//       const fontPath = GetPoolFilePath(m.bsp.assetPoolFiles, zoneHSM.font$)
-//       bsTicker.SetFont(fontPath$)
-//     }
-
-    // the following are not on BSTicker - alternate ways of implementing them?
-    // scrollingMethod
-    // backgroundBitmapAssetId
-    // fontSize
-    // safeTextRegion
-    // stretchBitmapFile
-
   }
 
   tickerZoneGetInitialState() {
@@ -211,21 +191,4 @@ export class STRSSDataFeedPlaying extends HState {
     stateData.nextState = this.superState;
     return "SUPER";
   }
-
-  populateRSSDataFeedWidget() {
-
-    // clear existing strings
-    // rssStringCount = m.stateMachine.widget.GetStringCount();
-    // m.stateMachine.widget.PopStrings(rssStringCount)
-
-    // populate widget with new strings
-    this.stateMachine.rssDataFeedItems.forEach((rssDataFeedItem) => {
-
-      rssDataFeedItem.rssItems.forEach( (rssItem) => {
-
-      });
-    });
-  }
-
-
 }
