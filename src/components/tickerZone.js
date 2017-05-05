@@ -10,12 +10,14 @@ import {
 
 import RSSTicker from './rssTicker';
 
-// import {
-//   StringParameterType,
-//   dmGetDataFeedById,
-//   dmGetMediaStateById,
-//   dmGetSimpleStringFromParameterizedString,
-// } from '@brightsign/bsdatamodel';
+import {
+  ContentItemType
+} from '@brightsign/bscore';
+
+import {
+  dmGetMediaStateIdsForZone,
+  dmGetMediaStateById,
+} from '@brightsign/bsdatamodel';
 
 export default class TickerZone extends Component {
 
@@ -42,9 +44,18 @@ export default class TickerZone extends Component {
 
     let articles : Array<string> = [];
 
-    if (this.props.dataFeeds.dataFeedsById && (Object.keys(this.props.dataFeeds.dataFeedsById).length > 0)) {
+    // if (this.props.dataFeeds.dataFeedsById && (Object.keys(this.props.dataFeeds.dataFeedsById).length > 0)) {
 
-      for (let dataFeedId in this.props.dataFeeds.dataFeedsById) {
+    const mediaStateIds = dmGetMediaStateIdsForZone(this.props.bsdm, { id: this.props.zone.id});
+
+    mediaStateIds.forEach( (mediaStateId) => {
+
+      const mediaState = dmGetMediaStateById(this.props.bsdm, { id : mediaStateId} );
+      console.log(mediaState);
+      if (mediaState.contentItem.type === ContentItemType.DataFeed) {
+
+        const dataFeedId = mediaState.contentItem.dataFeedId;
+
         if (this.props.dataFeeds.dataFeedsById.hasOwnProperty(dataFeedId)) {
           const dataFeed : ARLiveDataFeed = this.props.dataFeeds.dataFeedsById[dataFeedId];
           dataFeed.rssItems.forEach( (rssItem) => {
@@ -52,12 +63,7 @@ export default class TickerZone extends Component {
           });
         }
       }
-    }
-    else {
-      return (
-        <div>data feed not loaded yet</div>
-      );
-    }
+    });
 
     return (
       <RSSTicker
