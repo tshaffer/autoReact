@@ -8,7 +8,7 @@ import {
   ARLiveDataFeed
 } from '../entities/liveDataFeed';
 
-import RSSTicker from './rssTicker';
+// import RSSTicker from './rssTicker';
 
 import {
   ContentItemType
@@ -35,12 +35,15 @@ export default class TickerZone extends Component {
 
       // $FlowBrightSignExternalObject
       this.bsTicker = new BSTicker(left, top, width, height, 0);
+      this.bsTicker.SetPixelsPerSecond(400);
     }
   }
 
   bsTicker : ?Object;
 
   render() {
+
+    console.log('TickerZone:: RENDER INVOKED');
 
     let articles : Array<string> = [];
 
@@ -59,20 +62,25 @@ export default class TickerZone extends Component {
         if (this.props.dataFeeds.dataFeedsById.hasOwnProperty(dataFeedId)) {
           const dataFeed : ARLiveDataFeed = this.props.dataFeeds.dataFeedsById[dataFeedId];
           dataFeed.rssItems.forEach( (rssItem) => {
+            const article = rssItem.title;
             articles.push(rssItem.title);
+            if (this.bsTicker) {
+              this.bsTicker.AddString(article);
+            }
           });
         }
       }
     });
 
-    return (
-      <RSSTicker
-        width={this.props.width}
-        height={this.props.height}
-        articles={articles}
-        bsTicker={this.bsTicker}
-      />
-    );
+    // return (
+    //   <RSSTicker
+    //     width={this.props.width}
+    //     height={this.props.height}
+    //     articles={articles}
+    //     bsTicker={this.bsTicker}
+    //   />
+    // );
+    return null;
   }
 }
 
