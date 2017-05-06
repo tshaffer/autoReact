@@ -8,7 +8,7 @@ import PlatformService from '../platform';
 import { setPlaybackState } from '../store/stateMachine';
 // import { postMessage } from '../store/stateMachine';
 
-import Sign from '../components/sign';
+// import Sign from '../components/sign';
 
 // HACK
 export let myApp = {};

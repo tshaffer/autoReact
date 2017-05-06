@@ -14,8 +14,8 @@ import {
   dmOpenSign,
   dmGetZonesForSign,
   dmGetZoneById,
-  dmGetDataFeedIdsForSign,
-  dmGetDataFeedById,
+  // dmGetDataFeedIdsForSign,
+  // dmGetDataFeedById,
 } from '@brightsign/bsdatamodel';
 
 import PlatformService from '../platform';
@@ -40,9 +40,9 @@ import {
   DataFeed
 } from '../entities/dataFeed';
 
-import {
-  addDataFeed
-} from '../store/dataFeeds';
+// import {
+//   addDataFeed
+// } from '../store/dataFeeds';
 
 // import {
 //   bscCreateAbsoluteRect,
@@ -64,6 +64,8 @@ import {
   // bsdmStringComponent,
   bsdmParameterizedString,
   bsdmDataFeed,
+  bsdmMrssDataFeedContentItem,
+  bsdmState,
 } from '../bsdmWrappers/bsdm';
 
 let _singleton = null;
@@ -310,13 +312,36 @@ class BSP {
 
       debugger;
 
-      const psFeedUrl : bsdmParameterizedString =
-        new bsdmParameterizedString('http://feeds.reuters.com/Reuters/domesticNews');
+      const dpFeedUrl : bsdmParameterizedString =
+        new bsdmParameterizedString('http://bsnm.s3.amazonaws.com/ted/ade7af41a29d90abb1aa546a0721f999');
 
-      const dataFeed : bsdmDataFeed = new bsdmDataFeed('Flibbet', psFeedUrl, DataFeedUsageType.Text, 15);
-      dispatch(dataFeed.getAddDataFeedToBSDMAction());
-      const state = getState();
+      const dataFeed : bsdmDataFeed = new bsdmDataFeed('africa', dpFeedUrl, DataFeedUsageType.Content, 60);
+      const innerAction = dispatch(dataFeed.getAddDataFeedToBSDMAction());
+      const dataFeedId = innerAction.payload.id;
+      const mrssDataFeedContentItem = new bsdmMrssDataFeedContentItem('africaDF', dataFeedId, false);
+
+      let state = getState();
       debugger;
+
+      const bsdm = new bsdmState(getState().bsdm);
+      bsdm.zones.forEach( (zone) => {
+        if (zone.type === 'VideoOrImages' || zone.type === 'VideoOnly' || zone.type === 'Images') {
+          const dmMediaStateContainer : Object = bsdm.getZoneMediaStateContainer(zone.id);
+          const action = bsdm.appendMediaState(dmMediaStateContainer, mrssDataFeedContentItem);
+          dispatch(action).then( (action) => {
+            state = getState();
+            debugger;
+            // this.savePresentationAs(dmGetSignState(state.bsdm), filePath);
+          });
+        }
+      });
+
+      // const psFeedUrl : bsdmParameterizedString =
+      //   new bsdmParameterizedString('http://feeds.reuters.com/Reuters/domesticNews');
+      // const dataFeed : bsdmDataFeed = new bsdmDataFeed('Flibbet', psFeedUrl, DataFeedUsageType.Text, 15);
+      // dispatch(dataFeed.getAddDataFeedToBSDMAction());
+      // const state = getState();
+
 
       // create ticker zone
       // zoneRect = bscCreateAbsoluteRect(0, 880, 1920, 200);
