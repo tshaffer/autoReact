@@ -41,45 +41,36 @@ export default class TickerZone extends Component {
 
   bsTicker : ?Object;
 
+  shouldComponentUpdate(nextProps, nextState) {
+
+    console.log('nextProps: ');
+    console.log(nextProps);
+    console.log('nextState: ');
+    console.log(nextState);
+
+    const currentArticles = this.props.articles;
+    const nextArticles = nextProps.articles;
+    if (currentArticles.length !== nextArticles.length) return true;
+    currentArticles.forEach( (currentArticle, index) => {
+      const nextArticle = nextArticles[index];
+      if (nextArticle !== currentArticle) return true;
+    });
+
+    console.log('shouldComponentUpdate: return FALSE');
+
+    return false;
+  }
+
   render() {
 
     console.log('TickerZone:: RENDER INVOKED');
 
-    let articles : Array<string> = [];
+    if (this.bsTicker) {
+      this.props.articles.forEach( (article) => {
+        this.bsTicker.AddString(article);
+      });
+    }
 
-    // if (this.props.dataFeeds.dataFeedsById && (Object.keys(this.props.dataFeeds.dataFeedsById).length > 0)) {
-
-    const mediaStateIds = dmGetMediaStateIdsForZone(this.props.bsdm, { id: this.props.zone.id});
-
-    mediaStateIds.forEach( (mediaStateId) => {
-
-      const mediaState = dmGetMediaStateById(this.props.bsdm, { id : mediaStateId} );
-      console.log(mediaState);
-      if (mediaState.contentItem.type === ContentItemType.DataFeed) {
-
-        const dataFeedId = mediaState.contentItem.dataFeedId;
-
-        if (this.props.dataFeeds.dataFeedsById.hasOwnProperty(dataFeedId)) {
-          const dataFeed : ARLiveDataFeed = this.props.dataFeeds.dataFeedsById[dataFeedId];
-          dataFeed.rssItems.forEach( (rssItem) => {
-            const article = rssItem.title;
-            articles.push(rssItem.title);
-            if (this.bsTicker) {
-              this.bsTicker.AddString(article);
-            }
-          });
-        }
-      }
-    });
-
-    // return (
-    //   <RSSTicker
-    //     width={this.props.width}
-    //     height={this.props.height}
-    //     articles={articles}
-    //     bsTicker={this.bsTicker}
-    //   />
-    // );
     return null;
   }
 }
@@ -93,4 +84,5 @@ TickerZone.propTypes = {
   width: React.PropTypes.number.isRequired,
   height: React.PropTypes.number.isRequired,
   dataFeeds: React.PropTypes.object.isRequired,
+  articles: React.PropTypes.array.isRequired,
 };
