@@ -4,21 +4,6 @@ import React, { Component } from 'react';
 
 import PlatformService from '../platform';
 
-import {
-  ARLiveDataFeed
-} from '../entities/liveDataFeed';
-
-// import RSSTicker from './rssTicker';
-
-import {
-  ContentItemType
-} from '@brightsign/bscore';
-
-import {
-  dmGetMediaStateIdsForZone,
-  dmGetMediaStateById,
-} from '@brightsign/bsdatamodel';
-
 export default class TickerZone extends Component {
 
   constructor(props : Object) {
@@ -39,14 +24,7 @@ export default class TickerZone extends Component {
     }
   }
 
-  bsTicker : ?Object;
-
-  shouldComponentUpdate(nextProps, nextState) {
-
-    console.log('nextProps: ');
-    console.log(nextProps);
-    console.log('nextState: ');
-    console.log(nextState);
+  shouldComponentUpdate(nextProps : Object) {
 
     const currentArticles = this.props.articles;
     const nextArticles = nextProps.articles;
@@ -61,13 +39,18 @@ export default class TickerZone extends Component {
     return false;
   }
 
+  bsTicker : ?Object;
+
   render() {
 
     console.log('TickerZone:: RENDER INVOKED');
 
     if (this.bsTicker) {
+
+      // this pattern avoids flow error
+      const bsTicker : Object = this.bsTicker;
       this.props.articles.forEach( (article) => {
-        this.bsTicker.AddString(article);
+        bsTicker.AddString(article);
       });
     }
 
