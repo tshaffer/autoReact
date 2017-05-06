@@ -44,6 +44,28 @@ import {
   addDataFeed
 } from '../store/dataFeeds';
 
+// import {
+//   bscCreateAbsoluteRect,
+//   ZoneType,
+// } from '@brightsign/bscore';
+
+// import {
+//   dmGetSignState,
+//   dmPlaylistAppendMediaState,
+//   dmGetZoneMediaStateContainer,
+//   dmAddZone,
+//   dmGetParameterizedStringFromString,
+//   dmAddDataFeed,
+//   dmCreateDataFeedContentItem,
+// } from '@brightsign/bsdatamodel';
+
+import {
+  // bsdmStringParameterType,
+  // bsdmStringComponent,
+  bsdmParameterizedString,
+  bsdmDataFeed,
+} from '../bsdmWrappers/bsdm';
+
 let _singleton = null;
 
 class BSP {
@@ -151,15 +173,17 @@ class BSP {
           console.log(autoPlay);
           this.dispatch(dmOpenSign(autoPlay));
 
+          this.dispatch(this.buildPresentation('/Users/tedshaffer/Desktop/baconPresBuilderOut/mz4.bpf'));
+
           // get data feeds for the sign
-          let bsdm = this.getState().bsdm;
-          const dataFeedIds = dmGetDataFeedIdsForSign(bsdm);
-          dataFeedIds.forEach( (dataFeedId) => {
-            const dmDataFeed = dmGetDataFeedById(bsdm, { id: dataFeedId });
-            let dataFeed : DataFeed = new DataFeed(dmDataFeed);
-            this.dataFeeds[dmDataFeed.id] = dataFeed;
-            this.dispatch(addDataFeed(dataFeed));
-          });
+          // let bsdm = this.getState().bsdm;
+          // const dataFeedIds = dmGetDataFeedIdsForSign(bsdm);
+          // dataFeedIds.forEach( (dataFeedId) => {
+          //   const dmDataFeed = dmGetDataFeedById(bsdm, { id: dataFeedId });
+          //   let dataFeed : DataFeed = new DataFeed(dmDataFeed);
+          //   this.dataFeeds[dmDataFeed.id] = dataFeed;
+          //   this.dispatch(addDataFeed(dataFeed));
+          // });
 
           resolve();
         });
@@ -275,6 +299,53 @@ class BSP {
       }
     }
   }
+
+  buildPresentation(filePath : string) {
+
+    // let zoneRect;
+    // let action;
+    // let contentItem;
+
+    return (dispatch : Function, getState : Function) => {
+
+      debugger;
+
+      const psFeedUrl : bsdmParameterizedString =
+        new bsdmParameterizedString('http://feeds.reuters.com/Reuters/domesticNews');
+
+      const dataFeed : bsdmDataFeed = new bsdmDataFeed('Flibbet', psFeedUrl, DataFeedUsageType.Text, 15);
+      dispatch(dataFeed.getAddDataFeedToBSDMAction());
+      const state = getState();
+      debugger;
+
+      // create ticker zone
+      // zoneRect = bscCreateAbsoluteRect(0, 880, 1920, 200);
+      // action = dispatch(dmAddZone('Ticker', ZoneType.Ticker, 'ticker', zoneRect));
+      // let tickerZoneContainer = dmGetZoneMediaStateContainer(action.payload.id);
+      //
+      // let psFeedUrl = dmGetParameterizedStringFromString('http://feeds.reuters.com/Reuters/domesticNews');
+      // let innerAction = dispatch(dmAddDataFeed('UsNewsFeed', psFeedUrl, DataFeedUsageType.Text));
+      // let dataFeedId = innerAction.payload.id;
+      // contentItem = dmCreateDataFeedContentItem('NewsFeed', dataFeedId);
+      // dispatch(dmPlaylistAppendMediaState(tickerZoneContainer, contentItem)).then(
+      //   action => {
+      //     let state = getState();
+      //     this.savePresentationAs(dmGetSignState(state.bsdm), filePath);
+      //     debugger;
+      //   }
+      // ).catch((err) => {
+      //   console.log(err);
+      //   debugger;
+      // });
+    };
+  }
+
+  savePresentationAs(presentation : Object, path : string) {
+
+    const bpfStr = JSON.stringify(presentation, null, '\t');
+    fs.writeFileSync(path, bpfStr);
+  }
+
 }
 
 export const bsp = new BSP();
