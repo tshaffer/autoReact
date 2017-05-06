@@ -26,21 +26,31 @@ export default class TickerZone extends Component {
 
   shouldComponentUpdate(nextProps : Object) {
 
+    let retVal : boolean = false;
+
     const currentArticles = this.props.articles;
     const nextArticles = nextProps.articles;
     if (currentArticles.length !== nextArticles.length) {
       console.log('article count changed');
+      retVal = true;
       return true;
     }
+    if (retVal) {
+      console.log('shouldComponentUpdate: return true');
+      return true;
+    }
+
     currentArticles.forEach( (currentArticle, index) => {
       const nextArticle = nextArticles[index];
       if (nextArticle !== currentArticle)  {
         console.log('article content changed');
+        retVal = true;
         return true;
       }
     });
 
-    console.log('shouldComponentUpdate: return FALSE');
+    console.log('shouldComponentUpdate: return: ');
+    console.log(retVal);
 
     return false;
   }
