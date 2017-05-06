@@ -155,7 +155,6 @@ export class TickerZoneHSM extends HSM {
       return "HANDLED";
     }
     else if (event.EventType && event.EventType === 'LIVE_DATA_FEED_UPDATE') {
-
       this.stateMachine.processLiveDataFeedUpdate(event.EventData);
       stateData.nextState = this.stateMachine.stRSSDataFeedPlaying;
       return "TRANSITION";

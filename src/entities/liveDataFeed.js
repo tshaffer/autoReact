@@ -39,13 +39,13 @@ export class ARLiveDataFeed {
 
   restartDownloadTimer(bsp : Object) {
 
-    let self = this;
+    const updateInterval = this.bsdmDataFeed.updateInterval * 1000;
 
     setTimeout(() => {
       console.log('restartDownloadTimer: timeout occurred');
       bsp.queueRetrieveLiveDataFeed(this);
     }
-      ,self.bsdmDataFeed.updateInterval * 1000
+      ,updateInterval
     );
   }
 

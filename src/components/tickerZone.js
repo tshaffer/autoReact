@@ -28,10 +28,16 @@ export default class TickerZone extends Component {
 
     const currentArticles = this.props.articles;
     const nextArticles = nextProps.articles;
-    if (currentArticles.length !== nextArticles.length) return true;
+    if (currentArticles.length !== nextArticles.length) {
+      console.log('article count changed');
+      return true;
+    }
     currentArticles.forEach( (currentArticle, index) => {
       const nextArticle = nextArticles[index];
-      if (nextArticle !== currentArticle) return true;
+      if (nextArticle !== currentArticle)  {
+        console.log('article content changed');
+        return true;
+      }
     });
 
     console.log('shouldComponentUpdate: return FALSE');
@@ -49,6 +55,11 @@ export default class TickerZone extends Component {
 
       // this pattern avoids flow error
       const bsTicker : Object = this.bsTicker;
+
+      // const rssStringCount = bsTicker.GetStringCount(); Bug 27743
+      const rssStringCount = 100;
+      bsTicker.PopStrings(rssStringCount);
+
       this.props.articles.forEach( (article) => {
         bsTicker.AddString(article);
       });
