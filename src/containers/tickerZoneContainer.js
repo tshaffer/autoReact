@@ -14,8 +14,8 @@ import {
 } from '@brightsign/bsdatamodel';
 
 import {
-  ARLiveDataFeed
-} from '../entities/liveDataFeed';
+  DataFeed
+} from '../entities/dataFeed';
 
 function mapStateToProps (state, ownProps) {
   return {
@@ -39,7 +39,7 @@ export const getArticles = (state : Object, zoneId : string) : Array<string> => 
       const dataFeedId = mediaState.contentItem.dataFeedId;
 
       if (state.dataFeeds.dataFeedsById.hasOwnProperty(dataFeedId)) {
-        const dataFeed : ARLiveDataFeed = state.dataFeeds.dataFeedsById[dataFeedId];
+        const dataFeed : DataFeed = state.dataFeeds.dataFeedsById[dataFeedId];
         dataFeed.rssItems.forEach( (rssItem) => {
           articles.push(rssItem.title);
         });

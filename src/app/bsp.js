@@ -37,8 +37,8 @@ import {
 } from '../hsm/tickerZoneHSM';
 
 import {
-  ARLiveDataFeed
-} from '../entities/liveDataFeed';
+  DataFeed
+} from '../entities/dataFeed';
 
 import {
   addDataFeed
@@ -56,7 +56,7 @@ class BSP {
   syncSpec : Object;
   liveDataFeedsByTimer : Object;
   liveDataFeedsToDownload : Array<Object>;
-  arLiveDataFeeds : Object;
+  dataFeeds : Object;
 
   constructor() {
     if(!_singleton){
@@ -72,7 +72,7 @@ class BSP {
     this.getState = this.store.getState;
     // this.syncSpec = null;
     this.hsmList = [];
-    this.arLiveDataFeeds = {};
+    this.dataFeeds = {};
 
     const rootPath: string = PlatformService.default.getRootDirectory();
     const pathToPool: string = PlatformService.default.getPathToPool();
@@ -155,10 +155,10 @@ class BSP {
           let bsdm = this.getState().bsdm;
           const dataFeedIds = dmGetDataFeedIdsForSign(bsdm);
           dataFeedIds.forEach( (dataFeedId) => {
-            const dataFeed = dmGetDataFeedById(bsdm, { id: dataFeedId });
-            let arLiveDataFeed : ARLiveDataFeed = new ARLiveDataFeed(dataFeed);
-            this.arLiveDataFeeds[dataFeed.id] = arLiveDataFeed;
-            this.dispatch(addDataFeed(arLiveDataFeed));
+            const dmDataFeed = dmGetDataFeedById(bsdm, { id: dataFeedId });
+            let dataFeed : DataFeed = new DataFeed(dmDataFeed);
+            this.dataFeeds[dmDataFeed.id] = dataFeed;
+            this.dispatch(addDataFeed(dataFeed));
           });
 
           resolve();
@@ -257,20 +257,21 @@ class BSP {
     return file;
   }
 
-  queueRetrieveLiveDataFeed(arLiveDataFeed : ARLiveDataFeed) {
+  queueRetrieveLiveDataFeed(dataFeed : DataFeed) {
 
-    const liveDataFeed = arLiveDataFeed.bsdmDataFeed;
+    const liveDataFeed = dataFeed;
 
     if (liveDataFeed.usage === DataFeedUsageType.Text) {
-      arLiveDataFeed.retrieveFeed(this);
+      dataFeed.retrieveFeed(this);
     }
     else {
       debugger;
-      this.liveDataFeedsToDownload.push(liveDataFeed.name);
+      // is the following correct? check with autorun classic
+      this.liveDataFeedsToDownload.push(liveDataFeed);
 
       // launch download of first feed
       if (this.liveDataFeedsToDownload.length === 1) {
-        arLiveDataFeed.retrieveFeed(this);
+        dataFeed.retrieveFeed(this);
       }
     }
   }

@@ -12,9 +12,14 @@ import {
   dmGetSimpleStringFromParameterizedString,
 } from '@brightsign/bsdatamodel';
 
-export class ARLiveDataFeed {
+export class DataFeed {
 
-  bsdmDataFeed: DmDataFeed;
+  id : string;
+  type : string;
+  usage : string;
+  url : string;
+  updateInterval : number;
+  name : string;
   rssItems: Array<Object>;
 
   constructor(bsdmDataFeed: DmDataFeed) {
@@ -50,7 +55,7 @@ export class ARLiveDataFeed {
 
   restartDownloadTimer(bsp : Object) {
 
-    const updateInterval = this.bsdmDataFeed.updateInterval * 1000;
+    const updateInterval = this.updateInterval * 1000;
 
     setTimeout(() => {
       console.log('restartDownloadTimer: timeout occurred');
@@ -62,9 +67,7 @@ export class ARLiveDataFeed {
 
   retrieveFeed(bsp : Object) {
 
-    const liveDataFeed : Object = this.bsdmDataFeed;
-
-    const url = dmGetSimpleStringFromParameterizedString(liveDataFeed.url);
+    const url = dmGetSimpleStringFromParameterizedString(this.url);
 
     console.log('retrieveFeed: ' + url);
 
@@ -95,12 +98,9 @@ export class ARLiveDataFeed {
 
   processFeedContents(bsp : Object, feedData : Object) {
 
-    const liveDataFeed = this.bsdmDataFeed;
-
-    if (liveDataFeed.usage === DataFeedUsageType.Content &&
-      (liveDataFeed.DataFeedType === DataFeedType.BSNDynamicPlaylist) ||
-      (liveDataFeed.DataFeedType === DataFeedType.BSNMediaFeed)) {
-      console.log(liveDataFeed,' not supported yet');
+    if (this.usage === DataFeedUsageType.Content &&
+      (this.type === DataFeedType.BSNDynamicPlaylist) ||
+      (this.type === DataFeedType.BSNMediaFeed)) {
       debugger;
     }
     else {

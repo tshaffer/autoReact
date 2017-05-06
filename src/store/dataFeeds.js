@@ -1,8 +1,8 @@
 // @flow
 
 import {
-  ARLiveDataFeed
-} from '../entities/liveDataFeed';
+  DataFeed
+} from '../entities/dataFeed';
 
 // ------------------------------------
 // Constants
@@ -48,8 +48,8 @@ export default function(state : Object = initialState, action : Object) {
 
       let newState = Object.assign({}, state);
 
-      const dataFeed : ARLiveDataFeed = action.payload.dataFeed;
-      newState.dataFeedsById[dataFeed.bsdmDataFeed.id] = dataFeed;
+      const dataFeed : DataFeed = action.payload.dataFeed;
+      newState.dataFeedsById[dataFeed.id] = dataFeed;
 
       console.log(newState);
 
@@ -60,11 +60,11 @@ export default function(state : Object = initialState, action : Object) {
 
       let newState = Object.assign({}, state);
 
-      const dataFeed : ARLiveDataFeed = action.payload.dataFeed;
+      const dataFeed : DataFeed = action.payload.dataFeed;
 
       // deepClone required for redux to note that change occurred?
       // or does redux catch it?
-      newState.dataFeedsById[dataFeed.bsdmDataFeed.id] = dataFeed;
+      newState.dataFeedsById[dataFeed.id] = dataFeed;
 
       console.log(newState);
 

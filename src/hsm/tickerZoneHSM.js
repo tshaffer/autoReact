@@ -11,8 +11,8 @@ import {
 } from '@brightsign/bsdatamodel';
 
 import {
-  ARLiveDataFeed
-} from '../entities/liveDataFeed';
+  DataFeed
+} from '../entities/dataFeed';
 
 import {
   updateDataFeed
@@ -114,8 +114,8 @@ export class TickerZoneHSM extends HSM {
 
         const dataFeedId = bsdmMediaState.contentItem.dataFeedId;
         // const dataFeed = dmGetDataFeedById(bsdm, { id: dataFeedId });
-        const arLiveDataFeed = self.bsp.arLiveDataFeeds[dataFeedId];
-        self.rssDataFeedItems.push(arLiveDataFeed);
+        const dataFeed = self.bsp.dataFeeds[dataFeedId];
+        self.rssDataFeedItems.push(dataFeed);
       }
     });
   }
@@ -164,8 +164,8 @@ export class TickerZoneHSM extends HSM {
     return "SUPER";
   }
 
-  processLiveDataFeedUpdate(arLiveDataFeed : ARLiveDataFeed) {
-    this.dispatch(updateDataFeed(arLiveDataFeed));
+  processLiveDataFeedUpdate(dataFeed : DataFeed) {
+    this.dispatch(updateDataFeed(dataFeed));
   }
 }
 
