@@ -7,7 +7,7 @@ import {
   dmGetZoneSimplePlaylist,
   dmGetZonePropertiesById,
   dmGetZoneById,
-  dmGetDataFeedById,
+  // dmGetDataFeedById,
 } from '@brightsign/bsdatamodel';
 
 import {
@@ -113,8 +113,8 @@ export class TickerZoneHSM extends HSM {
         self.includesRSSFeeds = true;
 
         const dataFeedId = bsdmMediaState.contentItem.dataFeedId;
-        const dataFeed = dmGetDataFeedById(bsdm, { id: dataFeedId });
-        const arLiveDataFeed = self.bsp.arLiveDataFeeds[dataFeed.name];
+        // const dataFeed = dmGetDataFeedById(bsdm, { id: dataFeedId });
+        const arLiveDataFeed = self.bsp.arLiveDataFeeds[dataFeedId];
         self.rssDataFeedItems.push(arLiveDataFeed);
       }
     });

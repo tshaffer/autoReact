@@ -4,7 +4,7 @@ import { HSM, HState, STTopEventHandler } from './HSM';
 
 import {
   dmGetDataFeedIdsForSign,
-  dmGetDataFeedById,
+  // dmGetDataFeedById,
 } from '@brightsign/bsdatamodel';
 
 export class PlayerHSM extends HSM {
@@ -110,7 +110,10 @@ export class PlayerHSM extends HSM {
 
       const dataFeedIds = dmGetDataFeedIdsForSign(this.stateMachine.bsdm);
       dataFeedIds.forEach( (dataFeedId) => {
-        this.stateMachine.bsp.queueRetrieveLiveDataFeed(dmGetDataFeedById(this.stateMachine.bsdm, { id: dataFeedId }));
+        const arLiveDataFeed = this.stateMachine.bsp.arLiveDataFeeds[dataFeedId];
+        this.stateMachine.bsp.queueRetrieveLiveDataFeed(arLiveDataFeed);
+
+        // this.stateMachine.bsp.queueRetrieveLiveDataFeed(dmGetDataFeedById(this.stateMachine.bsdm, { id: dataFeedId }));
       });
 
       // launch playback

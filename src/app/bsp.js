@@ -3,19 +3,15 @@
 import fs from 'fs';
 import path from 'path';
 
-const xml2js = require('xml2js');
-
 const StringDecoder = require('string_decoder').StringDecoder;
 const decoder = new StringDecoder('utf8');
 
 import {
-  DataFeedType,
   DataFeedUsageType,
 } from '@brightsign/bscore';
 
 import {
   dmOpenSign,
-  dmGetSimpleStringFromParameterizedString,
   dmGetZonesForSign,
   dmGetZoneById,
   dmGetDataFeedIdsForSign,
@@ -161,7 +157,7 @@ class BSP {
           dataFeedIds.forEach( (dataFeedId) => {
             const dataFeed = dmGetDataFeedById(bsdm, { id: dataFeedId });
             let arLiveDataFeed : ARLiveDataFeed = new ARLiveDataFeed(dataFeed);
-            this.arLiveDataFeeds[dataFeed.name] = arLiveDataFeed;
+            this.arLiveDataFeeds[dataFeed.id] = arLiveDataFeed;
             this.dispatch(addDataFeed(arLiveDataFeed));
           });
 
@@ -261,10 +257,12 @@ class BSP {
     return file;
   }
 
-  queueRetrieveLiveDataFeed(liveDataFeed : Object) {
+  queueRetrieveLiveDataFeed(arLiveDataFeed : ARLiveDataFeed) {
+
+    const liveDataFeed = arLiveDataFeed.bsdmDataFeed;
 
     if (liveDataFeed.usage === DataFeedUsageType.Text) {
-      this.retrieveLiveDataFeed(liveDataFeed);
+      arLiveDataFeed.retrieveFeed(this);
     }
     else {
       debugger;
@@ -272,68 +270,9 @@ class BSP {
 
       // launch download of first feed
       if (this.liveDataFeedsToDownload.length === 1) {
-        this.retrieveLiveDataFeed(liveDataFeed);
+        arLiveDataFeed.retrieveFeed(this);
       }
     }
-  }
-
-  retrieveLiveDataFeed(liveDataFeed : Object) {
-
-    const url = dmGetSimpleStringFromParameterizedString(liveDataFeed.url);
-
-    fetch(url)
-      .then( (response) => {
-        let blobPromise = response.text();
-        blobPromise.then( (content) => {
-          let parser = new xml2js.Parser();
-          try {
-            parser.parseString(content, (err, jsonResponse) => {
-              if (err) {
-                console.log(err);
-                debugger;
-              }
-              console.log(jsonResponse);
-              this.processLiveDataFeed(liveDataFeed, jsonResponse);
-            });
-          }
-          catch (e) {
-            console.log(e);
-            debugger;
-          }
-        });
-      }).catch( (err) => {
-        console.log(err);
-        debugger;
-      });
-  }
-
-  processLiveDataFeed(liveDataFeed : Object, feedData : Object) {
-
-    let arLiveDataFeed = this.arLiveDataFeeds[liveDataFeed.name];
-
-    if (liveDataFeed.usage === DataFeedUsageType.Content &&
-      (liveDataFeed.DataFeedType === DataFeedType.BSNDynamicPlaylist) ||
-      (liveDataFeed.DataFeedType === DataFeedType.BSNMediaFeed)) {
-      console.log(liveDataFeed,' not supported yet');
-      debugger;
-    }
-    else {
-      arLiveDataFeed.parseSimpleRSSFeed(feedData);
-    }
-
-    // send internal message indicating that the data feed has been updated
-    let event = {
-      'EventType' : 'LIVE_DATA_FEED_UPDATE',
-      'EventData' : arLiveDataFeed
-    };
-    this.dispatch(this.postMessage(event));
-
-
-    // updateInterval% = liveDataFeed.updateInterval%
-
-    // ' set a timer to update this live data feed
-    // liveDataFeed.RestartLiveDataFeedDownloadTimer(updateInterval%)
-
   }
 }
 
