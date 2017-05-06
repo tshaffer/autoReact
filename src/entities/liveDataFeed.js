@@ -19,7 +19,7 @@ export class ARLiveDataFeed {
 
   constructor(bsdmDataFeed: DmDataFeed) {
 
-    this.bsdmDataFeed = bsdmDataFeed;
+    Object.assign(this, bsdmDataFeed);
     this.rssItems = [];
   }
 
