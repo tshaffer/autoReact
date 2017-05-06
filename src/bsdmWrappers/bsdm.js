@@ -1,12 +1,14 @@
 /* @flow */
 
 import {
-  ContentItemType
+  ContentItemType,
+  DataFeedType,
 } from '@brightsign/bscore';
 
 import {
   dmGetParameterizedStringFromString,
-  dmAddDataFeed,
+  // dmAddDataFeed,
+  dmAddBsnDataFeed,
   dmCreateMrssDataFeedContentItem,
   dmPlaylistAppendMediaState,
   dmGetZonesForSign,
@@ -53,11 +55,14 @@ export class bsdmParameterizedString {
 
 export class bsdmDataFeed {
   constructor(name : string, url : bsdmParameterizedString,
+              bsnId : number, bsnName : string,
               usage : string, updateInterval : number, useHeadRequest: boolean = false,
               parserPlugin : string = '', autoGenerateUserVariables : boolean = false,
               userVariableAccess : string = 'Shared') {
     this.name = name;
     this.url = url;
+    this.bsnId = bsnId;
+    this.bsnName = bsnName;
     this.usage = usage;
     this.updateInterval = updateInterval;
     this.useHeadRequest = useHeadRequest;
@@ -68,6 +73,8 @@ export class bsdmDataFeed {
 
   name : string;
   url : bsdmParameterizedString;
+  bsnId : number;
+  bsnName : string;
   usage : string;
   updateInterval : number;
   useHeadRequest : boolean;
@@ -75,9 +82,12 @@ export class bsdmDataFeed {
   autoGenerateUserVariables : boolean;
   userVariableAccess : string;
 
+  // BSN only for now
   getAddDataFeedToBSDMAction() {
-    const action = dmAddDataFeed(this.name, this.url, this.usage, this.updateInterval, this.useHeadRequest,
-      this.parserPlugin, this.autoGenerateUserVariables, this.userVariableAccess);
+
+    const action = dmAddBsnDataFeed(this.name, DataFeedType.BSNDynamicPlaylist, this.url.dmParameterizedString,
+      this.bsnId, this.bsnName, this.usage, this.updateInterval);
+
     return action;
   }
 }
@@ -131,8 +141,6 @@ export class bsdmState {
   bsdm : Object;
   zoneIds : Array<string>;
   zones : Array<Object>;
-  // container : Object;
-  // contentItem : Object;
 
   getZoneMediaStateContainer(zoneId : string) : Object {
     const dmMediaStateContainer = dmGetZoneMediaStateContainer(zoneId);
@@ -145,15 +153,7 @@ export class bsdmState {
                    transitionType : ?Object = null,
                    eventType : ?Object = null,
                    eventData : ?Object = null) {
-    // this.container = container;
-    // this.contentItem = contentItem;
-    // this.name = name;
-    // this.transitionType = transitionType;
-    // this.eventType = eventType;
-    // this.eventData = eventData;
-
     const action = dmPlaylistAppendMediaState(container, contentItem, name, transitionType, eventType, eventData);
     return action;
   }
-
 }

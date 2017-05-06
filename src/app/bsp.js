@@ -14,8 +14,7 @@ import {
   dmOpenSign,
   dmGetZonesForSign,
   dmGetZoneById,
-  // dmGetDataFeedIdsForSign,
-  // dmGetDataFeedById,
+  dmGetSignState,
 } from '@brightsign/bsdatamodel';
 
 import PlatformService from '../platform';
@@ -39,25 +38,6 @@ import {
 import {
   DataFeed
 } from '../entities/dataFeed';
-
-// import {
-//   addDataFeed
-// } from '../store/dataFeeds';
-
-// import {
-//   bscCreateAbsoluteRect,
-//   ZoneType,
-// } from '@brightsign/bscore';
-
-// import {
-//   dmGetSignState,
-//   dmPlaylistAppendMediaState,
-//   dmGetZoneMediaStateContainer,
-//   dmAddZone,
-//   dmGetParameterizedStringFromString,
-//   dmAddDataFeed,
-//   dmCreateDataFeedContentItem,
-// } from '@brightsign/bsdatamodel';
 
 import {
   // bsdmStringParameterType,
@@ -304,10 +284,6 @@ class BSP {
 
   buildPresentation(filePath : string) {
 
-    // let zoneRect;
-    // let action;
-    // let contentItem;
-
     return (dispatch : Function, getState : Function) => {
 
       debugger;
@@ -315,53 +291,34 @@ class BSP {
       const dpFeedUrl : bsdmParameterizedString =
         new bsdmParameterizedString('http://bsnm.s3.amazonaws.com/ted/ade7af41a29d90abb1aa546a0721f999');
 
-      const dataFeed : bsdmDataFeed = new bsdmDataFeed('africa', dpFeedUrl, DataFeedUsageType.Content, 60);
+      // const dataFeed : bsdmDataFeed = new bsdmDataFeed('africa', dpFeedUrl, DataFeedUsageType.Content, 60);
+      const dataFeed : bsdmDataFeed = new bsdmDataFeed('africa',
+        dpFeedUrl,
+        237307,
+        'africa',
+        DataFeedUsageType.Content,
+        60);
       const innerAction = dispatch(dataFeed.getAddDataFeedToBSDMAction());
       const dataFeedId = innerAction.payload.id;
       const mrssDataFeedContentItem = new bsdmMrssDataFeedContentItem('africaDF', dataFeedId, false);
 
       let state = getState();
-      debugger;
 
       const bsdm = new bsdmState(getState().bsdm);
       bsdm.zones.forEach( (zone) => {
         if (zone.type === 'VideoOrImages' || zone.type === 'VideoOnly' || zone.type === 'Images') {
           const dmMediaStateContainer : Object = bsdm.getZoneMediaStateContainer(zone.id);
-          const action = bsdm.appendMediaState(dmMediaStateContainer, mrssDataFeedContentItem);
-          dispatch(action).then( (action) => {
+          const action = bsdm.appendMediaState(dmMediaStateContainer, mrssDataFeedContentItem.mrssDataFeedContentItem);
+          dispatch(action).then( (_) => {
             state = getState();
+            this.savePresentationAs(dmGetSignState(state.bsdm), filePath);
             debugger;
-            // this.savePresentationAs(dmGetSignState(state.bsdm), filePath);
+          }).catch((err) => {
+            console.log(err);
+            debugger;
           });
         }
       });
-
-      // const psFeedUrl : bsdmParameterizedString =
-      //   new bsdmParameterizedString('http://feeds.reuters.com/Reuters/domesticNews');
-      // const dataFeed : bsdmDataFeed = new bsdmDataFeed('Flibbet', psFeedUrl, DataFeedUsageType.Text, 15);
-      // dispatch(dataFeed.getAddDataFeedToBSDMAction());
-      // const state = getState();
-
-
-      // create ticker zone
-      // zoneRect = bscCreateAbsoluteRect(0, 880, 1920, 200);
-      // action = dispatch(dmAddZone('Ticker', ZoneType.Ticker, 'ticker', zoneRect));
-      // let tickerZoneContainer = dmGetZoneMediaStateContainer(action.payload.id);
-      //
-      // let psFeedUrl = dmGetParameterizedStringFromString('http://feeds.reuters.com/Reuters/domesticNews');
-      // let innerAction = dispatch(dmAddDataFeed('UsNewsFeed', psFeedUrl, DataFeedUsageType.Text));
-      // let dataFeedId = innerAction.payload.id;
-      // contentItem = dmCreateDataFeedContentItem('NewsFeed', dataFeedId);
-      // dispatch(dmPlaylistAppendMediaState(tickerZoneContainer, contentItem)).then(
-      //   action => {
-      //     let state = getState();
-      //     this.savePresentationAs(dmGetSignState(state.bsdm), filePath);
-      //     debugger;
-      //   }
-      // ).catch((err) => {
-      //   console.log(err);
-      //   debugger;
-      // });
     };
   }
 
