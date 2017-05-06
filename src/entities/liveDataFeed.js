@@ -37,14 +37,16 @@ export class ARLiveDataFeed {
     // this.populateTicker(rssItems);
   }
 
-  restartDownloadTimer() {
+  restartDownloadTimer(bsp : Object) {
 
     let self = this;
 
     setTimeout(() => {
       console.log('restartDownloadTimer: timeout occurred');
+      bsp.queueRetrieveLiveDataFeed(this);
     }
-      , self.bsdmDataFeed.updateInterval * 1000);
+      ,self.bsdmDataFeed.updateInterval * 1000
+    );
   }
 
   retrieveFeed(bsp : Object) {
@@ -52,6 +54,8 @@ export class ARLiveDataFeed {
     const liveDataFeed : Object = this.bsdmDataFeed;
 
     const url = dmGetSimpleStringFromParameterizedString(liveDataFeed.url);
+
+    console.log('retrieveFeed: ' + url);
 
     fetch(url)
       .then( (response) => {
@@ -100,6 +104,6 @@ export class ARLiveDataFeed {
     bsp.dispatch(bsp.postMessage(event));
 
     // ' set a timer to update this live data feed
-    this.restartDownloadTimer();
+    this.restartDownloadTimer(bsp);
   }
 }
