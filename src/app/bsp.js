@@ -16,6 +16,7 @@ import {
   dmGetZonesForSign,
   dmGetZoneById,
   dmGetSignState,
+  dmAddBsnDataFeed,
 } from '@brightsign/bsdatamodel';
 
 import PlatformService from '../platform';
@@ -51,6 +52,14 @@ import {
 } from '../bsdmWrappers/bsdm';
 
 let _singleton = null;
+
+// https://flow.org/en/docs/types/functions/
+
+function bsdmAddBsnDataFeed(name : string, dataFeedType : string, url : Object, bsnId : number,
+                            bsnName : string, usage : string, updateInterval : number) : Object {
+  const action = dmAddBsnDataFeed(name, dataFeedType, url, bsnId, bsnName, usage, updateInterval);
+  return action;
+}
 
 class BSP {
 
@@ -284,6 +293,7 @@ class BSP {
     }
   }
 
+
   buildPresentation(filePath : string) {
 
     return (dispatch : Function, getState : Function) => {
@@ -293,13 +303,21 @@ class BSP {
       const dpFeedUrl : bsdmParameterizedString =
         new bsdmParameterizedString('http://bsnm.s3.amazonaws.com/ted/ade7af41a29d90abb1aa546a0721f999');
 
-      const bsnDataFeedAdder : IAddBSNDataFeed = new BSNDataFeedAdder();
-      let adderAction = bsnDataFeedAdder.addBSNDataFeed('africa', DataFeedType.BSNDynamicPlaylist,
+      let adderAction = bsdmAddBsnDataFeed('africa', DataFeedType.BSNDynamicPlaylist,
         dpFeedUrl.dmParameterizedString,
         237307,
         'africa',
         DataFeedUsageType.Content,
         60);
+
+      // const bsnDataFeedAdder : IAddBSNDataFeed = new BSNDataFeedAdder();
+      // let adderAction = bsnDataFeedAdder.addBSNDataFeed('africa', DataFeedType.BSNDynamicPlaylist,
+      //   dpFeedUrl.dmParameterizedString,
+      //   237307,
+      //   'africa',
+      //   DataFeedUsageType.Content,
+      //   60);
+
       const innerAction = dispatch(adderAction);
 
 
