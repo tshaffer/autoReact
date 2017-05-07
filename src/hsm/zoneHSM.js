@@ -11,6 +11,7 @@ import {
 import ImageState from './imageState';
 import VideoState from './videoState';
 import RSSDataFeedState from './rssDataFeedState';
+import MRSSDataFeedState from './mrssDataFeedState';
 
 export class ZoneHSM extends HSM {
 
@@ -57,6 +58,9 @@ export class ZoneHSM extends HSM {
       }
       else if (bsdmMediaState.contentItem.type === 'DataFeed') {
         newState = new RSSDataFeedState(this, bsdmMediaState);
+      }
+      else if (bsdmMediaState.contentItem.type === 'MrssFeed') {
+        newState = new MRSSDataFeedState(this, bsdmMediaState);
       }
       else {
         debugger;

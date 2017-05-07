@@ -265,7 +265,6 @@ class BSP {
       dataFeed.retrieveFeed(this);
     }
     else {
-      debugger;
       // is the following correct? check with autorun classic
       this.liveDataFeedsToDownload.push(liveDataFeed);
 

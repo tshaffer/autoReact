@@ -1,6 +1,11 @@
 /* @flow */
 
+import fs from 'fs';
+import path from 'path';
+
 const xml2js = require('xml2js');
+
+import { MRSSFeed } from './mrssFeed';
 
 import {
   DataFeedType,
@@ -12,6 +17,8 @@ import {
   dmGetSimpleStringFromParameterizedString,
 } from '@brightsign/bsdatamodel';
 
+import PlatformService from '../platform';
+
 export class DataFeed {
 
   id : string;
@@ -21,6 +28,7 @@ export class DataFeed {
   updateInterval : number;
   name : string;
   rssItems: Array<Object>;
+  feed : MRSSFeed;
 
   constructor(bsdmDataFeed: DmDataFeed) {
 
@@ -101,7 +109,7 @@ export class DataFeed {
     if (this.usage === DataFeedUsageType.Content &&
       (this.type === DataFeedType.BSNDynamicPlaylist) ||
       (this.type === DataFeedType.BSNMediaFeed)) {
-      debugger;
+      this.downloadMRSSContent(feedData);
     }
     else {
       this.parseSimpleRSSFeed(feedData);
@@ -116,5 +124,23 @@ export class DataFeed {
 
     // ' set a timer to update this live data feed
     this.restartDownloadTimer(bsp);
+  }
+
+  downloadMRSSContent(feedData : Object) {
+
+    const rootPath: string = PlatformService.default.getRootDirectory();
+    let filePath = path.join(rootPath, 'feed_cache', this.name);
+    filePath = filePath + '.json';
+
+    const feedStr = JSON.stringify(feedData, null, '\t');
+    fs.writeFileSync(filePath, feedStr);
+
+    this.parseMRSSFeed(filePath);
+  }
+
+  parseMRSSFeed(filePath : string) {
+
+    this.feed = new MRSSFeed(this);
+    this.feed.populateFeedItems(filePath);
   }
 }
