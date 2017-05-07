@@ -2,7 +2,6 @@
 
 import {
   ContentItemType,
-  DataFeedType,
 } from '@brightsign/bscore';
 
 import {
@@ -53,8 +52,6 @@ export class bsdmParameterizedString {
 export interface IAddBSNDataFeed {
   addBSNDataFeed : (name : string, dataFeedType : string, url : Object, bsnId : number,
                     bsnName : string, usage : string, updateInterval : number) => Object;
-  // addBSNDataFeed(name : string, dataFeedType : string, url : Object, bsnId : number,
-  //                bsnName : string, usage : string, updateInterval : number): Object;
 }
 
 export class BSNDataFeedAdder {
@@ -65,48 +62,6 @@ export class BSNDataFeedAdder {
 
     return action;
   }
-}
-
-export class bsdmDataFeed {
-  constructor(name : string, url : bsdmParameterizedString,
-              bsnId : number, bsnName : string,
-              usage : string, updateInterval : number, useHeadRequest: boolean = false,
-              parserPlugin : string = '', autoGenerateUserVariables : boolean = false,
-              userVariableAccess : string = 'Shared') {
-    this.name = name;
-    this.url = url;
-    this.bsnId = bsnId;
-    this.bsnName = bsnName;
-    this.usage = usage;
-    this.updateInterval = updateInterval;
-    this.useHeadRequest = useHeadRequest;
-    this.parserPlugin = parserPlugin;
-    this.autoGenerateUserVariables = autoGenerateUserVariables;
-    this.userVariableAccess = userVariableAccess;
-  }
-
-  name : string;
-  url : bsdmParameterizedString;
-  bsnId : number;
-  bsnName : string;
-  usage : string;
-  updateInterval : number;
-  useHeadRequest : boolean;
-  parserPlugin : string;
-  autoGenerateUserVariables : boolean;
-  userVariableAccess : string;
-
-
-  // BSN only for now
-  getAddDataFeedToBSDMAction() {
-
-    const action = dmAddBsnDataFeed(this.name, DataFeedType.BSNDynamicPlaylist, this.url.dmParameterizedString,
-      this.bsnId, this.bsnName, this.usage, this.updateInterval);
-
-    return action;
-  }
-
-
 }
 
 export class bsdmContentItem {

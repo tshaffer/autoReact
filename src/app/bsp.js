@@ -44,7 +44,6 @@ import {
   // bsdmStringParameterType,
   // bsdmStringComponent,
   bsdmParameterizedString,
-  bsdmDataFeed,
   bsdmMrssDataFeedContentItem,
   bsdmState,
   BSNDataFeedAdder,
@@ -294,17 +293,8 @@ class BSP {
       const dpFeedUrl : bsdmParameterizedString =
         new bsdmParameterizedString('http://bsnm.s3.amazonaws.com/ted/ade7af41a29d90abb1aa546a0721f999');
 
-      // const dataFeed : bsdmDataFeed = new bsdmDataFeed('africa', dpFeedUrl, DataFeedUsageType.Content, 60);
-      // const dataFeed : bsdmDataFeed = new bsdmDataFeed('africa',
-      //   dpFeedUrl,
-      //   237307,
-      //   'africa',
-      //   DataFeedUsageType.Content,
-      //   60);
-
-      const bsnDataFeedAdder = new BSNDataFeedAdder();
-      let concreteBSNDataFeedAdder : IAddBSNDataFeed = bsnDataFeedAdder;
-      let adderAction = concreteBSNDataFeedAdder.addBSNDataFeed('africa', DataFeedType.BSNDynamicPlaylist,
+      const bsnDataFeedAdder : IAddBSNDataFeed = new BSNDataFeedAdder();
+      let adderAction = bsnDataFeedAdder.addBSNDataFeed('africa', DataFeedType.BSNDynamicPlaylist,
         dpFeedUrl.dmParameterizedString,
         237307,
         'africa',
@@ -313,7 +303,6 @@ class BSP {
       const innerAction = dispatch(adderAction);
 
 
-      // const innerAction = dispatch(dataFeed.getAddDataFeedToBSDMAction());
       const dataFeedId = innerAction.payload.id;
       const mrssDataFeedContentItem = new bsdmMrssDataFeedContentItem('africaDF', dataFeedId, false);
 
