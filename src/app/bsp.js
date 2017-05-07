@@ -55,10 +55,24 @@ let _singleton = null;
 
 // https://flow.org/en/docs/types/functions/
 
+type callbackFunction = (st: string, an : any) => void;
+
+function flibbet(callback: callbackFunction) {
+  // callbackFunction here is the function signature (error:string, result: any): void;
+  callback('flibbet', 69);
+}
+
+function specificCallback(s : string, a : any) {
+  console.log(s);
+  console.log(a);
+}
+
+
 function bsdmAddBsnDataFeed(name : string, dataFeedType : string, url : Object, bsnId : number,
                             bsnName : string, usage : string, updateInterval : number) : Object {
   const action = dmAddBsnDataFeed(name, dataFeedType, url, bsnId, bsnName, usage, updateInterval);
   return action;
+
 }
 
 class BSP {
@@ -74,6 +88,7 @@ class BSP {
   dataFeeds : Object;
 
   constructor() {
+
     if(!_singleton){
       console.log('bsp constructor invoked');
       _singleton = this;
@@ -299,6 +314,8 @@ class BSP {
     return (dispatch : Function, getState : Function) => {
 
       debugger;
+
+      flibbet(specificCallback);
 
       const dpFeedUrl : bsdmParameterizedString =
         new bsdmParameterizedString('http://bsnm.s3.amazonaws.com/ted/ade7af41a29d90abb1aa546a0721f999');
