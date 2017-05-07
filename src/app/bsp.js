@@ -67,13 +67,19 @@ function specificCallback(s : string, a : any) {
   console.log(a);
 }
 
+type addDataFeedFunction = (name : string, dataFeedType : string, url : Object, bsnId : number,
+                            bsnName : string, usage : string, updateInterval : number) => Object;
 
-function bsdmAddBsnDataFeed(name : string, dataFeedType : string, url : Object, bsnId : number,
-                            bsnName : string, usage : string, updateInterval : number) : Object {
-  const action = dmAddBsnDataFeed(name, dataFeedType, url, bsnId, bsnName, usage, updateInterval);
+function addDataFeed(functionToCall : addDataFeedFunction, name, dataFeedType, url, bsnId, bsnName, usage, updateInterval) {
+  const action = functionToCall(name, dataFeedType, url, bsnId, bsnName, usage, updateInterval);
   return action;
-
 }
+
+// function bsdmAddBsnDataFeed(name : string, dataFeedType : string, url : Object, bsnId : number,
+//                             bsnName : string, usage : string, updateInterval : number) : Object {
+//   const action = dmAddBsnDataFeed(name, dataFeedType, url, bsnId, bsnName, usage, updateInterval);
+//   return action;
+// }
 
 class BSP {
 
@@ -320,12 +326,19 @@ class BSP {
       const dpFeedUrl : bsdmParameterizedString =
         new bsdmParameterizedString('http://bsnm.s3.amazonaws.com/ted/ade7af41a29d90abb1aa546a0721f999');
 
-      let adderAction = bsdmAddBsnDataFeed('africa', DataFeedType.BSNDynamicPlaylist,
+      let adderAction = addDataFeed(dmAddBsnDataFeed, 'africa', DataFeedType.BSNDynamicPlaylist,
         dpFeedUrl.dmParameterizedString,
         237307,
         'africa',
         DataFeedUsageType.Content,
         60);
+
+      // let adderAction = bsdmAddBsnDataFeed('africa', DataFeedType.BSNDynamicPlaylist,
+      //   dpFeedUrl.dmParameterizedString,
+      //   237307,
+      //   'africa',
+      //   DataFeedUsageType.Content,
+      //   60);
 
       // const bsnDataFeedAdder : IAddBSNDataFeed = new BSNDataFeedAdder();
       // let adderAction = bsnDataFeedAdder.addBSNDataFeed('africa', DataFeedType.BSNDynamicPlaylist,
