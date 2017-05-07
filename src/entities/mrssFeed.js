@@ -25,7 +25,7 @@ export class MRSSFeed {
   populateFeedItems(filePath : string) {
 
     this.items = [];
-    
+
     // read file
     const feedFileBuf = fs.readFileSync(filePath);
     const fileStr: string = decoder.write(feedFileBuf);
@@ -40,9 +40,6 @@ export class MRSSFeed {
         this.items.push(feedItem);
       });
     }
-
-    debugger;
-
   }
 
   parseFeedByPlugin() {

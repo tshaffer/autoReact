@@ -29,6 +29,7 @@ export class DataFeed {
   name : string;
   rssItems: Array<Object>;
   feed : MRSSFeed;
+  assetsToDownload : Array<Object>;
 
   constructor(bsdmDataFeed: DmDataFeed) {
 
@@ -136,11 +137,47 @@ export class DataFeed {
     fs.writeFileSync(filePath, feedStr);
 
     this.parseMRSSFeed(filePath);
+
+    // get files to download
+    this.assetsToDownload = [];
+    this.feed.items.forEach( (item) => {
+      // Do not download content of type 'text/html' - they are accessed directly
+      // console.log('link: ', item.link[0]);
+      // console.log('name: ', item.link[0]);
+      // if (item.guid && item.guid[0]) {
+      //   console.log('changeHint: ', item.guid[0]);
+      // }
+
+      let change_hint = '';
+      if (item.guid && item.guid[0]) {
+        change_hint = item.guid[0];
+      }
+
+      this.assetsToDownload.push( {
+        link: item.link[0],
+        name: item.link[0],   // THIS LOOKS WRONG!! BUT THAT'S WHAT IT LOOKS LIKE IN ARC
+        change_hint
+      });
+    });
+
+    debugger;
+
+    // download content - simulate assetFetcher
+    // do the following?
+    //    download each file
+    //    get sha1
+    //    based on sha1, move it to the correct place
+    //    update pool asset files?
   }
 
   parseMRSSFeed(filePath : string) {
 
     this.feed = new MRSSFeed(this);
     this.feed.populateFeedItems(filePath);
+
+    if (this.feed.ttlSeconds > 0 && this.feed.ttlSeconds < this.updateInterval) {
+      this.updateInterval = this.feed.ttlSeconds;
+    }
+
   }
 }
