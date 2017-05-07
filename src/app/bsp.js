@@ -8,6 +8,7 @@ const decoder = new StringDecoder('utf8');
 
 import {
   DataFeedUsageType,
+  DataFeedType,
 } from '@brightsign/bscore';
 
 import {
@@ -46,6 +47,8 @@ import {
   bsdmDataFeed,
   bsdmMrssDataFeedContentItem,
   bsdmState,
+  BSNDataFeedAdder,
+  IAddBSNDataFeed,
 } from '../bsdmWrappers/bsdm';
 
 let _singleton = null;
@@ -155,7 +158,7 @@ class BSP {
           console.log(autoPlay);
           this.dispatch(dmOpenSign(autoPlay));
 
-          this.dispatch(this.buildPresentation('/Users/tedshaffer/Desktop/baconPresBuilderOut/mz4.bpf'));
+          this.dispatch(this.buildPresentation('/Users/tedshaffer/Desktop/baconPresBuilderOut/mz5.bpf'));
 
           // get data feeds for the sign
           // let bsdm = this.getState().bsdm;
@@ -292,13 +295,25 @@ class BSP {
         new bsdmParameterizedString('http://bsnm.s3.amazonaws.com/ted/ade7af41a29d90abb1aa546a0721f999');
 
       // const dataFeed : bsdmDataFeed = new bsdmDataFeed('africa', dpFeedUrl, DataFeedUsageType.Content, 60);
-      const dataFeed : bsdmDataFeed = new bsdmDataFeed('africa',
-        dpFeedUrl,
+      // const dataFeed : bsdmDataFeed = new bsdmDataFeed('africa',
+      //   dpFeedUrl,
+      //   237307,
+      //   'africa',
+      //   DataFeedUsageType.Content,
+      //   60);
+
+      const bsnDataFeedAdder = new BSNDataFeedAdder();
+      let concreteBSNDataFeedAdder : IAddBSNDataFeed = bsnDataFeedAdder;
+      let adderAction = concreteBSNDataFeedAdder.addBSNDataFeed('africa', DataFeedType.BSNDynamicPlaylist,
+        dpFeedUrl.dmParameterizedString,
         237307,
         'africa',
         DataFeedUsageType.Content,
         60);
-      const innerAction = dispatch(dataFeed.getAddDataFeedToBSDMAction());
+      const innerAction = dispatch(adderAction);
+
+
+      // const innerAction = dispatch(dataFeed.getAddDataFeedToBSDMAction());
       const dataFeedId = innerAction.payload.id;
       const mrssDataFeedContentItem = new bsdmMrssDataFeedContentItem('africaDF', dataFeedId, false);
 

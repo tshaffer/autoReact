@@ -47,11 +47,25 @@ export class bsdmParameterizedString {
 
   dmParameterizedString : Object;
 }
-// export class bsdmDataFeed {
-//   constructor() {
-//     console.log('poo');
-//   }
-// }
+
+
+
+export interface IAddBSNDataFeed {
+  addBSNDataFeed : (name : string, dataFeedType : string, url : Object, bsnId : number,
+                    bsnName : string, usage : string, updateInterval : number) => Object;
+  // addBSNDataFeed(name : string, dataFeedType : string, url : Object, bsnId : number,
+  //                bsnName : string, usage : string, updateInterval : number): Object;
+}
+
+export class BSNDataFeedAdder {
+  addBSNDataFeed(name : string, dataFeedType : string, url : Object, bsnId : number,
+                 bsnName : string, usage : string, updateInterval : number) {
+    const action = dmAddBsnDataFeed(name, dataFeedType, url,
+      bsnId, bsnName, usage, updateInterval);
+
+    return action;
+  }
+}
 
 export class bsdmDataFeed {
   constructor(name : string, url : bsdmParameterizedString,
@@ -82,6 +96,7 @@ export class bsdmDataFeed {
   autoGenerateUserVariables : boolean;
   userVariableAccess : string;
 
+
   // BSN only for now
   getAddDataFeedToBSDMAction() {
 
@@ -90,6 +105,8 @@ export class bsdmDataFeed {
 
     return action;
   }
+
+
 }
 
 export class bsdmContentItem {
