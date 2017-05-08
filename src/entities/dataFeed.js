@@ -6,6 +6,8 @@ const crypto = require('crypto');
 
 const xml2js = require('xml2js');
 
+import { addPoolAssetFile } from '../utilities/utilities';
+
 import { MRSSFeed } from './mrssFeed';
 
 import {
@@ -161,16 +163,12 @@ export class DataFeed {
       });
     });
 
+    // see bacon::src/platform/desktop//services/mediaThumbs.js::buildImageThumbs
+    // http://stackoverflow.com/questions/24586110/resolve-promises-one-after-another-i-e-in-sequence
     this.fetchAsset(this.assetsToDownload[0].link).then( () => {
       debugger;
     });
 
-    // download content - simulate assetFetcher
-    // do the following?
-    //    download each file
-    //    get sha1
-    //    based on sha1, move it to the correct place
-    //    update pool asset files?
   }
 
   parseMRSSFeed(filePath : string) {
@@ -188,18 +186,22 @@ export class DataFeed {
     console.log('retrieve asset from: ' + url);
 
     return new Promise( (resolve, reject) => {
+
+      // download file
       fetch(url)
         .then( (response) => {
           let responsePromise = response.arrayBuffer();
           responsePromise.then( (contents) => {
             const buf = toBuffer(contents);
+
+            // write file to temporary location
             fs.writeFile('flibbet', buf, (err) => {
               if (err) {
                 reject(err);
               }
-              this.getSHA1('flibbet').then( (sha1) => {
 
-                debugger;
+              // calculate sha1
+              this.getSHA1('flibbet').then( (sha1) => {
 
                 // move file to correct pool location
                 const targetPath: string = path.join(PlatformService.default.getRootDirectory(), 'pool');
@@ -211,7 +213,10 @@ export class DataFeed {
                       reject(err);
                     }
                   });
+
+                  // add to pool asset files
                   console.log('moved flibbet to: ', absolutePoolPath);
+                  addPoolAssetFile(url, absolutePoolPath);
                   resolve();
                 });
               });
