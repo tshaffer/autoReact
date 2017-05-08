@@ -2,6 +2,7 @@
 
 import fs from 'fs';
 import path from 'path';
+const crypto = require('crypto');
 
 const xml2js = require('xml2js');
 
@@ -160,7 +161,10 @@ export class DataFeed {
       });
     });
 
-    this.fetchAsset(this.assetsToDownload[0].link);
+    this.fetchAsset(this.assetsToDownload[0].link).then( (sha1) => {
+      console.log(sha1);
+      debugger;
+    });
 
     // download content - simulate assetFetcher
     // do the following?
@@ -184,23 +188,49 @@ export class DataFeed {
 
     console.log('retrieve asset from: ' + url);
 
-    fetch(url)
-      .then( (response) => {
-        let responsePromise = response.arrayBuffer();
-        responsePromise.then( (contents) => {
-          debugger;
-          const buf = toBuffer(contents);
-          fs.writeFile('flibbet.jpg', buf, (err) => {
+    return new Promise( (resolve, _) => {
+      fetch(url)
+        .then( (response) => {
+          let responsePromise = response.arrayBuffer();
+          responsePromise.then( (contents) => {
             debugger;
-            if (err) throw err;
-            console.log('flibbet.jpg has been saved!');
+            const buf = toBuffer(contents);
+            fs.writeFile('flibbet', buf, (err) => {
+              debugger;
+              if (err) throw err;
+              console.log('flibbet has been saved!');
+              this.getSHA1('flibbet').then( (sha1) => {
+                resolve(sha1);
+              });
+            });
           });
+        }).catch( (err) => {
+          console.log(err);
+          debugger;
         });
-      }).catch( (err) => {
-      console.log(err);
-      debugger;
     });
   }
+
+  getSHA1(filePath: string) {
+
+    return new Promise((resolve, _) => {
+      const hash = crypto.createHash('sha1');
+      const input = fs.createReadStream(filePath);
+      input.on('readable', () => {
+        const data = input.read();
+        if (data) {
+          hash.update(data);
+        }
+        else {
+          const sha1 = hash.digest('hex');
+          resolve(sha1);
+        }
+      });
+      // TODO - check for error
+    });
+  }
+
+
 }
 
 // From ArrayBuffer to Buffer
