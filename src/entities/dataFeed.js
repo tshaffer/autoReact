@@ -161,8 +161,7 @@ export class DataFeed {
       });
     });
 
-    this.fetchAsset(this.assetsToDownload[0].link).then( (sha1) => {
-      console.log(sha1);
+    this.fetchAsset(this.assetsToDownload[0].link).then( () => {
       debugger;
     });
 
@@ -188,19 +187,33 @@ export class DataFeed {
 
     console.log('retrieve asset from: ' + url);
 
-    return new Promise( (resolve, _) => {
+    return new Promise( (resolve, reject) => {
       fetch(url)
         .then( (response) => {
           let responsePromise = response.arrayBuffer();
           responsePromise.then( (contents) => {
-            debugger;
             const buf = toBuffer(contents);
             fs.writeFile('flibbet', buf, (err) => {
-              debugger;
-              if (err) throw err;
-              console.log('flibbet has been saved!');
+              if (err) {
+                reject(err);
+              }
               this.getSHA1('flibbet').then( (sha1) => {
-                resolve(sha1);
+
+                debugger;
+
+                // move file to correct pool location
+                const targetPath: string = path.join(PlatformService.default.getRootDirectory(), 'pool');
+                this.getPoolFilePath(targetPath, sha1, true).then((relativeFilePath) => {
+                  const absolutePoolPath = path.join(targetPath, relativeFilePath, 'sha1-' + sha1);
+                  fs.rename('flibbet', absolutePoolPath, (err) => {
+                    if (err) {
+                      debugger;
+                      reject(err);
+                    }
+                  });
+                  console.log('moved flibbet to: ', absolutePoolPath);
+                  resolve();
+                });
               });
             });
           });
@@ -230,6 +243,47 @@ export class DataFeed {
     });
   }
 
+  getPoolFilePath(startDir: string, sha1: string, createDirectories: boolean) {
+
+    return new Promise( (resolve, reject) => {
+
+      let relativeFilePath = '';
+
+      if (sha1.length >= 2) {
+
+        let folders = [];
+        folders.push(sha1.substring(sha1.length - 2, sha1.length - 2 + 1));
+        folders.push(sha1.substring(sha1.length - 1, sha1.length - 1 + 1));
+
+        if (createDirectories) {
+          let currentDir = path.join(startDir, folders[0]);
+          mkdir(currentDir).then(() => {
+            currentDir = path.join(currentDir, folders[1]);
+            mkdir(currentDir).then(() => {
+              folders.forEach(folderName => {
+                relativeFilePath = relativeFilePath + folderName + '/';
+              });
+              resolve(relativeFilePath);
+            });
+          }).catch( (err) => {
+            debugger;
+            reject(err);
+          });
+        }
+        else {
+          folders.forEach(folderName => {
+            relativeFilePath = relativeFilePath + folderName + '/';
+          });
+          resolve(relativeFilePath);
+        }
+      }
+      else {
+        // not sure if this case can occur
+        debugger;
+      }
+    });
+  }
+
 
 }
 
@@ -241,6 +295,19 @@ function toBuffer(ab : ArrayBuffer) : Buffer {
     buf[i] = view[i];
   }
   return buf;
+}
+
+function mkdir(dirPath: string, ignoreAlreadyExists: boolean = true) {
+  return new Promise( (resolve, reject) => {
+    fs.mkdir(dirPath, (err) => {
+      if (!err || (err.code === 'EEXIST' && ignoreAlreadyExists)) {
+        resolve();
+      }
+      else {
+        reject(err);
+      }
+    });
+  });
 }
 
 
