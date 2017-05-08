@@ -130,6 +130,16 @@ export class DataFeed {
     this.restartDownloadTimer(bsp);
   }
 
+  parseMRSSFeed(filePath : string) {
+
+    this.feed = new MRSSFeed(this);
+    this.feed.populateFeedItems(filePath);
+
+    if (this.feed.ttlSeconds > 0 && this.feed.ttlSeconds < this.updateInterval) {
+      this.updateInterval = this.feed.ttlSeconds;
+    }
+  }
+
   downloadMRSSContent(feedData : Object) {
 
     const rootPath: string = PlatformService.default.getRootDirectory();
@@ -165,20 +175,85 @@ export class DataFeed {
 
     // see bacon::src/platform/desktop//services/mediaThumbs.js::buildImageThumbs
     // http://stackoverflow.com/questions/24586110/resolve-promises-one-after-another-i-e-in-sequence
-    this.fetchAsset(this.assetsToDownload[0].link).then( () => {
-      debugger;
-    });
+    // this.fetchTheAsset(this.assetsToDownload[0].link).then( () => {
+    //   debugger;
+    // });
 
+    let self = this;
+
+    let fileCount = this.assetsToDownload.length;
+    let sequence = Promise.resolve();
+    this.assetsToDownload.forEach(function(assetToDownload) {
+      sequence = sequence.then( () => {
+        return self.fetchTheAsset(assetToDownload.link);
+      }).then(() => {
+        console.log('fetchTheAsset resolved');
+        fileCount--;
+        if (fileCount === 0) {
+          debugger;
+        }
+      });
+    });
   }
 
-  parseMRSSFeed(filePath : string) {
+  otherCode(filePath : string, buf : Buffer, ) {
 
-    this.feed = new MRSSFeed(this);
-    this.feed.populateFeedItems(filePath);
+    return new Promise( (resolve, reject) => {
+      fs.writeFile(filePath, buf, (err) => {
+        if (err) {
+          reject(err);
+        }
+        this.getSHA1('flibbet').then((sha1) => {
+          resolve(sha1);
+        });
+      });
+    });
+  }
 
-    if (this.feed.ttlSeconds > 0 && this.feed.ttlSeconds < this.updateInterval) {
-      this.updateInterval = this.feed.ttlSeconds;
-    }
+  fetchTheAsset(url : string) {
+
+    let targetPath : string = '';
+    let absolutePoolPath : string = '';
+    // let sha1 : string = '';
+
+    console.log('retrieve asset from: ' + url);
+
+    return new Promise( (resolve, reject) => {
+
+      fetch(url).then((response) => {
+        return response.arrayBuffer();
+      }).then((contents) => {
+
+        // write file to temporary location
+        const buf = toBuffer(contents);
+        return this.otherCode('flibbet', buf);
+
+      }).then( (sha1) => {
+
+        this.poo = sha1;
+
+        // use the sha1 to get the target file path
+        targetPath = path.join(PlatformService.default.getRootDirectory(), 'pool');
+        return this.getPoolFilePath(targetPath, sha1, true);
+
+      }).then((relativeFilePath : string) => {
+
+        // move file to the pool
+        // absolutePoolPath = path.join(targetPath, relativeFilePath, 'sha1-' + sha1);
+        absolutePoolPath = path.join(targetPath, relativeFilePath, 'sha1-' + this.poo);
+        fs.rename('flibbet', absolutePoolPath, (err) => {
+          if (err) {
+            debugger;
+            reject(err);
+          }
+        });
+
+        // add file to pool asset files
+        console.log('moved flibbet to: ', absolutePoolPath);
+        addPoolAssetFile(url, absolutePoolPath);
+        resolve();
+      });
+    });
   }
 
   fetchAsset(url : string) {
@@ -240,7 +315,7 @@ export class DataFeed {
           hash.update(data);
         }
         else {
-          const sha1 = hash.digest('hex');
+          const sha1 : string = hash.digest('hex');
           resolve(sha1);
         }
       });
