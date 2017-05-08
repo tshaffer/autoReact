@@ -175,9 +175,6 @@ export class DataFeed {
 
     // see bacon::src/platform/desktop//services/mediaThumbs.js::buildImageThumbs
     // http://stackoverflow.com/questions/24586110/resolve-promises-one-after-another-i-e-in-sequence
-    // this.fetchTheAsset(this.assetsToDownload[0].link).then( () => {
-    //   debugger;
-    // });
 
     let self = this;
 
@@ -196,7 +193,7 @@ export class DataFeed {
     });
   }
 
-  otherCode(filePath : string, buf : Buffer, ) {
+  writeFileGetSha1(buf : Buffer, filePath : string) {
 
     return new Promise( (resolve, reject) => {
       fs.writeFile(filePath, buf, (err) => {
@@ -226,7 +223,7 @@ export class DataFeed {
 
         // write file to temporary location
         const buf = toBuffer(contents);
-        return this.otherCode('flibbet', buf);
+        return this.writeFileGetSha1(buf, 'flibbet');
 
       }).then( (sha1) => {
 
