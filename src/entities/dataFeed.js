@@ -155,12 +155,12 @@ export class DataFeed {
 
       this.assetsToDownload.push( {
         link: item.link[0],
-        name: item.link[0],   // THIS LOOKS WRONG!! BUT THAT'S WHAT IT LOOKS LIKE IN ARC
+        name: item.link[0],
         change_hint
       });
     });
 
-    debugger;
+    this.fetchAsset(this.assetsToDownload[0].link);
 
     // download content - simulate assetFetcher
     // do the following?
@@ -178,6 +178,39 @@ export class DataFeed {
     if (this.feed.ttlSeconds > 0 && this.feed.ttlSeconds < this.updateInterval) {
       this.updateInterval = this.feed.ttlSeconds;
     }
+  }
 
+  fetchAsset(url : string) {
+
+    console.log('retrieve asset from: ' + url);
+
+    fetch(url)
+      .then( (response) => {
+        let responsePromise = response.arrayBuffer();
+        responsePromise.then( (contents) => {
+          debugger;
+          const buf = toBuffer(contents);
+          fs.writeFile('flibbet.jpg', buf, (err) => {
+            debugger;
+            if (err) throw err;
+            console.log('flibbet.jpg has been saved!');
+          });
+        });
+      }).catch( (err) => {
+      console.log(err);
+      debugger;
+    });
   }
 }
+
+// From ArrayBuffer to Buffer
+function toBuffer(ab : ArrayBuffer) : Buffer {
+  let buf = new Buffer(ab.byteLength);
+  let view = new Uint8Array(ab);
+  for (let i = 0; i < buf.length; ++i) {
+    buf[i] = view[i];
+  }
+  return buf;
+}
+
+
