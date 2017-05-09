@@ -9,6 +9,8 @@ import PlatformService from '../platform';
 import ImageContainer from '../containers/imageContainer';
 import VideoContainer from '../containers/videoContainer';
 import Html from './html';
+import MrssDisplayItemContainer from '../containers/mrssDisplayItemContainer';
+
 
 import {
   dmGetHtmlSiteById,
@@ -104,11 +106,20 @@ export default class MediaZone extends Component {
 
   renderMrssItem(mrssContentItem : Object) {
 
+    let duration : number = 10;
+
+    let self = this;
+
     debugger;
     const dataFeedId = mrssContentItem.dataFeedId;
 
     return (
-      <div>poo</div>
+      <MrssDisplayItemContainer
+        width={this.props.width}
+        height={this.props.height}
+        duration={duration * 1000}
+        onTimeout={self.nextAsset.bind(this)}
+      />
     );
   }
 
