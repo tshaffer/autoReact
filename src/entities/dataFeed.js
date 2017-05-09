@@ -113,7 +113,7 @@ export class DataFeed {
     if (this.usage === DataFeedUsageType.Content &&
       (this.type === DataFeedType.BSNDynamicPlaylist) ||
       (this.type === DataFeedType.BSNMediaFeed)) {
-      this.downloadMRSSContent(feedData);
+      this.downloadMRSSContent(bsp, feedData);
     }
     else {
       this.parseSimpleRSSFeed(feedData);
@@ -140,7 +140,7 @@ export class DataFeed {
     }
   }
 
-  downloadMRSSContent(feedData : Object) {
+  downloadMRSSContent(bsp : Object, feedData : Object) {
 
     const rootPath: string = PlatformService.default.getRootDirectory();
     let filePath = path.join(rootPath, 'feed_cache', this.name);
@@ -187,7 +187,14 @@ export class DataFeed {
         console.log('fetchTheAsset resolved');
         fileCount--;
         if (fileCount === 0) {
-          debugger;
+
+          // tell the states to switch over to the new spec immediately
+          let event = {
+            'EventType' : 'MRSS_SPEC_UPDATED',
+            'EventData' : this
+          };
+          bsp.dispatch(bsp.postMessage(event));
+
         }
       });
     });
@@ -200,7 +207,7 @@ export class DataFeed {
         if (err) {
           reject(err);
         }
-        this.getSHA1('flibbet').then((sha1) => {
+        this.getSHA1(filePath).then((sha1) => {
           resolve(sha1);
         });
       });
@@ -376,7 +383,7 @@ function toBuffer(ab : ArrayBuffer) : Buffer {
 
 function mkdir(dirPath: string, ignoreAlreadyExists: boolean = true) {
   return new Promise( (resolve, reject) => {
-    fs.mkdir(dirPath, (err) => {
+    fs.mkdir(dirPath, 0o777, (err) => {
       if (!err || (err.code === 'EEXIST' && ignoreAlreadyExists)) {
         resolve();
       }
