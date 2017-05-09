@@ -6,8 +6,6 @@ const crypto = require('crypto');
 
 const xml2js = require('xml2js');
 
-import { addPoolAssetFile } from '../utilities/utilities';
-
 import { MRSSFeed } from './mrssFeed';
 
 import {
@@ -33,6 +31,7 @@ export class DataFeed {
   rssItems: Array<Object>;
   feed : MRSSFeed;
   assetsToDownload : Array<Object>;
+  feedPoolAssetFiles : Object = {};
 
   constructor(bsdmDataFeed: DmDataFeed) {
 
@@ -218,7 +217,7 @@ export class DataFeed {
 
     let targetPath : string = '';
     let absolutePoolPath : string = '';
-    // let sha1 : string = '';
+    let fileSha1 : string = '';
 
     console.log('retrieve asset from: ' + url);
 
@@ -234,7 +233,7 @@ export class DataFeed {
 
       }).then( (sha1) => {
 
-        this.poo = sha1;
+        fileSha1 = sha1;
 
         // use the sha1 to get the target file path
         targetPath = path.join(PlatformService.default.getRootDirectory(), 'pool');
@@ -243,8 +242,7 @@ export class DataFeed {
       }).then((relativeFilePath : string) => {
 
         // move file to the pool
-        // absolutePoolPath = path.join(targetPath, relativeFilePath, 'sha1-' + sha1);
-        absolutePoolPath = path.join(targetPath, relativeFilePath, 'sha1-' + this.poo);
+        absolutePoolPath = path.join(targetPath, relativeFilePath, 'sha1-' + fileSha1);
         fs.rename('flibbet', absolutePoolPath, (err) => {
           if (err) {
             debugger;
@@ -254,60 +252,60 @@ export class DataFeed {
 
         // add file to pool asset files
         console.log('moved flibbet to: ', absolutePoolPath);
-        addPoolAssetFile(url, absolutePoolPath);
+        this.addFeedPoolAssetFile(url, absolutePoolPath);
         resolve();
       });
     });
   }
 
-  fetchAsset(url : string) {
-
-    console.log('retrieve asset from: ' + url);
-
-    return new Promise( (resolve, reject) => {
-
-      // download file
-      fetch(url)
-        .then( (response) => {
-          let responsePromise = response.arrayBuffer();
-          responsePromise.then( (contents) => {
-            const buf = toBuffer(contents);
-
-            // write file to temporary location
-            fs.writeFile('flibbet', buf, (err) => {
-              if (err) {
-                reject(err);
-              }
-
-              // calculate sha1
-              this.getSHA1('flibbet').then( (sha1) => {
-
-                // move file to correct pool location
-                const targetPath: string = path.join(PlatformService.default.getRootDirectory(), 'pool');
-                this.getPoolFilePath(targetPath, sha1, true).then((relativeFilePath) => {
-                  const absolutePoolPath = path.join(targetPath, relativeFilePath, 'sha1-' + sha1);
-                  fs.rename('flibbet', absolutePoolPath, (err) => {
-                    if (err) {
-                      debugger;
-                      reject(err);
-                    }
-                  });
-
-                  // add to pool asset files
-                  console.log('moved flibbet to: ', absolutePoolPath);
-                  addPoolAssetFile(url, absolutePoolPath);
-                  resolve();
-                });
-              });
-            });
-          });
-        }).catch( (err) => {
-          console.log(err);
-          debugger;
-        });
-    });
-  }
-
+  // fetchAsset(url : string) {
+  //
+  //   console.log('retrieve asset from: ' + url);
+  //
+  //   return new Promise( (resolve, reject) => {
+  //
+  //     // download file
+  //     fetch(url)
+  //       .then( (response) => {
+  //         let responsePromise = response.arrayBuffer();
+  //         responsePromise.then( (contents) => {
+  //           const buf = toBuffer(contents);
+  //
+  //           // write file to temporary location
+  //           fs.writeFile('flibbet', buf, (err) => {
+  //             if (err) {
+  //               reject(err);
+  //             }
+  //
+  //             // calculate sha1
+  //             this.getSHA1('flibbet').then( (sha1) => {
+  //
+  //               // move file to correct pool location
+  //               const targetPath: string = path.join(PlatformService.default.getRootDirectory(), 'pool');
+  //               this.getPoolFilePath(targetPath, sha1, true).then((relativeFilePath) => {
+  //                 const absolutePoolPath = path.join(targetPath, relativeFilePath, 'sha1-' + sha1);
+  //                 fs.rename('flibbet', absolutePoolPath, (err) => {
+  //                   if (err) {
+  //                     debugger;
+  //                     reject(err);
+  //                   }
+  //                 });
+  //
+  //                 // add to pool asset files
+  //                 console.log('moved flibbet to: ', absolutePoolPath);
+  //                 addPoolAssetFile(url, absolutePoolPath);
+  //                 resolve();
+  //               });
+  //             });
+  //           });
+  //         });
+  //       }).catch( (err) => {
+  //         console.log(err);
+  //         debugger;
+  //       });
+  //   });
+  // }
+  //
   getSHA1(filePath: string) {
 
     return new Promise((resolve, _) => {
@@ -368,7 +366,20 @@ export class DataFeed {
     });
   }
 
+  setFeedPoolAssetFiles(poolAssetFilesIn : Object) {
+    this.feedPoolAssetFiles = poolAssetFilesIn;
+  }
 
+  addFeedPoolAssetFile(fileName : string, filePath : string) {
+    this.feedPoolAssetFiles[fileName] = filePath;
+  }
+
+  getFeedPoolFilePath(resourceIdentifier : string) {
+
+    const filePath =  this.feedPoolAssetFiles[resourceIdentifier];
+    console.log('resourceIdentifier: ' + resourceIdentifier + ', filePath: ' +  filePath);
+    return filePath;
+  }
 }
 
 // From ArrayBuffer to Buffer
