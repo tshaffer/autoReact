@@ -102,6 +102,16 @@ export default class MediaZone extends Component {
     );
   }
 
+  renderMrssItem(mrssContentItem : Object) {
+
+    debugger;
+    const dataFeedId = mrssContentItem.dataFeedId;
+
+    return (
+      <div>poo</div>
+    );
+  }
+
   getEvent( bsdm : Object, mediaStateId: string ) {
 
     let eventIds = dmGetEventIdsForMediaState(bsdm, { id : mediaStateId });
@@ -140,6 +150,9 @@ export default class MediaZone extends Component {
       }
       case 'Html': {
         return this.renderHtmlItem(mediaContentItem);
+      }
+      case 'MrssFeed': {
+        return this.renderMrssItem(mediaContentItem);
       }
       default: {
         break;

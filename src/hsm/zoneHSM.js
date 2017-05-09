@@ -15,11 +15,12 @@ import MRSSDataFeedState from './mrssDataFeedState';
 
 export class ZoneHSM extends HSM {
 
-  constructor(dispatch: Function, bsdm : Object, zoneId : string) {
+  constructor(bsp : Object, dispatch: Function, bsdm : Object, zoneId : string) {
     super();
 
     this.type = 'media';
 
+    this.bsp = bsp;
     this.dispatch = dispatch;
     this.bsdm = bsdm;
     this.zoneId = zoneId;
@@ -60,7 +61,7 @@ export class ZoneHSM extends HSM {
         newState = new RSSDataFeedState(this, bsdmMediaState);
       }
       else if (bsdmMediaState.contentItem.type === 'MrssFeed') {
-        newState = new MRSSDataFeedState(this, bsdmMediaState);
+        newState = new MRSSDataFeedState(this.bsp, this, bsdmMediaState);
       }
       else {
         debugger;

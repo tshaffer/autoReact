@@ -117,7 +117,7 @@ class BSP {
           break;
         }
         default: {
-          zoneHSM = new ZoneHSM(this.dispatch, bsdm, zoneId);
+          zoneHSM = new ZoneHSM(this, this.dispatch, bsdm, zoneId);
           break;
         }
       }

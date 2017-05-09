@@ -258,54 +258,6 @@ export class DataFeed {
     });
   }
 
-  // fetchAsset(url : string) {
-  //
-  //   console.log('retrieve asset from: ' + url);
-  //
-  //   return new Promise( (resolve, reject) => {
-  //
-  //     // download file
-  //     fetch(url)
-  //       .then( (response) => {
-  //         let responsePromise = response.arrayBuffer();
-  //         responsePromise.then( (contents) => {
-  //           const buf = toBuffer(contents);
-  //
-  //           // write file to temporary location
-  //           fs.writeFile('flibbet', buf, (err) => {
-  //             if (err) {
-  //               reject(err);
-  //             }
-  //
-  //             // calculate sha1
-  //             this.getSHA1('flibbet').then( (sha1) => {
-  //
-  //               // move file to correct pool location
-  //               const targetPath: string = path.join(PlatformService.default.getRootDirectory(), 'pool');
-  //               this.getPoolFilePath(targetPath, sha1, true).then((relativeFilePath) => {
-  //                 const absolutePoolPath = path.join(targetPath, relativeFilePath, 'sha1-' + sha1);
-  //                 fs.rename('flibbet', absolutePoolPath, (err) => {
-  //                   if (err) {
-  //                     debugger;
-  //                     reject(err);
-  //                   }
-  //                 });
-  //
-  //                 // add to pool asset files
-  //                 console.log('moved flibbet to: ', absolutePoolPath);
-  //                 addPoolAssetFile(url, absolutePoolPath);
-  //                 resolve();
-  //               });
-  //             });
-  //           });
-  //         });
-  //       }).catch( (err) => {
-  //         console.log(err);
-  //         debugger;
-  //       });
-  //   });
-  // }
-  //
   getSHA1(filePath: string) {
 
     return new Promise((resolve, _) => {
