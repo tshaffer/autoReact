@@ -71,11 +71,22 @@ export default class MRSSDataFeedState extends HState {
     }
     else if (event.EventType && event.EventType === 'timeoutEvent') {
       console.log('timeout event');
+
+      // check to see if it's at the end of the feed
+      if (this.atEndOfFeed()) {
+        stateData.nextState = this.nextState;
+        return "TRANSITION";
+      }
+
       this.advanceToNextMRSSItem(false);
     }
 
     stateData.nextState = this.superState;
     return 'SUPER';
+  }
+
+  atEndOfFeed() {
+    return (this.displayIndex >= this.currentFeed.items.length);
   }
 
   advanceToNextMRSSItem(onEntry : boolean) {
