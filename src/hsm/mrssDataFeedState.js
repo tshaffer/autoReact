@@ -40,7 +40,10 @@ export default class MRSSDataFeedState extends HState {
     this.nextState = nextState;
   }
 
+  // STPlayingMediaRSSEventHandler in ba classic
+
   STDisplayingMRSSDataFeedEventHandler(event : Object, stateData : Object) : string {
+
     stateData.nextState = null;
 
     if (event.EventType && event.EventType === 'ENTRY_SIGNAL') {
@@ -55,41 +58,42 @@ export default class MRSSDataFeedState extends HState {
         // feed is fully downloaded
         this.currentFeed = this.dataFeed.feed;
         this.displayIndex = 0;
-        this.advanceToNextMRSSItem();
+        this.advanceToNextMRSSItem(true);
       }
       else {
-        // this situation will occur when the feed itself has not downloaded yet - send a message to self to trigger
-        // exit from state (like video playback failure)
         debugger;
       }
-
-      // m.LaunchTimer()
 
       return 'HANDLED';
     }
     else if (event.EventType && event.EventType === 'EXIT_SIGNAL') {
       console.log('exit signal');
     }
+    else if (event.EventType && event.EventType === 'timeoutEvent') {
+      console.log('timeout event');
+      this.advanceToNextMRSSItem(false);
+    }
+
     stateData.nextState = this.superState;
     return 'SUPER';
   }
 
-  advanceToNextMRSSItem() {
+  advanceToNextMRSSItem(onEntry : boolean) {
 
     let displayedItem = false;
 
     while (!displayedItem) {
       if (this.displayIndex >= this.currentFeed.items.length) {
         this.displayIndex = 0;
-        /*
-        more stuff
-         */
-
       }
 
       const displayItem = this.currentFeed.items[this.displayIndex];
       this.stateMachine.dispatch(setFeedDisplayItem(this.dataFeed.id, displayItem));
-      this.stateMachine.dispatch(setActiveMediaState(this.stateMachine.id, this.id));
+
+      // should only do this on entry, but it currently only works if setFeedDisplayItem is called first
+      if (onEntry) {
+        this.stateMachine.dispatch(setActiveMediaState(this.stateMachine.id, this.id));
+      }
 
       // const url = displayItem.link[0];
       // const filePath = this.dataFeed.getFeedPoolFilePath(url);
@@ -99,15 +103,4 @@ export default class MRSSDataFeedState extends HState {
       this.displayIndex = this.displayIndex + 1;
     }
   }
-
-  // displayMRSSItem(displayItem : Object, filePath : string) {
-  //
-  //   this.stateMachine.dispatch(setActiveMediaState(this.stateMachine.id, this.id));
-  //
-  //   // if isImage(displayItem) {
-  //
-  //   // dispatch something to redux store!!
-  //   // }
-  //
-  // }
 }

@@ -106,11 +106,10 @@ export default class MediaZone extends Component {
 
   renderMrssItem(mrssContentItem : Object) {
 
-    let duration : number = 10;
+    let duration : number = 3;
 
     let self = this;
 
-    debugger;
     const dataFeedId = mrssContentItem.dataFeedId;
 
     return (

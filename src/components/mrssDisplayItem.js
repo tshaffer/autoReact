@@ -2,6 +2,10 @@
 
 import React, { Component } from 'react';
 
+import path from 'path';
+
+import { bsp } from '../app/bsp';
+
 export default class MrssDisplayItem extends Component {
 
   constructor(props : Object) {
@@ -15,34 +19,29 @@ export default class MrssDisplayItem extends Component {
 
     let self = this;
 
-    if (this.timeout) {
-      debugger;
-    }
-
     this.timeout = setTimeout( () => {
-      this.timeout = null;
       self.props.onTimeout();
     }
       ,this.props.duration);
 
-    debugger;
     console.log(this.props.displayItem);
+    const url = this.props.displayItem.link[0];
+    const dataFeedId = this.props.dataFeedId;
+    const dataFeed = bsp.dataFeeds[dataFeedId];
+    const feedPoolAssetFiles = dataFeed.feedPoolAssetFiles;
+    const imageFilePath = feedPoolAssetFiles[url];
+
+    const src = path.join('file://', imageFilePath);
+    console.log('mrssDisplayItem.js::render, image src: ' + src);
 
     return (
-      <div>foo</div>
+      <img
+        src={src}
+        width={this.props.width.toString()}
+        height={this.props.height.toString()}
+      />
     );
-    // const src = path.join('file://', getPoolFilePath(this.props.resourceIdentifier));
-    // console.log('image.js::render, image src: ' + src);
-    //
-    // return (
-    //   <img
-    //     src={src}
-    //     width={this.props.width.toString()}
-    //     height={this.props.height.toString()}
-    //   />
-    // );
   }
-
 }
 
 MrssDisplayItem.propTypes = {
