@@ -115,6 +115,7 @@ export default class MediaZone extends Component {
 
     return (
       <MrssDisplayItemContainer
+        dataFeedId={dataFeedId}
         width={this.props.width}
         height={this.props.height}
         duration={duration * 1000}

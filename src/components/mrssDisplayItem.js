@@ -20,10 +20,13 @@ export default class MrssDisplayItem extends Component {
     }
 
     this.timeout = setTimeout( () => {
-        this.timeout = null;
-        self.props.onTimeout();
-      }
+      this.timeout = null;
+      self.props.onTimeout();
+    }
       ,this.props.duration);
+
+    debugger;
+    console.log(this.props.displayItem);
 
     return (
       <div>foo</div>
@@ -43,6 +46,8 @@ export default class MrssDisplayItem extends Component {
 }
 
 MrssDisplayItem.propTypes = {
+  dataFeedId: React.PropTypes.string.isRequired,
+  displayItem : React.PropTypes.object.isRequired,
   width: React.PropTypes.number.isRequired,
   height: React.PropTypes.number.isRequired,
   duration: React.PropTypes.number.isRequired,

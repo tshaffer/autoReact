@@ -6,6 +6,10 @@ import {
   setActiveMediaState
 } from '../store/activeMediaStates';
 
+import {
+  setFeedDisplayItem
+} from '../store/feedDisplayItems';
+
 export default class MRSSDataFeedState extends HState {
 
   bsp : Object;
@@ -14,6 +18,7 @@ export default class MRSSDataFeedState extends HState {
   currentFeed : Object;
   pendingFeed : Object;
   displayIndex : number;
+  dataFeed : Object;
 
   constructor(bsp : Object, zoneHSM: Object, bsdmState: Object) {
 
@@ -83,23 +88,26 @@ export default class MRSSDataFeedState extends HState {
       }
 
       const displayItem = this.currentFeed.items[this.displayIndex];
-      const url = displayItem.link[0];
-      const filePath = this.dataFeed.getFeedPoolFilePath(url);
-      this.displayMRSSItem( displayItem, filePath );
+      this.stateMachine.dispatch(setFeedDisplayItem(this.dataFeed.id, displayItem));
+      this.stateMachine.dispatch(setActiveMediaState(this.stateMachine.id, this.id));
+
+      // const url = displayItem.link[0];
+      // const filePath = this.dataFeed.getFeedPoolFilePath(url);
+      // this.displayMRSSItem( displayItem, filePath );
       displayedItem = true;
 
       this.displayIndex = this.displayIndex + 1;
     }
   }
 
-  displayMRSSItem(displayItem : Object, filePath : string) {
-
-    this.stateMachine.dispatch(setActiveMediaState(this.stateMachine.id, this.id));
-
-    // if isImage(displayItem) {
-
-    // dispatch something to redux store!!
-    // }
-
-  }
+  // displayMRSSItem(displayItem : Object, filePath : string) {
+  //
+  //   this.stateMachine.dispatch(setActiveMediaState(this.stateMachine.id, this.id));
+  //
+  //   // if isImage(displayItem) {
+  //
+  //   // dispatch something to redux store!!
+  //   // }
+  //
+  // }
 }
