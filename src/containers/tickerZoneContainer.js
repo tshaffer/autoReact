@@ -14,8 +14,8 @@ import {
 } from '@brightsign/bsdatamodel';
 
 import {
-  DataFeed
-} from '../entities/dataFeed';
+  TextDataFeed
+} from '../entities/textDataFeed';
 
 function mapStateToProps (state, ownProps) {
   return {
@@ -39,8 +39,8 @@ export const getArticles = (state : Object, zoneId : string) : Array<string> => 
       const dataFeedId = mediaState.contentItem.dataFeedId;
 
       if (state.dataFeeds.dataFeedsById.hasOwnProperty(dataFeedId)) {
-        const dataFeed : DataFeed = state.dataFeeds.dataFeedsById[dataFeedId];
-        dataFeed.rssItems.forEach( (rssItem) => {
+        const textDataFeed : TextDataFeed = state.dataFeeds.dataFeedsById[dataFeedId];
+        textDataFeed.rssItems.forEach( (rssItem) => {
           articles.push(rssItem.title);
         });
       }

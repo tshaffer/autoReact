@@ -41,6 +41,14 @@ import {
 } from '../entities/dataFeed';
 
 import {
+  MrssDataFeed
+} from '../entities/mrssDataFeed';
+
+import {
+  TextDataFeed
+} from '../entities/textDataFeed';
+
+import {
   addDataFeed
 } from '../store/dataFeeds';
 
@@ -156,11 +164,21 @@ class BSP {
           const dataFeedIds = dmGetDataFeedIdsForSign(bsdm);
           dataFeedIds.forEach( (dataFeedId) => {
             const dmDataFeed = dmGetDataFeedById(bsdm, { id: dataFeedId });
-            let dataFeed : DataFeed = new DataFeed(dmDataFeed);
-            this.dataFeeds[dmDataFeed.id] = dataFeed;
-            this.dispatch(addDataFeed(dataFeed));
-          });
 
+            if (dmDataFeed.usage === DataFeedUsageType.Mrss) {
+              let dataFeed : MrssDataFeed = new MrssDataFeed(dmDataFeed);
+              this.dataFeeds[dmDataFeed.id] = dataFeed;
+              this.dispatch(addDataFeed(dataFeed));
+            }
+            else if (dmDataFeed.usage === DataFeedUsageType.Text) {
+              let dataFeed : TextDataFeed = new TextDataFeed(dmDataFeed);
+              this.dataFeeds[dmDataFeed.id] = dataFeed;
+              this.dispatch(addDataFeed(dataFeed));
+            }
+            else {
+              debugger;
+            }
+          });
           resolve();
         });
       });
