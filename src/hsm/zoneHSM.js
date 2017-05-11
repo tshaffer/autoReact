@@ -15,14 +15,14 @@ import MRSSDataFeedState from './mrssDataFeedState';
 
 export class ZoneHSM extends HSM {
 
-  constructor(bsp : Object, dispatch: Function, bsdm : Object, zoneId : string) {
+  constructor(dispatch: Function, getState : Function, zoneId : string) {
     super();
 
     this.type = 'media';
 
-    this.bsp = bsp;
     this.dispatch = dispatch;
-    this.bsdm = bsdm;
+    this.getState = getState;
+    this.bsdm = getState().bsdm;
     this.zoneId = zoneId;
 
     this.stTop = new HState(this, "Top");
@@ -33,7 +33,7 @@ export class ZoneHSM extends HSM {
     this.initialPseudoStateHandler = this.videoOrImagesZoneGetInitialState;
 
     // build playlist
-    this.bsdmZone = dmGetZoneById(bsdm, { id: zoneId });
+    this.bsdmZone = dmGetZoneById(this.bsdm, { id: zoneId });
 
     this.id = this.bsdmZone.id;
     this.name = this.bsdmZone.name;
@@ -50,7 +50,7 @@ export class ZoneHSM extends HSM {
     let newState = null;
 
     this.mediaStateIds.forEach( (mediaStateId, index) => {
-      const bsdmMediaState = dmGetMediaStateById(bsdm, { id : mediaStateId});
+      const bsdmMediaState = dmGetMediaStateById(this.bsdm, { id : mediaStateId});
       if (bsdmMediaState.contentItem.type === 'Image') {
         newState = new ImageState(this, bsdmMediaState);
       }
@@ -61,7 +61,7 @@ export class ZoneHSM extends HSM {
         newState = new RSSDataFeedState(this, bsdmMediaState);
       }
       else if (bsdmMediaState.contentItem.type === 'MrssFeed') {
-        newState = new MRSSDataFeedState(this.bsp, this, bsdmMediaState);
+        newState = new MRSSDataFeedState(this, bsdmMediaState);
       }
       else {
         debugger;

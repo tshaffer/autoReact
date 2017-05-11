@@ -18,12 +18,6 @@ import { MRSSFeed } from './mrssFeed';
 
 export class MrssDataFeed extends DataFeed {
 
-  id : string;
-  type : string;
-  usage : string;
-  url : string;
-  updateInterval : number;
-  name : string;
   feed : MRSSFeed;
   assetsToDownload : Array<Object>;
   feedPoolAssetFiles : Object = {};
@@ -61,12 +55,6 @@ export class MrssDataFeed extends DataFeed {
     // get files to download
     this.assetsToDownload = [];
     this.feed.items.forEach( (item) => {
-      // Do not download content of type 'text/html' - they are accessed directly
-      // console.log('link: ', item.link[0]);
-      // console.log('name: ', item.link[0]);
-      // if (item.guid && item.guid[0]) {
-      //   console.log('changeHint: ', item.guid[0]);
-      // }
 
       let change_hint = '';
       if (item.guid && item.guid[0]) {
@@ -89,9 +77,9 @@ export class MrssDataFeed extends DataFeed {
     let sequence = Promise.resolve();
     this.assetsToDownload.forEach(function(assetToDownload) {
       sequence = sequence.then( () => {
-        return self.fetchTheAsset(assetToDownload.url);
+        return self.fetchAsset(assetToDownload.url);
       }).then(() => {
-        console.log('fetchTheAsset resolved');
+        console.log('fetchAsset resolved');
         fileCount--;
         if (fileCount === 0) {
 
@@ -121,7 +109,7 @@ export class MrssDataFeed extends DataFeed {
     });
   }
 
-  fetchTheAsset(url : string) {
+  fetchAsset(url : string) {
 
     let targetPath : string = '';
     let absolutePoolPath : string = '';

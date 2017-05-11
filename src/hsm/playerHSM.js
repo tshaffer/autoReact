@@ -117,7 +117,7 @@ export class PlayerHSM extends HSM {
       // launch playback
       const state = this.stateMachine.getState();
       this.stateMachine.bsdm = state.bsdm;
-      this.stateMachine.bsp.startPlayback(this.stateMachine.bsdm);
+      this.stateMachine.bsp.startPlayback();
 
       return 'HANDLED';
     }

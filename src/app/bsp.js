@@ -108,7 +108,9 @@ class BSP {
     });
   }
 
-  startPlayback(bsdm : Object) {
+  startPlayback() {
+
+    const bsdm = this.getState().bsdm;
 
     let zoneHSMs = [];
 
@@ -125,7 +127,7 @@ class BSP {
           break;
         }
         default: {
-          zoneHSM = new ZoneHSM(this, this.dispatch, bsdm, zoneId);
+          zoneHSM = new ZoneHSM(this.dispatch, this.getState, zoneId);
           break;
         }
       }

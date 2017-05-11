@@ -12,7 +12,6 @@ import {
 
 export default class MRSSDataFeedState extends HState {
 
-  bsp : Object;
   bsdmState: Object;
   state: Object;
   currentFeed : Object;
@@ -20,10 +19,9 @@ export default class MRSSDataFeedState extends HState {
   displayIndex : number;
   dataFeed : Object;
 
-  constructor(bsp : Object, zoneHSM: Object, bsdmState: Object) {
+  constructor(zoneHSM: Object, bsdmState: Object) {
 
     super(zoneHSM, bsdmState.id);
-    this.bsp = bsp;
     this.bsdm = zoneHSM.bsdm;
     this.bsdmState = bsdmState;
 
@@ -31,9 +29,7 @@ export default class MRSSDataFeedState extends HState {
 
     this.HStateEventHandler = this.STDisplayingMRSSDataFeedEventHandler;
 
-    console.log(this.bsp.dataFeeds);
-
-    this.dataFeed = this.bsp.dataFeeds[bsdmState.contentItem.dataFeedId];
+    this.dataFeed = this.stateMachine.getState().dataFeeds.dataFeedsById[bsdmState.contentItem.dataFeedId];
   }
 
   setNextState( nextState : Object ) {
