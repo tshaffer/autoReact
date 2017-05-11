@@ -10,6 +10,8 @@ import {
 }
 from './dataFeed';
 
+import { MRSSDataFeedItem } from '../entities/mrssDataFeedItem';
+
 export class MRSSFeed {
 
   constructor(dataFeed : DataFeed) {
@@ -19,7 +21,9 @@ export class MRSSFeed {
 
   dataFeed : DataFeed;
   ttlSeconds : number;
+
   title : string;
+
   items : Array<Object>;
 
   populateFeedItems(filePath : string) {
@@ -37,7 +41,7 @@ export class MRSSFeed {
     }
     if (dataFeedBase.item) {
       dataFeedBase.item.forEach( (feedItem) => {
-        this.items.push(feedItem);
+        this.items.push(new MRSSDataFeedItem(feedItem));
       });
     }
   }

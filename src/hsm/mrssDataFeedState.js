@@ -91,27 +91,18 @@ export default class MRSSDataFeedState extends HState {
 
   advanceToNextMRSSItem(onEntry : boolean) {
 
-    let displayedItem = false;
-
-    while (!displayedItem) {
-      if (this.displayIndex >= this.currentFeed.items.length) {
-        this.displayIndex = 0;
-      }
-
-      const displayItem = this.currentFeed.items[this.displayIndex];
-      this.stateMachine.dispatch(setFeedDisplayItem(this.dataFeed.id, displayItem));
-
-      // should only do this on entry, but it currently only works if setFeedDisplayItem is called first
-      if (onEntry) {
-        this.stateMachine.dispatch(setActiveMediaState(this.stateMachine.id, this.id));
-      }
-
-      // const url = displayItem.link[0];
-      // const filePath = this.dataFeed.getFeedPoolFilePath(url);
-      // this.displayMRSSItem( displayItem, filePath );
-      displayedItem = true;
-
-      this.displayIndex = this.displayIndex + 1;
+    if (this.displayIndex >= this.currentFeed.items.length) {
+      this.displayIndex = 0;
     }
+
+    const displayItem = this.currentFeed.items[this.displayIndex];
+    this.stateMachine.dispatch(setFeedDisplayItem(this.dataFeed.id, displayItem));
+
+    // should only do this on entry, but it currently only works if setFeedDisplayItem is called first
+    if (onEntry) {
+      this.stateMachine.dispatch(setActiveMediaState(this.stateMachine.id, this.id));
+    }
+
+    this.displayIndex = this.displayIndex + 1;
   }
 }
