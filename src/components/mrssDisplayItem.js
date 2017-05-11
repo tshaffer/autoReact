@@ -24,8 +24,8 @@ export default class MrssDisplayItem extends Component {
     }
       ,this.props.duration);
 
-    console.log(this.props.displayItem);
-    const url = this.props.displayItem.link[0];
+    console.log(this.props.mrssDataFeedItem);
+    const url = this.props.mrssDataFeedItem.url;
     const dataFeedId = this.props.dataFeedId;
     const dataFeed = bsp.dataFeeds[dataFeedId];
     const feedPoolAssetFiles = dataFeed.feedPoolAssetFiles;
@@ -46,7 +46,7 @@ export default class MrssDisplayItem extends Component {
 
 MrssDisplayItem.propTypes = {
   dataFeedId: React.PropTypes.string.isRequired,
-  displayItem : React.PropTypes.object.isRequired,
+  mrssDataFeedItem : React.PropTypes.object.isRequired,
   width: React.PropTypes.number.isRequired,
   height: React.PropTypes.number.isRequired,
   duration: React.PropTypes.number.isRequired,

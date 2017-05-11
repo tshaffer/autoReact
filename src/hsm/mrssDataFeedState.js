@@ -7,8 +7,8 @@ import {
 } from '../store/activeMediaStates';
 
 import {
-  setFeedDisplayItem
-} from '../store/feedDisplayItems';
+  setMrssDataFeedItem
+} from '../store/mrssDataFeedItems';
 
 export default class MRSSDataFeedState extends HState {
 
@@ -96,7 +96,7 @@ export default class MRSSDataFeedState extends HState {
     }
 
     const displayItem = this.currentFeed.items[this.displayIndex];
-    this.stateMachine.dispatch(setFeedDisplayItem(this.dataFeed.id, displayItem));
+    this.stateMachine.dispatch(setMrssDataFeedItem(this.dataFeed.id, displayItem));
 
     // should only do this on entry, but it currently only works if setFeedDisplayItem is called first
     if (onEntry) {

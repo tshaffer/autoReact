@@ -5,14 +5,14 @@ import { bsDmReducer } from '@brightsign/bsdatamodel';
 import stateMachineReducer from './stateMachine';
 import activeMediaStatesReducer from './activeMediaStates';
 import dataFeedsReducer from './dataFeeds';
-import feedDisplayItemsReducer from './feedDisplayItems';
+import mrssDataFeedItemReducer from './mrssDataFeedItems';
 
 const rootReducer = combineReducers({
   bsdm: bsDmReducer,
   stateMachine: stateMachineReducer,
   activeMediaStates : activeMediaStatesReducer,
   dataFeeds : dataFeedsReducer,
-  feedDisplayItems : feedDisplayItemsReducer
+  mrssDataFeedItems : mrssDataFeedItemReducer
 });
 
 export default rootReducer;

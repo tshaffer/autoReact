@@ -74,8 +74,8 @@ export class MrssDataFeed extends DataFeed {
       }
 
       this.assetsToDownload.push( {
-        link: item.link[0],
-        name: item.link[0],
+        name: item.url,
+        url: item.url,
         change_hint
       });
     });
@@ -89,7 +89,7 @@ export class MrssDataFeed extends DataFeed {
     let sequence = Promise.resolve();
     this.assetsToDownload.forEach(function(assetToDownload) {
       sequence = sequence.then( () => {
-        return self.fetchTheAsset(assetToDownload.link);
+        return self.fetchTheAsset(assetToDownload.url);
       }).then(() => {
         console.log('fetchTheAsset resolved');
         fileCount--;
