@@ -11,6 +11,7 @@ import VideoContainer from '../containers/videoContainer';
 import Html from './html';
 import MrssDisplayItemContainer from '../containers/mrssDisplayItemContainer';
 
+import { getPoolFilePath } from '../utilities/utilities';
 
 import {
   dmGetHtmlSiteById,
@@ -54,11 +55,13 @@ export default class MediaZone extends Component {
       }
     }
 
+    const src = path.join('file://', getPoolFilePath(resourceIdentifier));
+
     switch (mediaType) {
       case 'Image': {
         return (
           <ImageContainer
-            resourceIdentifier={resourceIdentifier}
+            resourceIdentifier={src}
             width={this.props.width}
             height={this.props.height}
             duration={duration * 1000}
@@ -69,7 +72,7 @@ export default class MediaZone extends Component {
       case 'Video': {
         return (
           <VideoContainer
-            resourceIdentifier={resourceIdentifier}
+            resourceIdentifier={src}
             width={this.props.width}
             height={this.props.height}
             onVideoEnd={self.nextAsset.bind(this)}

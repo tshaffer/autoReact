@@ -6,6 +6,8 @@ import path from 'path';
 
 import { bsp } from '../app/bsp';
 
+import ImageContainer from '../containers/imageContainer';
+
 export default class MrssDisplayItem extends Component {
 
   constructor(props : Object) {
@@ -17,30 +19,29 @@ export default class MrssDisplayItem extends Component {
 
   render () {
 
-    let self = this;
-
-    this.timeout = setTimeout( () => {
-      self.props.onTimeout();
-    }
-      ,this.props.duration);
-
     console.log(this.props.mrssDataFeedItem);
     const url = this.props.mrssDataFeedItem.url;
     const dataFeedId = this.props.dataFeedId;
     const dataFeed = bsp.dataFeeds[dataFeedId];
     const feedPoolAssetFiles = dataFeed.feedPoolAssetFiles;
     const imageFilePath = feedPoolAssetFiles[url];
-
     const src = path.join('file://', imageFilePath);
     console.log('mrssDisplayItem.js::render, image src: ' + src);
 
-    return (
-      <img
-        src={src}
-        width={this.props.width.toString()}
-        height={this.props.height.toString()}
-      />
-    );
+    if (this.props.mrssDataFeedItem.isImage()) {
+      return (
+        <ImageContainer
+          resourceIdentifier={src}
+          width={this.props.width}
+          height={this.props.height}
+          duration={this.props.duration}
+          onTimeout={this.props.onTimeout.bind(this)}
+        />
+      );
+    }
+    else {
+      debugger;
+    }
   }
 }
 

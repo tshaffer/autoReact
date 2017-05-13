@@ -2,10 +2,6 @@
 
 import React, { Component } from 'react';
 
-import path from 'path';
-
-import { getPoolFilePath } from '../utilities/utilities';
-
 export default class Image extends Component {
 
   constructor(props : Object) {
@@ -37,12 +33,11 @@ export default class Image extends Component {
     }
       ,this.props.duration);
 
-    const src = path.join('file://', getPoolFilePath(this.props.resourceIdentifier));
-    console.log('image.js::render, image src: ' + src);
+    console.log('image.js::render, image src: ' + this.props.resourceIdentifier);
 
     return (
       <img
-        src={src}
+        src={this.props.resourceIdentifier}
         width={this.props.width.toString()}
         height={this.props.height.toString()}
       />

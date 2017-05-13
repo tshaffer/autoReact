@@ -38,4 +38,22 @@ export class MRSSDataFeedItem {
   type : string;
   thumbnailUrl : string;
   pubDate : string;
+
+  isImage() : boolean {
+    if (this.type === 'image/jpeg' || this.type === 'image/png') {
+      return true;
+    }
+
+    return false;
+  }
+  
+  isVideo() : boolean {
+
+    if (this.type === 'video/mpeg' || this.type === 'video/mp4' || this.type === 'video/quicktime' || 
+      this.type === 'video/x-matroska' || this.medium === 'video') {
+      return true;
+    }
+
+    return false;
+  }
 }

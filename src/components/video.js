@@ -2,22 +2,17 @@
 
 import React, { Component } from 'react';
 
-import path from 'path';
-
-import { getPoolFilePath } from '../utilities/utilities';
-
 export default class Video extends Component {
 
   render () {
 
     let self = this;
 
-    const src = path.join('file://', getPoolFilePath(this.props.resourceIdentifier));
-    console.log('video.js::render, video src: ' + src);
+    console.log('video.js::render, video src: ' + this.props.resourceIdentifier);
 
     return (
       <video
-        src={src}
+        src={this.props.resourceIdentifier}
         autoPlay={true}
         width={this.props.width.toString()}
         height={this.props.height.toString()}
