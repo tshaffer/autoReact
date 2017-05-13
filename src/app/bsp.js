@@ -25,6 +25,10 @@ import {
 } from '../utilities/utilities';
 
 import {
+  HSM
+} from '../hsm/HSM';
+
+import {
   PlayerHSM
 } from '../hsm/playerHSM';
 
@@ -54,17 +58,19 @@ import {
 
 let _singleton = null;
 
+type DataFeedLUT = { [dataFeedId:string]: DataFeed };
+type FileNameToFilePathLUT =  { [fileName:string]: string };
+
 class BSP {
 
   store : Object;
   dispatch : Function;
   getState : Function;
-  playerHSM : Object;
-  hsmList : Array<Object>;
+  playerHSM : PlayerHSM;
+  hsmList : Array<HSM>;
   syncSpec : Object;
-  liveDataFeedsByTimer : Object;
-  liveDataFeedsToDownload : Array<Object>;
-  dataFeeds : Object;
+  liveDataFeedsToDownload : Array<DataFeed>;
+  dataFeeds : DataFeedLUT;
 
   constructor() {
     if(!_singleton){
@@ -79,19 +85,19 @@ class BSP {
     this.dispatch = this.store.dispatch;
     this.getState = this.store.getState;
     // this.syncSpec = null;
-    this.hsmList = [];
+    this.hsmList = [] ;
     this.dataFeeds = {};
 
     const rootPath: string = PlatformService.default.getRootDirectory();
     const pathToPool: string = PlatformService.default.getPathToPool();
 
-    let state;
+    let state : Object;
 
     this.openSyncSpec(path.join(rootPath, 'local-sync.json')).then((cardSyncSpec) => {
 
       this.syncSpec = cardSyncSpec;
 
-      const poolAssetFiles = this.buildPoolAssetFiles(this.syncSpec, pathToPool);
+      const poolAssetFiles : FileNameToFilePathLUT = this.buildPoolAssetFiles(this.syncSpec, pathToPool);
       setPoolAssetFiles(poolAssetFiles);
 
       state = this.store.getState();
@@ -112,14 +118,14 @@ class BSP {
 
     const bsdm = this.getState().bsdm;
 
-    let zoneHSMs = [];
+    let zoneHSMs : Array<ZoneHSM> = [];
 
-    const zoneIds = dmGetZonesForSign(bsdm);
-    zoneIds.forEach( (zoneId) => {
+    const zoneIds : Array<string> = dmGetZonesForSign(bsdm);
+    zoneIds.forEach( (zoneId : string) => {
 
       const bsdmZone = dmGetZoneById(bsdm, { id: zoneId });
 
-      let zoneHSM;
+      let zoneHSM : ZoneHSM;
 
       switch (bsdmZone.type) {
         case 'Ticker': {
@@ -135,13 +141,13 @@ class BSP {
       this.hsmList.push(zoneHSM);
     });
 
-    zoneHSMs.forEach( (zoneHSM) => {
+    zoneHSMs.forEach( (zoneHSM : ZoneHSM) => {
       zoneHSM.constructorFunction();
       zoneHSM.initialize();
     });
   }
 
-  restartPlayback(presentationName : string) {
+  restartPlayback(presentationName : string) : Promise<void> {
 
     console.log('restart: ', presentationName);
 
@@ -206,7 +212,7 @@ class BSP {
     return this.getSyncSpecFile('autoschedule.json', syncSpec, rootPath);
   }
 
-  openSyncSpec(filePath : string = '') {
+  openSyncSpec(filePath : string = '') : Promise<Object> {
     return new Promise( (resolve, reject) => {
       fs.readFile(filePath, (err, dataBuffer) => {
 
@@ -221,9 +227,9 @@ class BSP {
     });
   }
 
-  buildPoolAssetFiles(syncSpec : Object, pathToPool : string) : Object {
+  buildPoolAssetFiles(syncSpec : Object, pathToPool : string) : FileNameToFilePathLUT {
 
-    let poolAssetFiles = {};
+    let poolAssetFiles : FileNameToFilePathLUT = {};
 
     syncSpec.files.download.forEach( (syncSpecFile) => {
       poolAssetFiles[syncSpecFile.name] = path.join(pathToPool, syncSpecFile.link);
