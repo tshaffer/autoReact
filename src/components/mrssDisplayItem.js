@@ -4,8 +4,6 @@ import React, { Component } from 'react';
 
 import path from 'path';
 
-import { bsp } from '../app/bsp';
-
 import ImageContainer from '../containers/imageContainer';
 
 export default class MrssDisplayItem extends Component {
@@ -19,13 +17,15 @@ export default class MrssDisplayItem extends Component {
 
   render () {
 
-    console.log(this.props.mrssDataFeedItem);
-    const url = this.props.mrssDataFeedItem.url;
-    const dataFeedId = this.props.dataFeedId;
-    const dataFeed = bsp.dataFeeds[dataFeedId];
-    const feedPoolAssetFiles = dataFeed.feedPoolAssetFiles;
-    const imageFilePath = feedPoolAssetFiles[url];
-    const src = path.join('file://', imageFilePath);
+    // console.log(this.props.mrssDataFeedItem);
+    // const url = this.props.mrssDataFeedItem.url;
+    // const dataFeedId = this.props.dataFeedId;
+    // const dataFeed = bsp.dataFeeds[dataFeedId];
+    // const feedPoolAssetFiles = dataFeed.feedPoolAssetFiles;
+    // const imageFilePath = feedPoolAssetFiles[url];
+    // const src = path.join('file://', imageFilePath);
+
+    const src = path.join('file://', this.props.mrssDataFeedItemPath);
     console.log('mrssDisplayItem.js::render, image src: ' + src);
 
     if (this.props.mrssDataFeedItem.isImage()) {
@@ -48,6 +48,7 @@ export default class MrssDisplayItem extends Component {
 MrssDisplayItem.propTypes = {
   dataFeedId: React.PropTypes.string.isRequired,
   mrssDataFeedItem : React.PropTypes.object.isRequired,
+  mrssDataFeedItemPath : React.PropTypes.string.isRequired,
   width: React.PropTypes.number.isRequired,
   height: React.PropTypes.number.isRequired,
   duration: React.PropTypes.number.isRequired,

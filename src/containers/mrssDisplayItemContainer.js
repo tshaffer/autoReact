@@ -2,14 +2,18 @@
 
 import { connect } from 'react-redux';
 
-import { getMrssDataFeedItem } from '../store/mrssDataFeedItems';
+import {
+  getMrssDataFeedItem,
+  getMrssDataFeedItemPath }
+from '../store/mrssDataFeedItems';
 
 import MrssDisplayItem from '../components/mrssDisplayItem';
 
 function mapStateToProps (state, ownProps) {
   return {
     ...ownProps,
-    mrssDataFeedItem : getMrssDataFeedItem(state, ownProps.dataFeedId)
+    mrssDataFeedItem : getMrssDataFeedItem(state, ownProps.dataFeedId),
+    mrssDataFeedItemPath : getMrssDataFeedItemPath(state, ownProps.dataFeedId)
   };
 }
 

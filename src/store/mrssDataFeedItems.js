@@ -56,4 +56,20 @@ export function getMrssDataFeedItem(state : Object, mrssDataFeedItemId : string)
   return mrssDataFeedItem;
 }
 
+export function getMrssDataFeedItemPath(state : Object, mrssDataFeedItemId : string) {
+
+  debugger;
+
+  const mrssDataFeedItemsByFeedId = state.mrssDataFeedItems.mrssDataFeedItemsByFeedId;
+  const mrssDataFeedItem = mrssDataFeedItemsByFeedId[mrssDataFeedItemId];
+
+  console.log(mrssDataFeedItem);
+  const url = mrssDataFeedItem.url;
+  const dataFeedId = mrssDataFeedItemId;
+  const dataFeed = state.dataFeeds.dataFeedsById[dataFeedId];
+  const feedPoolAssetFiles = dataFeed.feedPoolAssetFiles;
+  const filePath = feedPoolAssetFiles[url];
+  return filePath;
+}
+
 
