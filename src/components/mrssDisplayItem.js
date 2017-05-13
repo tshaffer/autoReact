@@ -17,14 +17,6 @@ export default class MrssDisplayItem extends Component {
 
   render () {
 
-    // console.log(this.props.mrssDataFeedItem);
-    // const url = this.props.mrssDataFeedItem.url;
-    // const dataFeedId = this.props.dataFeedId;
-    // const dataFeed = bsp.dataFeeds[dataFeedId];
-    // const feedPoolAssetFiles = dataFeed.feedPoolAssetFiles;
-    // const imageFilePath = feedPoolAssetFiles[url];
-    // const src = path.join('file://', imageFilePath);
-
     const src = path.join('file://', this.props.mrssDataFeedItemPath);
     console.log('mrssDisplayItem.js::render, image src: ' + src);
 

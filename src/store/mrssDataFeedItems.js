@@ -52,24 +52,17 @@ export default function(state : Object = initialState, action : Object) {
 export function getMrssDataFeedItem(state : Object, mrssDataFeedItemId : string) {
 
   const mrssDataFeedItemsByFeedId = state.mrssDataFeedItems.mrssDataFeedItemsByFeedId;
-  const mrssDataFeedItem = mrssDataFeedItemsByFeedId[mrssDataFeedItemId];
-  return mrssDataFeedItem;
+  return mrssDataFeedItemsByFeedId[mrssDataFeedItemId];
 }
 
 export function getMrssDataFeedItemPath(state : Object, mrssDataFeedItemId : string) {
 
-  debugger;
-
   const mrssDataFeedItemsByFeedId = state.mrssDataFeedItems.mrssDataFeedItemsByFeedId;
   const mrssDataFeedItem = mrssDataFeedItemsByFeedId[mrssDataFeedItemId];
 
-  console.log(mrssDataFeedItem);
+  const dataFeed = state.dataFeeds.dataFeedsById[mrssDataFeedItemId];
   const url = mrssDataFeedItem.url;
-  const dataFeedId = mrssDataFeedItemId;
-  const dataFeed = state.dataFeeds.dataFeedsById[dataFeedId];
-  const feedPoolAssetFiles = dataFeed.feedPoolAssetFiles;
-  const filePath = feedPoolAssetFiles[url];
-  return filePath;
+  return dataFeed.feedPoolAssetFiles[url];
 }
 
 
