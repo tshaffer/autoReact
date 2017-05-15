@@ -35,13 +35,13 @@ export default class MediaZone extends Component {
 
     let self = this;
 
-    const assetId = mediaContentItem.assetId;
+    const assetId : string = mediaContentItem.assetId;
     // TODO - HACK - need FileName!!
-    const mediaType = mediaContentItem.type;
+    const mediaType : string = mediaContentItem.type;
 
-    const resourceIdentifier = path.basename(assetId);
+    const resourceIdentifier : string = path.basename(assetId);
 
-    const eventName = event.type;
+    const eventName : string = event.type;
     switch(eventName) {
       case 'Timer': {
         duration = event.data.interval;
@@ -55,7 +55,7 @@ export default class MediaZone extends Component {
       }
     }
 
-    const src = path.join('file://', getPoolFilePath(resourceIdentifier));
+    const src : string = path.join('file://', getPoolFilePath(resourceIdentifier));
 
     switch (mediaType) {
       case 'Image': {
@@ -92,10 +92,10 @@ export default class MediaZone extends Component {
     // enableMouseEvents = mediaStateContentItem.enableMouseEvents;
     // hwzOn = mediaStateContentItem.hwzOn;
 
-    const htmlSiteId = htmlContentItem.siteId;
-    const site = dmGetHtmlSiteById(this.props.bsdm, {id: htmlSiteId});
+    const htmlSiteId : string = htmlContentItem.siteId;
+    const site : Object = dmGetHtmlSiteById(this.props.bsdm, {id: htmlSiteId});
 
-    const url = PlatformService.defaults.getHtmlSiteUrl(site);
+    const url : string = PlatformService.defaults.getHtmlSiteUrl(site);
 
     return (
       <Html
@@ -113,7 +113,7 @@ export default class MediaZone extends Component {
 
     let self = this;
 
-    const dataFeedId = mrssContentItem.dataFeedId;
+    const dataFeedId : string = mrssContentItem.dataFeedId;
 
     return (
       <MrssDisplayItemContainer
@@ -126,14 +126,14 @@ export default class MediaZone extends Component {
     );
   }
 
-  getEvent( bsdm : Object, mediaStateId: string ) {
+  getEvent( bsdm : Object, mediaStateId: string ) : Object {
 
-    let eventIds = dmGetEventIdsForMediaState(bsdm, { id : mediaStateId });
+    let eventIds : Array<string> = dmGetEventIdsForMediaState(bsdm, { id : mediaStateId });
     if (eventIds.length !== 1) {
       debugger;
     }
 
-    let event = dmGetEventById(bsdm, { id : eventIds[0] });
+    let event : Object = dmGetEventById(bsdm, { id : eventIds[0] });
     if (!event) {
       debugger;
     }
@@ -154,8 +154,8 @@ export default class MediaZone extends Component {
 
     const mediaStateId : string = this.props.activeMediaStateId;
     const mediaState : Object = dmGetMediaStateById(this.props.bsdm, { id : mediaStateId });
-    const event = this.getEvent(this.props.bsdm, mediaState.id);
-    const mediaContentItem = mediaState.contentItem;
+    const event : Object = this.getEvent(this.props.bsdm, mediaState.id);
+    const mediaContentItem : Object = mediaState.contentItem;
 
     switch(mediaContentItem.type) {
       case'Video':

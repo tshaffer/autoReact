@@ -17,7 +17,7 @@ export default class MrssDisplayItem extends Component {
 
   render () {
 
-    const src = path.join('file://', this.props.mrssDataFeedItemPath);
+    const src : string = path.join('file://', this.props.mrssDataFeedItemPath);
     console.log('mrssDisplayItem.js::render, image src: ' + src);
 
     if (this.props.mrssDataFeedItem.isImage()) {

@@ -214,7 +214,7 @@ class BSP {
 
   openSyncSpec(filePath : string = '') : Promise<Object> {
     return new Promise( (resolve, reject) => {
-      fs.readFile(filePath, (err, dataBuffer) => {
+      fs.readFile(filePath, (err, dataBuffer : Buffer) => {
 
         if (err) {
           reject(err);
@@ -231,7 +231,7 @@ class BSP {
 
     let poolAssetFiles : FileNameToFilePathLUT = {};
 
-    syncSpec.files.download.forEach( (syncSpecFile) => {
+    syncSpec.files.download.forEach( (syncSpecFile : Object) => {
       poolAssetFiles[syncSpecFile.name] = path.join(pathToPool, syncSpecFile.link);
     });
 
@@ -249,9 +249,9 @@ class BSP {
       }
 
       // const fileSize = syncSpecFile.size;
-      const filePath = path.join(rootPath, syncSpecFile.link);
+      const filePath : string = path.join(rootPath, syncSpecFile.link);
 
-      fs.readFile(filePath, (err, dataBuffer) => {
+      fs.readFile(filePath, (err, dataBuffer : Buffer) => {
         if (err) {
           reject(err);
         } else {

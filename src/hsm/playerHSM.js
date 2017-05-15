@@ -105,11 +105,12 @@ export class PlayerHSM extends HSM {
       this.stateMachine.bsdm = this.stateMachine.getState().bsdm;
 
       // load live data feeds and queue for downloading
-      this.stateMachine.bsp.liveDataFeedsByTimer = {};
       this.stateMachine.bsp.liveDataFeedsToDownload = [];
 
       const dataFeedIds = dmGetDataFeedIdsForSign(this.stateMachine.bsdm);
       dataFeedIds.forEach( (dataFeedId) => {
+        const rState = this.stateMachine.getState();
+        debugger;
         const dataFeed = this.stateMachine.bsp.dataFeeds[dataFeedId];
         this.stateMachine.bsp.queueRetrieveLiveDataFeed(dataFeed);
       });

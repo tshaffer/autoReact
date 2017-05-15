@@ -68,7 +68,7 @@ export default class Sign extends Component {
 
   getZoneJSX(zoneId : string) {
 
-    const zone = dmGetZoneById(this.props.bsdm, { id: zoneId });
+    const zone : Object = dmGetZoneById(this.props.bsdm, { id: zoneId });
 
     switch (zone.type) {
       case 'VideoOrImages': {
@@ -76,7 +76,7 @@ export default class Sign extends Component {
         return mediaZoneJSX;
       }
       case 'Ticker': {
-        const tickerZoneJSX = this.getTickerZoneJSX(zone);
+        const tickerZoneJSX  = this.getTickerZoneJSX(zone);
         return tickerZoneJSX;
       }
       default: {
@@ -87,7 +87,7 @@ export default class Sign extends Component {
 
   render() {
 
-    const zoneIds = dmGetZonesForSign(this.props.bsdm);
+    const zoneIds : Array<string> = dmGetZonesForSign(this.props.bsdm);
 
     return (
       <div>
