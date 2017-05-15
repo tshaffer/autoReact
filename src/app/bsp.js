@@ -58,7 +58,6 @@ import {
 
 let _singleton = null;
 
-type DataFeedLUT = { [dataFeedId:string]: DataFeed };
 type FileNameToFilePathLUT =  { [fileName:string]: string };
 
 class BSP {
@@ -70,7 +69,6 @@ class BSP {
   hsmList : Array<HSM>;
   syncSpec : Object;
   liveDataFeedsToDownload : Array<DataFeed>;
-  dataFeeds : DataFeedLUT;
 
   constructor() {
     if(!_singleton){
@@ -86,7 +84,6 @@ class BSP {
     this.getState = this.store.getState;
     // this.syncSpec = null;
     this.hsmList = [] ;
-    this.dataFeeds = {};
 
     const rootPath: string = PlatformService.default.getRootDirectory();
     const pathToPool: string = PlatformService.default.getPathToPool();
@@ -129,7 +126,7 @@ class BSP {
 
       switch (bsdmZone.type) {
         case 'Ticker': {
-          zoneHSM = new TickerZoneHSM(this, this.dispatch, bsdm, zoneId);
+          zoneHSM = new TickerZoneHSM(this.dispatch, this.getState, zoneId);
           break;
         }
         default: {
@@ -175,12 +172,10 @@ class BSP {
 
             if (dmDataFeed.usage === DataFeedUsageType.Mrss) {
               let dataFeed : MrssDataFeed = new MrssDataFeed(dmDataFeed);
-              this.dataFeeds[dmDataFeed.id] = dataFeed;
               this.dispatch(addDataFeed(dataFeed));
             }
             else if (dmDataFeed.usage === DataFeedUsageType.Text) {
               let dataFeed : TextDataFeed = new TextDataFeed(dmDataFeed);
-              this.dataFeeds[dmDataFeed.id] = dataFeed;
               this.dispatch(addDataFeed(dataFeed));
             }
             else {

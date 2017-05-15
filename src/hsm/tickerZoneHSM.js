@@ -11,23 +11,25 @@ import {
 } from '@brightsign/bsdatamodel';
 
 import {
-  DataFeed
-} from '../entities/dataFeed';
-
-import {
   updateDataFeed
 } from '../store/dataFeeds';
 
+import {
+  DataFeed
+} from '../entities/dataFeed';
+
+type DataFeedLUT = { [dataFeedId:string]: DataFeed };
+
 export class TickerZoneHSM extends HSM {
 
-  constructor(bsp: Object, dispatch: Function, bsdm: Object, zoneId: string) {
+  constructor(dispatch: Function, getState: Function, zoneId: string) {
     super();
 
     this.type = 'ticker';
 
-    this.bsp = bsp;
     this.dispatch = dispatch;
-    this.bsdm = bsdm;
+    this.getState = getState;
+    this.bsdm = getState().bsdm;
     this.zoneId = zoneId;
 
     this.stTop = new HState(this, "Top");
@@ -37,7 +39,7 @@ export class TickerZoneHSM extends HSM {
     this.constructorHandler = this.tickerZoneConstructor;
     this.initialPseudoStateHandler = this.tickerZoneGetInitialState;
 
-    const zoneProperties = dmGetZonePropertiesById(bsdm, {id: zoneId});
+    const zoneProperties = dmGetZonePropertiesById(this.bsdm, {id: zoneId});
 
     this.numberOfLines = zoneProperties.textWidget.numberOfLines;
     this.delay = zoneProperties.textWidget.delay;
@@ -106,15 +108,15 @@ export class TickerZoneHSM extends HSM {
     this.rssDataFeedItems = [];
 
     this.mediaStateIds.forEach( (mediaStateId) => {
-      const bsdmMediaState = dmGetMediaStateById(bsdm, {id: mediaStateId});
+      const bsdmMediaState = dmGetMediaStateById(this.bsdm, {id: mediaStateId});
       if (bsdmMediaState.contentItem.type === 'DataFeed') {
 
         // BACONTODO - I think this is sufficient to set 'includesRSSFeeds'
         self.includesRSSFeeds = true;
 
+        const dataFeedsById : DataFeedLUT = getState().dataFeeds.dataFeedsById;
         const dataFeedId = bsdmMediaState.contentItem.dataFeedId;
-        // const dataFeed = dmGetDataFeedById(bsdm, { id: dataFeedId });
-        const dataFeed = self.bsp.dataFeeds[dataFeedId];
+        const dataFeed = dataFeedsById[dataFeedId];
         self.rssDataFeedItems.push(dataFeed);
       }
     });

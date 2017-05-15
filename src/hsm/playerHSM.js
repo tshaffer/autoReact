@@ -7,6 +7,11 @@ import {
   // dmGetDataFeedById,
 } from '@brightsign/bsdatamodel';
 
+import {
+  DataFeed
+} from '../entities/dataFeed';
+type DataFeedLUT = { [dataFeedId:string]: DataFeed };
+
 export class PlayerHSM extends HSM {
 
   constructor(bsp : Object, dispatch: Function, getState : Function, bsdm: Object) {
@@ -108,10 +113,9 @@ export class PlayerHSM extends HSM {
       this.stateMachine.bsp.liveDataFeedsToDownload = [];
 
       const dataFeedIds = dmGetDataFeedIdsForSign(this.stateMachine.bsdm);
+      const dataFeedsById : DataFeedLUT = this.stateMachine.getState().dataFeeds.dataFeedsById;
       dataFeedIds.forEach( (dataFeedId) => {
-        const rState = this.stateMachine.getState();
-        debugger;
-        const dataFeed = this.stateMachine.bsp.dataFeeds[dataFeedId];
+        const dataFeed = dataFeedsById[dataFeedId];
         this.stateMachine.bsp.queueRetrieveLiveDataFeed(dataFeed);
       });
 
